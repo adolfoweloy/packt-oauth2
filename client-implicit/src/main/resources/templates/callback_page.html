@@ -4,7 +4,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-Just a test
+Friends who has also granted client-implicit
+<div id="friends">
+	<ul>
+	</ul>
+</div>
 </body>
 
 <script
@@ -14,15 +18,15 @@ Just a test
 $(document).ready(function() {
 	var fragment = window.location.hash;
 	var res = getResponse(fragment);
+	window.location.hash = '_#';
 
 	getUserId(res['access_token'], function(userId) {
 		getFriends(userId, res['access_token'], function(friends) {
-			console.log(friends);
+			$(friends).each(function(index, friend) {
+				$('#friends').find('ul').append('<li>' + friend.name + '</li>');
+			});
 		});
 	});
-
-
-	alert(friends.length);
 
 });
 
@@ -62,7 +66,7 @@ function getUserId(accessToken, callback) {
 
 function getFriends(userId, accessToken, callback) {
 	var baseUrl = 'https://graph.facebook.com/v2.9/';
-	var endpoint = userId + '/friendlists';
+	var endpoint = userId + '/friends';
 	var url = baseUrl + endpoint;
 
 	$.ajax({
@@ -70,8 +74,8 @@ function getFriends(userId, accessToken, callback) {
         beforeSend: function(xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
         },
-        success: function(data){
-			var friends = data;
+        success: function(result){
+			var friends = result.data;
 			callback(friends);
         },
         error: function(jqXHR, textStatus, errorThrown)   {
