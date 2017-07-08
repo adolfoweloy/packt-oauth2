@@ -27,11 +27,9 @@ $(document).ready(function() {
 		return;
 	}
 
-	getUserId(res['access_token'], function(userId) {
-		getFriends(userId, res['access_token'], function(friends) {
-			$(friends).each(function(index, friend) {
-				$('#friends').find('ul').append('<li>' + friend.name + '</li>');
-			});
+	getFriends(res['access_token'], function(friends) {
+		$(friends).each(function(index, friend) {
+			$('#friends').find('ul').append('<li>' + friend.name + '</li>');
 		});
 	});
 
@@ -53,31 +51,9 @@ function getResponse(fragment) {
 	return response;
 }
 
-function getUserId(accessToken, callback) {
+function getFriends(accessToken, callback) {
 	var baseUrl = 'https://graph.facebook.com/v2.9/';
-	var endpoint = 'me?fields=id';
-	var url = baseUrl + endpoint;
-	var userId = null;
-
-	$.ajax({
-        url: url,
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
-        },
-        success: function(data){
-        	var userId = data.id;
-			callback(userId);
-        },
-        error: function(jqXHR, textStatus, errorThrown)   {
-            console.log(textStatus);
-        }
-    });
-
-}
-
-function getFriends(userId, accessToken, callback) {
-	var baseUrl = 'https://graph.facebook.com/v2.9/';
-	var endpoint = userId + '/friends';
+	var endpoint ='me/friends';
 	var url = baseUrl + endpoint;
 
 	$.ajax({
