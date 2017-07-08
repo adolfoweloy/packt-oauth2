@@ -18,8 +18,8 @@ public class ClientImplicitApplication {
 		return "client";
 	}
 
-@GetMapping("/callback")
-public String callback() {
-	return "callback_page";
-}
+	@GetMapping("/callback")
+	public String callback() {
+		return "callback_page";
+	}
 }
