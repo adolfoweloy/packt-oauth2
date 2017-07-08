@@ -18,7 +18,14 @@ Friends who has also granted client-implicit
 $(document).ready(function() {
 	var fragment = window.location.hash;
 	var res = getResponse(fragment);
+
 	window.location.hash = '_#';
+
+	if (res.hasError()) {
+		$("<div>Error trying to obtain user's authorization!</div>")
+			.insertBefore('#friends');
+		return;
+	}
 
 	getUserId(res['access_token'], function(userId) {
 		getFriends(userId, res['access_token'], function(friends) {
@@ -38,6 +45,10 @@ function getResponse(fragment) {
 		var keyValue = attr.split('=');
 		response[keyValue[0]] = keyValue[1];
 	});
+
+	response.hasError = function() {
+		return !response['access_token'];
+	};
 
 	return response;
 }
