@@ -1,4 +1,4 @@
-package com.packt.example.socialimplicit.facebook;
+package com.packt.example.socialauthcode.facebook;
 
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.impl.FacebookTemplate;

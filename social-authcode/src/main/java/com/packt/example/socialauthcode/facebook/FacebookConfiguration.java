@@ -1,4 +1,4 @@
-package com.packt.example.socialimplicit.facebook;
+package com.packt.example.socialauthcode.facebook;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

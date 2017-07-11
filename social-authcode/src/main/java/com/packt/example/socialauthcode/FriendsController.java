@@ -1,4 +1,4 @@
-package com.packt.example.socialimplicit;
+package com.packt.example.socialauthcode;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.ConnectionRepository;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/")
-public class HelloController {
+public class FriendsController {
 
 	@Autowired
     private Facebook facebook;
@@ -22,7 +22,7 @@ public class HelloController {
     private ConnectionRepository connectionRepository;
 
     @GetMapping
-    public String helloFacebook(Model model) {
+    public String friends(Model model) {
         if (connectionRepository.findPrimaryConnection(Facebook.class) == null) {
             return "redirect:/connect/facebook";
         }
@@ -33,6 +33,6 @@ public class HelloController {
         model.addAttribute("facebookProfile", userProfile);
         PagedList<Reference> friends = facebook.friendOperations().getFriends();
         model.addAttribute("friends", friends);
-        return "hello";
+        return "friends";
     }
 }

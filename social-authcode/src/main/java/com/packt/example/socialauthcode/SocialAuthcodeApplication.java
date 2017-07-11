@@ -1,12 +1,12 @@
-package com.packt.example.socialimplicit;
+package com.packt.example.socialauthcode;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SocialImplicitApplication {
+public class SocialAuthcodeApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SocialImplicitApplication.class, args);
+		SpringApplication.run(SocialAuthcodeApplication.class, args);
 	}
 }

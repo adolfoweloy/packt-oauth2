@@ -1,4 +1,4 @@
-package com.packt.example.socialimplicit.facebook;
+package com.packt.example.socialauthcode.facebook;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
