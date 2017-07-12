@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationProperties(prefix = "facebook")
-public class FacebookPropertiesWrapper {
+public class EnhancedFacebookProperties {
 
 	private String appId;
 
@@ -13,6 +13,7 @@ public class FacebookPropertiesWrapper {
 
 	private String apiVersion;
 
+	// getters and setters omitted for brevity
 	public String getAppId() {
 		return appId;
 	}

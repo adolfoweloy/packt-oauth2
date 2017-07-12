@@ -23,7 +23,7 @@ import org.springframework.social.facebook.api.Facebook;
 public class FacebookConfiguration extends SocialAutoConfigurerAdapter {
 
 	@Autowired
-	private FacebookPropertiesWrapper properties;
+	private EnhancedFacebookProperties properties;
 
 	@Bean
 	@ConditionalOnMissingBean(Facebook.class)
