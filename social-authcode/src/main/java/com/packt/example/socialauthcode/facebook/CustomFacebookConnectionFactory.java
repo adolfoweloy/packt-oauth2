@@ -9,8 +9,10 @@ public class CustomFacebookConnectionFactory extends
 
 	public CustomFacebookConnectionFactory(
 			String appId, String appSecret, String apiVersion) {
-		super("facebook", new CustomFacebookServiceProvider(appId, appSecret, apiVersion),
-				new FacebookAdapter());
+
+		super("facebook",
+			new CustomFacebookServiceProvider(appId, appSecret, apiVersion),
+			new FacebookAdapter());
 	}
 
 }

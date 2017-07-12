@@ -21,14 +21,15 @@ public class CustomFacebookServiceProvider extends
 			String appSecret, String apiVersion) {
 		String graphApiURL = "https://graph.facebook.com/v" + apiVersion + "/";
 
-		OAuth2Template oAuth2Template = new OAuth2Template(appId, appSecret,
+		OAuth2Template template = new OAuth2Template(appId, appSecret,
 				"https://www.facebook.com/v" + apiVersion + "/dialog/oauth",
 				graphApiURL + "oauth/access_token");
 
-		oAuth2Template.setUseParametersForClientAuthentication(true);
-		return oAuth2Template;
+		template.setUseParametersForClientAuthentication(true);
+		return template;
 	}
 
+	@Override
 	public Facebook getApi(String accessToken) {
 		FacebookTemplate template = new FacebookTemplate(accessToken, appNamespace);
 		template.setApiVersion(apiVersion);
