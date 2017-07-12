@@ -12,7 +12,9 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.social.config.annotation.EnableSocial;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactory;
+import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.ConnectionRepository;
+import org.springframework.social.connect.web.ConnectController;
 import org.springframework.social.facebook.api.Facebook;
 
 @Configuration
@@ -38,4 +40,14 @@ public class FacebookConfiguration extends SocialAutoConfigurerAdapter {
 				this.properties.getAppSecret(), this.properties.getApiVersion());
 	}
 
+	@Bean
+	public ConnectController connectController(
+			ConnectionFactoryLocator factoryLocator,
+			ConnectionRepository repository) {
+
+		ConnectController controller = new ConnectController(
+			factoryLocator, repository);
+		controller.setApplicationUrl("http://localhost:8080");
+		return controller;
+	}
 }
