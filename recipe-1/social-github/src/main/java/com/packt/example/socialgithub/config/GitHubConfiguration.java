@@ -1,4 +1,4 @@
-package com.packt.example.socialgithub.github;
+package com.packt.example.socialgithub.config;
 
 import org.springframework.boot.autoconfigure.social.SocialAutoConfigurerAdapter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

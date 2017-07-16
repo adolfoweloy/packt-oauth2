@@ -14,27 +14,28 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class RepositoriesController {
 
 	@Autowired
-    private GitHub github;
+	private GitHub github;
 
 	@Autowired
-    private ConnectionRepository connectionRepository;
+	private ConnectionRepository connectionRepository;
 
-    @GetMapping
-    public String repositories(Model model) {
-        if (connectionRepository.findPrimaryConnection(GitHub.class) == null) {
-            return "redirect:/connect/github";
-        }
+	@GetMapping
+	public String repositories(Model model) {
+		if (connectionRepository.findPrimaryConnection(GitHub.class) == null) {
+			return "redirect:/connect/github";
+		}
 
-        String name = github.userOperations().getUserProfile().getName();
-        String username = github.userOperations().getUserProfile().getUsername();
-        model.addAttribute("name", name);
+		String name = github.userOperations().getUserProfile().getName();
+		String username = github.userOperations().getUserProfile()
+				.getUsername();
+		model.addAttribute("name", name);
 
 		String uri = "https://api.github.com/users/{user}/repos";
-        GitHubRepo[] repos = github.restOperations()
-    		.getForObject(uri, GitHubRepo[].class, username);
-        model.addAttribute("repositories", Arrays.asList(repos));
+		GitHubRepo[] repos = github.restOperations().getForObject(uri,
+				GitHubRepo[].class, username);
+		model.addAttribute("repositories", Arrays.asList(repos));
 
-        return "repositories";
-    }
+		return "repositories";
+	}
 
 }
