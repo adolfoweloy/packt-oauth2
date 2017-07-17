@@ -14,18 +14,19 @@ public class GooglePlusController {
 	private Google google;
 
 	@Autowired
-    private ConnectionRepository connectionRepository;
+	private ConnectionRepository connectionRepository;
 
-    @GetMapping
-    public String profile(Model model) {
-        if (connectionRepository.findPrimaryConnection(Google.class) == null) {
-            return "redirect:/connect/google";
-        }
+	@GetMapping
+	public String profile(Model model) {
+		if (connectionRepository.findPrimaryConnection(Google.class) == null) {
+			return "redirect:/connect/google";
+		}
 
-        String name = google.plusOperations().getGoogleProfile().getDisplayName();
-        model.addAttribute("name", name);
+		String name = google.plusOperations().getGoogleProfile()
+			.getDisplayName();
+		model.addAttribute("name", name);
 
-        return "profile";
-    }
+		return "profile";
+	}
 
 }
