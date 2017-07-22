@@ -66,4 +66,4 @@ VALUES
     ('clientapp', 'provider', '123456',
     'read_profile,read_posts', 'authorization_code',
     'http://localhost:9000/callback',
-    null, 120, -1, null, 'false');
+    null, 3000, -1, null, 'false');
