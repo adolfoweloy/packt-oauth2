@@ -1,0 +1,22 @@
+## Resource Owner authentication (in-memory database)
+security:
+  user:
+    name: adolfo
+    password: 123
+
+## jpa config for client registration
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/oauth2provider
+    username: oauth2provider
+    password: 123
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        show_sql: true
+        hbm2ddl:
+          auto: validate
+  thymeleaf:
+    cache: false
