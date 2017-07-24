@@ -3,18 +3,3 @@ security:
   user:
     name: adolfo
     password: 123
-
-## Database definitions
-spring:
-  datasource:
-    url: jdbc:h2:mem:ironbank;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        show_sql: true
-        hbm2ddl:
-          auto: validate
