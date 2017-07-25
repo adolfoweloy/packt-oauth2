@@ -2,22 +2,22 @@ package com.packt.example.clientcredentialsserver.api;
 
 public class UserProfile {
 
-	private String name;
+    private String name;
 
-	private String email;
+    private String email;
 
-	public UserProfile(String name, String email) {
-		super();
-		this.name = name;
-		this.email = email;
-	}
+    public UserProfile(String name, String email) {
+        super();
+        this.name = name;
+        this.email = email;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
 }
