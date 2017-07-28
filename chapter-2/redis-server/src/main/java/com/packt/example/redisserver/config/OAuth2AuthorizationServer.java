@@ -15,37 +15,37 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 @Configuration
 @EnableAuthorizationServer
 public class OAuth2AuthorizationServer extends
-		AuthorizationServerConfigurerAdapter {
+        AuthorizationServerConfigurerAdapter {
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-	@Autowired
-	private RedisConnectionFactory connectionFactory;
+    @Autowired
+    private RedisConnectionFactory connectionFactory;
 
-	@Override
-	public void configure(
-		AuthorizationServerEndpointsConfigurer endpoints)
-		throws Exception {
-		endpoints
-			.authenticationManager(authenticationManager)
-			.tokenStore(tokenStore());
-	}
+    @Override
+    public void configure(
+        AuthorizationServerEndpointsConfigurer endpoints)
+        throws Exception {
+        endpoints
+            .authenticationManager(authenticationManager)
+            .tokenStore(tokenStore());
+    }
 
-	@Bean
-	public TokenStore tokenStore() {
-		RedisTokenStore redis = new RedisTokenStore(connectionFactory);
-		return redis;
-	}
+    @Bean
+    public TokenStore tokenStore() {
+        RedisTokenStore redis = new RedisTokenStore(connectionFactory);
+        return redis;
+    }
 
-	@Override
-	public void configure(ClientDetailsServiceConfigurer clients)
-			throws Exception {
-		clients.inMemory()
-			.withClient("clientapp")
-			.secret("123456")
-			.authorizedGrantTypes("password", "authorization_code")
-			.scopes("read_profile", "read_contacts");
-	}
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clients)
+            throws Exception {
+        clients.inMemory()
+            .withClient("clientapp")
+            .secret("123456")
+            .authorizedGrantTypes("password", "authorization_code")
+            .scopes("read_profile", "read_contacts");
+    }
 
 }
