@@ -19,38 +19,36 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 @Configuration
 @EnableAuthorizationServer
 public class OAuth2AuthorizationServer extends
-		AuthorizationServerConfigurerAdapter {
+        AuthorizationServerConfigurerAdapter {
 
-	@Autowired
-	private DataSource dataSource;
+    @Autowired
+    private DataSource dataSource;
 
-	@Bean
-	public TokenStore tokenStore() {
-		return new JdbcTokenStore(dataSource);
-	}
+    @Bean
+    public TokenStore tokenStore() {
+        return new JdbcTokenStore(dataSource);
+    }
 
-	@Bean
-	public ApprovalStore approvalStore() {
-		return new JdbcApprovalStore(dataSource);
-	}
+    @Bean
+    public ApprovalStore approvalStore() {
+        return new JdbcApprovalStore(dataSource);
+    }
 
-	@Bean
-	public ClientRegistrationService clientRegistrationService() {
-		return new JdbcClientDetailsService(dataSource);
-	}
+    @Bean
+    public ClientRegistrationService clientRegistrationService() {
+        return new JdbcClientDetailsService(dataSource);
+    }
 
-	@Override
-	public void configure(AuthorizationServerEndpointsConfigurer endpoints)
-			throws Exception {
-		endpoints
-			.approvalStore(approvalStore())
-			.tokenStore(tokenStore());
-	}
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints)
+            throws Exception {
+        endpoints.approvalStore(approvalStore()).tokenStore(tokenStore());
+    }
 
-	@Override
-	public void configure(ClientDetailsServiceConfigurer clients)
-			throws Exception {
-		clients.jdbc(dataSource);
-	}
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clients)
+            throws Exception {
+        clients.jdbc(dataSource);
+    }
 
 }

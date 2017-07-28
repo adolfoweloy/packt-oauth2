@@ -2,34 +2,34 @@ package com.packt.example.oauth2provider.client;
 
 public class BasicClientInfo {
 
-	private String name;
+    private String name;
 
-	private String redirectUri;
+    private String redirectUri;
 
-	private String clientType;
+    private String clientType;
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getRedirectUri() {
-		return redirectUri;
-	}
+    public String getRedirectUri() {
+        return redirectUri;
+    }
 
-	public void setRedirectUri(String redirectUri) {
-		this.redirectUri = redirectUri;
-	}
+    public void setRedirectUri(String redirectUri) {
+        this.redirectUri = redirectUri;
+    }
 
-	public String getClientType() {
-		return clientType;
-	}
+    public String getClientType() {
+        return clientType;
+    }
 
-	public void setClientType(String clientType) {
-		this.clientType = clientType;
-	}
+    public void setClientType(String clientType) {
+        this.clientType = clientType;
+    }
 
 }
