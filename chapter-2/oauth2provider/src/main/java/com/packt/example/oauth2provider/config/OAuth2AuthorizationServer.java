@@ -34,21 +34,25 @@ public class OAuth2AuthorizationServer extends
         return new JdbcApprovalStore(dataSource);
     }
 
-    @Bean
-    public ClientRegistrationService clientRegistrationService() {
-        return new JdbcClientDetailsService(dataSource);
-    }
-
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints)
             throws Exception {
-        endpoints.approvalStore(approvalStore()).tokenStore(tokenStore());
+        //@formatter:off
+        endpoints
+            .approvalStore(approvalStore())
+            .tokenStore(tokenStore());
+        //@formatter:on
     }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients)
             throws Exception {
         clients.jdbc(dataSource);
+    }
+
+    @Bean
+    public ClientRegistrationService clientRegistrationService() {
+        return new JdbcClientDetailsService(dataSource);
     }
 
 }

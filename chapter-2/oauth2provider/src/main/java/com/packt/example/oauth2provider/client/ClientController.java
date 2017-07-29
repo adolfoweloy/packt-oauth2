@@ -65,7 +65,6 @@ public class ClientController {
         app.setAccessTokenValidity(3000);
         app.addScope("read_profile");
         app.addScope("read_contacts");
-        app.addResourceId("provider");
 
         clientRegistrationService.addClientDetails(app);
 
