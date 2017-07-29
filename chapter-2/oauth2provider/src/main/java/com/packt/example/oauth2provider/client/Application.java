@@ -37,18 +37,6 @@ public class Application implements ClientDetails {
         additionalInformation.put("client_type", clientType.name());
     }
 
-    public void addRedirectUri(String redirectUri) {
-        this.webServerRedirectUri.add(redirectUri);
-    }
-
-    public void addScope(String scope) {
-        this.scope.add(scope);
-    }
-
-    public void addResourceId(String resourceId) {
-        this.resourceIds.add(resourceId);
-    }
-
     public void setClientId(String clientId) {
         this.clientId = clientId;
     }
@@ -59,6 +47,18 @@ public class Application implements ClientDetails {
 
     public void setAccessTokenValidity(int accessTokenValidity) {
         this.accessTokenValidity = accessTokenValidity;
+    }
+
+    public void addRedirectUri(String redirectUri) {
+        this.webServerRedirectUri.add(redirectUri);
+    }
+
+    public void addScope(String scope) {
+        this.scope.add(scope);
+    }
+
+    public void addResourceId(String resourceId) {
+        this.resourceIds.add(resourceId);
     }
 
     @Override
