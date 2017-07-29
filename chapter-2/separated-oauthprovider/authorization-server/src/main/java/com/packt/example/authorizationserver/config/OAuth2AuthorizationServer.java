@@ -14,31 +14,33 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 @Configuration
 @EnableAuthorizationServer
 public class OAuth2AuthorizationServer extends
-		AuthorizationServerConfigurerAdapter {
+        AuthorizationServerConfigurerAdapter {
 
-	@Autowired
-	private RedisConnectionFactory connectionFactory;
+    @Autowired
+    private RedisConnectionFactory connectionFactory;
 
-	@Override
-	public void configure(AuthorizationServerEndpointsConfigurer endpoints)
-			throws Exception {
-		endpoints.tokenStore(tokenStore());
-	}
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints)
+            throws Exception {
+        endpoints.tokenStore(tokenStore());
+    }
 
-	@Bean
-	public TokenStore tokenStore() {
-		return new RedisTokenStore(connectionFactory);
-	}
+    @Bean
+    public TokenStore tokenStore() {
+        return new RedisTokenStore(connectionFactory);
+    }
 
-	@Override
-	public void configure(ClientDetailsServiceConfigurer clients)
-			throws Exception {
-		clients.inMemory()
-			.withClient("clientapp")
-			.secret("123456")
-			.redirectUris("http://localhost:9000/callback")
-			.authorizedGrantTypes("authorization_code")
-			.scopes("read_profile", "read_contacts");
-	}
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clients)
+            throws Exception {
+        //@formatter:off
+        clients.inMemory()
+            .withClient("clientapp")
+            .secret("123456")
+            .redirectUris("http://localhost:9000/callback")
+            .authorizedGrantTypes("authorization_code")
+            .scopes("read_profile", "read_contacts");
+      //@formatter:on
+    }
 
 }

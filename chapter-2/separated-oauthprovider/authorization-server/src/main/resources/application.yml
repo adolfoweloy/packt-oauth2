@@ -1,8 +1,0 @@
-security:
-  user:
-    name: adolfo
-    password: 123
-
-spring:
-  redis:
-    url: redis://localhost:6379
