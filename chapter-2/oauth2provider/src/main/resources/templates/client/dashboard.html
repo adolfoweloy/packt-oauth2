@@ -27,8 +27,8 @@
                 <td>Delete app</td>
             </tr>
             <tr th:each="app : ${applications}">
-                <td th:text="${app.additionalInformation.name}"></td>
-                <td th:text="${app.additionalInformation.client_type}"></td>
+                <td th:text="${app.additionalInformation['name']}"></td>
+                <td th:text="${app.additionalInformation['client_type']}"></td>
                 <td th:text="${app.clientId}">client_id</td>
                 <td th:text="${app.clientSecret}">client_secret</td>
                 <td><a class="btn btn-danger" href="#" th:href="@{/client/remove(client_id=${app.clientId})}">Delete</a></td>
