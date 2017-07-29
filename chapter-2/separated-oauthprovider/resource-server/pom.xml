@@ -4,11 +4,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.packt.example</groupId>
-  <artifactId>resource_server</artifactId>
+  <artifactId>resource-server</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>resource_server</name>
+  <name>resource-server</name>
   <description>Demo project for Spring Boot</description>
 
   <parent>

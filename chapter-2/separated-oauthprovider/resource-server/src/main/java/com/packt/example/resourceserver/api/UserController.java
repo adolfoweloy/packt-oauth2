@@ -1,4 +1,4 @@
-package com.packt.example.resource_server.api;
+package com.packt.example.resourceserver.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;

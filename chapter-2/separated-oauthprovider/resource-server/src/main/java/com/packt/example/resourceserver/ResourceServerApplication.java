@@ -1,4 +1,4 @@
-package com.packt.example.resource_server;
+package com.packt.example.resourceserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

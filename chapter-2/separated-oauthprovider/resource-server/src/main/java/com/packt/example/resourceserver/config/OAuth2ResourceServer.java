@@ -1,4 +1,4 @@
-package com.packt.example.resource_server.config;
+package com.packt.example.resourceserver.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

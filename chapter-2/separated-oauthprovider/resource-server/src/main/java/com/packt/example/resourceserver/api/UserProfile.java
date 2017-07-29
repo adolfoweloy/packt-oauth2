@@ -1,4 +1,4 @@
-package com.packt.example.resource_server.api;
+package com.packt.example.resourceserver.api;
 
 public class UserProfile {
 
