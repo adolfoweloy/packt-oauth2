@@ -6,10 +6,10 @@ import io.gatling.http.Predef._
 
 class ValidationSimulation extends Simulation {
 
-  val httpConf = http.baseURL("http://localhost:8080")
+  val httpConf = http.baseURL("http://localhost:8081")
 
   val authorizationScenarios = List(
-    AuthorizationServer.validation.inject(rampUsers(1000) over(10 seconds)))
+    AuthorizationScenarios.scenario1.inject(rampUsers(100) over(10 seconds)))
 
   setUp(authorizationScenarios).protocols(httpConf)
 

@@ -6,7 +6,7 @@ import io.gatling.http.Predef._
 import org.json4s.DefaultFormats
 import org.json4s.native.JsonMethods.parse
 
-object AuthorizationServer {
+object AuthorizationScenarios {
   
   case class Token(access_token:String)
 
@@ -15,8 +15,8 @@ object AuthorizationServer {
   val accessToken = "Bearer " + jsValue
     .extract[Token].access_token
 
-  var validation = scenario("Validation of the access token")
-      .exec(http("Validate access token through api usage")
+  var scenario1 = scenario("Validation of the access token (strategy1)")
+      .exec(http("Validate access token scenario 1")
         .get("/api/profile")
         .header("Authorization", accessToken)
       )
