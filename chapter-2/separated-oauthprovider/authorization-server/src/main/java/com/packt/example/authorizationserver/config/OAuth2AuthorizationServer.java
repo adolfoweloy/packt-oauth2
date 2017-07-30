@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -19,10 +20,17 @@ public class OAuth2AuthorizationServer extends
     @Autowired
     private RedisConnectionFactory connectionFactory;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints)
             throws Exception {
-        endpoints.tokenStore(tokenStore());
+        //@formatter:off
+        endpoints
+            .authenticationManager(authenticationManager)
+            .tokenStore(tokenStore());
+        //@formatter:on
     }
 
     @Bean
@@ -38,7 +46,7 @@ public class OAuth2AuthorizationServer extends
             .withClient("clientapp")
             .secret("123456")
             .redirectUris("http://localhost:9000/callback")
-            .authorizedGrantTypes("authorization_code")
+            .authorizedGrantTypes("authorization_code", "password")
             .scopes("read_profile", "read_contacts");
       //@formatter:on
     }
