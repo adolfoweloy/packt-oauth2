@@ -12,3 +12,4 @@ src/main/webapp/assets/bower_components/
 .DS_Store
 workspace/
 *.mvn/
+**/dump.rdb
