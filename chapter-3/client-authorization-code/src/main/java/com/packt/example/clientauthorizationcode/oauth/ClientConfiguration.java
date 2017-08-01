@@ -27,22 +27,22 @@ public class ClientConfiguration {
 
     @Bean
     public OAuth2ProtectedResourceDetails authorizationCode() {
-        AuthorizationCodeResourceDetails detailsForBookserver = new AuthorizationCodeResourceDetails();
+        AuthorizationCodeResourceDetails resourceDetails = new AuthorizationCodeResourceDetails();
 
         //@formatter:off
-        detailsForBookserver.setId("oauth2server");
-        detailsForBookserver.setTokenName("oauth_token");
-        detailsForBookserver.setClientId("clientapp");
-        detailsForBookserver.setClientSecret("123456");
-        detailsForBookserver.setAccessTokenUri("http://localhost:8080/oauth/token");
-        detailsForBookserver.setUserAuthorizationUri("http://localhost:8080/oauth/authorize");
-        detailsForBookserver.setScope(Arrays.asList("read_profile"));
-        detailsForBookserver.setPreEstablishedRedirectUri(("http://localhost:9000/callback"));
-        detailsForBookserver.setUseCurrentUri(false);
-        detailsForBookserver.setClientAuthenticationScheme(AuthenticationScheme.header);
+        resourceDetails.setId("oauth2server");
+        resourceDetails.setTokenName("oauth_token");
+        resourceDetails.setClientId("clientapp");
+        resourceDetails.setClientSecret("123456");
+        resourceDetails.setAccessTokenUri("http://localhost:8080/oauth/token");
+        resourceDetails.setUserAuthorizationUri("http://localhost:8080/oauth/authorize");
+        resourceDetails.setScope(Arrays.asList("read_profile"));
+        resourceDetails.setPreEstablishedRedirectUri(("http://localhost:9000/callback"));
+        resourceDetails.setUseCurrentUri(false);
+        resourceDetails.setClientAuthenticationScheme(AuthenticationScheme.header);
         //@formatter:on
 
-        return detailsForBookserver;
+        return resourceDetails;
     }
 
     @Bean
