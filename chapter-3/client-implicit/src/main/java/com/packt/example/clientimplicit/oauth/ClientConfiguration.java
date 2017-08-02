@@ -10,7 +10,6 @@ import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.client.token.AccessTokenProviderChain;
 import org.springframework.security.oauth2.client.token.ClientTokenServices;
-import org.springframework.security.oauth2.client.token.grant.implicit.ImplicitAccessTokenProvider;
 import org.springframework.security.oauth2.client.token.grant.implicit.ImplicitResourceDetails;
 import org.springframework.security.oauth2.common.AuthenticationScheme;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
@@ -26,34 +25,33 @@ public class ClientConfiguration {
     private OAuth2ClientContext oauth2ClientContext;
 
     @Bean
-    public OAuth2ProtectedResourceDetails authorizationCode() {
-        ImplicitResourceDetails detailsForBookserver = new ImplicitResourceDetails();
+    public OAuth2ProtectedResourceDetails implicitResourceDetails() {
+        ImplicitResourceDetails resourceDetails = new ImplicitResourceDetails();
 
         //@formatter:off
-        detailsForBookserver.setId("oauth2server");
-        detailsForBookserver.setTokenName("oauth_token");
-        detailsForBookserver.setClientId("clientapp");
-        detailsForBookserver.setAccessTokenUri("http://localhost:8080/oauth/token");
-        detailsForBookserver.setUserAuthorizationUri("http://localhost:8080/oauth/authorize");
-        detailsForBookserver.setScope(Arrays.asList("read_profile"));
-        detailsForBookserver.setPreEstablishedRedirectUri(("http://localhost:9000/callback"));
-        detailsForBookserver.setUseCurrentUri(false);
-        detailsForBookserver.setClientAuthenticationScheme(AuthenticationScheme.header);
+        resourceDetails.setId("oauth2server");
+        resourceDetails.setTokenName("oauth_token");
+        resourceDetails.setClientId("clientapp");
+        resourceDetails.setUserAuthorizationUri("http://localhost:8080/oauth/authorize");
+        resourceDetails.setScope(Arrays.asList("read_profile"));
+        resourceDetails.setPreEstablishedRedirectUri("http://localhost:9000/callback");
+        resourceDetails.setUseCurrentUri(false);
+        resourceDetails.setClientAuthenticationScheme(AuthenticationScheme.query);
         //@formatter:on
 
-        return detailsForBookserver;
+        return resourceDetails;
     }
 
     @Bean
     public OAuth2RestTemplate oauth2RestTemplate() {
 
-        OAuth2ProtectedResourceDetails resourceDetails = authorizationCode();
+        OAuth2ProtectedResourceDetails resourceDetails = implicitResourceDetails();
 
         OAuth2RestTemplate template = new OAuth2RestTemplate(resourceDetails,
                 oauth2ClientContext);
 
         AccessTokenProviderChain provider = new AccessTokenProviderChain(
-                Arrays.asList(new ImplicitAccessTokenProvider()));
+                Arrays.asList(new CustomImplicitAccessTokenProvider()));
 
         provider.setClientTokenServices(clientTokenServices);
         template.setAccessTokenProvider(provider);

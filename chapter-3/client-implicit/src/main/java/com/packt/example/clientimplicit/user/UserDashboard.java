@@ -22,11 +22,27 @@ public class UserDashboard {
 
     @GetMapping("/callback")
     public ModelAndView callback() {
-        return new ModelAndView("forward:/dashboard");
+        ClientUser clientUser = getClientUserData();
+
+        ModelAndView mv = new ModelAndView("dashboard");
+        mv.addObject("user", clientUser);
+
+        return mv;
     }
 
     @GetMapping("/dashboard")
     public ModelAndView dashboard() {
+        ClientUser clientUser = getClientUserData();
+
+        ModelAndView mv = new ModelAndView("dashboard");
+        mv.addObject("user", clientUser);
+
+        tryToGetUserProfile(mv);
+
+        return mv;
+    }
+
+    private ClientUser getClientUserData() {
         ClientUserDetails userDetails = (ClientUserDetails) SecurityContextHolder
                 .getContext().getAuthentication().getPrincipal();
         ClientUser clientUser = userDetails.getClientUser();
@@ -35,12 +51,7 @@ public class UserDashboard {
                 new Entry("entry 1"),
                 new Entry("entry 2")));
 
-        ModelAndView mv = new ModelAndView("dashboard");
-        mv.addObject("user", clientUser);
-
-        tryToGetUserProfile(mv);
-
-        return mv;
+        return clientUser;
     }
 
     private void tryToGetUserProfile(ModelAndView mv) {
