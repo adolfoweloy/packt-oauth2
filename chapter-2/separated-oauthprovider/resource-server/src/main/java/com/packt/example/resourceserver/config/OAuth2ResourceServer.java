@@ -37,7 +37,9 @@ public class OAuth2ResourceServer extends ResourceServerConfigurerAdapter {
             .authenticated()
         .and()
             .requestMatchers()
-            .antMatchers("/api/**");
+            .antMatchers("/api/**")
+        .and()
+            .cors();
         //@formatter:on
     }
 
