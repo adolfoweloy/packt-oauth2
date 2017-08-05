@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.packt.example.clientpassword.oauth.UserProfile;
 import com.packt.example.clientpassword.security.ClientUserDetails;
 
 @Controller

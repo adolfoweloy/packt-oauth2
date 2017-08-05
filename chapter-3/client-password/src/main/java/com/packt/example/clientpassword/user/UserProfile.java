@@ -1,4 +1,4 @@
-package com.packt.example.clientpassword.oauth;
+package com.packt.example.clientpassword.user;
 
 public class UserProfile {
 
