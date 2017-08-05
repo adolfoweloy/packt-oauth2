@@ -9,7 +9,7 @@ $(function() {
   });
 
   $.ajax({
-      url: 'http://localhost:8081/api/profile',
+      url: 'http://localhost:8080/api/profile',
       beforeSend: function(xhr) {
           xhr.setRequestHeader("Authorization", "Bearer " + oauth2Token['access_token']);
       },

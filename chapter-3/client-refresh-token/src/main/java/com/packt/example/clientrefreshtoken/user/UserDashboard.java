@@ -20,6 +20,11 @@ public class UserDashboard {
     @Autowired
     private OAuth2RestTemplate restTemplate;
 
+    @GetMapping("/")
+    public String home() {
+        return "index";
+    }
+
     @GetMapping("/callback")
     public ModelAndView callback() {
         return new ModelAndView("forward:/dashboard");
@@ -44,7 +49,7 @@ public class UserDashboard {
     }
 
     private void tryToGetUserProfile(ModelAndView mv) {
-        String endpoint = "http://localhost:8081/api/profile";
+        String endpoint = "http://localhost:8080/api/profile";
         try {
             UserProfile userProfile = restTemplate.getForObject(endpoint, UserProfile.class);
             mv.addObject("profile", userProfile);
