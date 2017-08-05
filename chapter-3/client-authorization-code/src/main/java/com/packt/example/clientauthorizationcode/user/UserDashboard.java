@@ -1,7 +1,7 @@
 package com.packt.example.clientauthorizationcode.user;
 
-import com.packt.example.clientauthorizationcode.oauth.UserProfile;
-import com.packt.example.clientauthorizationcode.security.ClientUserDetails;
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Arrays;
+import com.packt.example.clientauthorizationcode.security.ClientUserDetails;
 
 @Controller
 public class UserDashboard {
@@ -18,6 +18,11 @@ public class UserDashboard {
 
     @Autowired
     private OAuth2RestTemplate restTemplate;
+
+    @GetMapping("/")
+    public String home() {
+        return "index";
+    }
 
     @GetMapping("/callback")
     public ModelAndView callback() {

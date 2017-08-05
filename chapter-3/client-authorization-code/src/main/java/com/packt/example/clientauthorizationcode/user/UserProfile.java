@@ -1,4 +1,4 @@
-package com.packt.example.clientauthorizationcode.oauth;
+package com.packt.example.clientauthorizationcode.user;
 
 public class UserProfile {
 

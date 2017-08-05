@@ -1,4 +1,4 @@
-package com.packt.example.clientimplicit.oauth;
+package com.packt.example.clientimplicit.user;
 
 public class UserProfile {
 
