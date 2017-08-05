@@ -18,6 +18,9 @@ public class UserDashboard {
     @Autowired
     private OAuth2RestTemplate restTemplate;
 
+    @GetMapping("/")
+    public String home() { return "index"; }
+
     @GetMapping("/callback")
     public ModelAndView callback() {
         ClientUser clientUser = getClientUserData();

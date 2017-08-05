@@ -1,12 +1,9 @@
 package com.packt.example.clientimplicit.oauth;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
-import org.springframework.security.oauth2.client.resource.UserApprovalRequiredException;
 import org.springframework.security.oauth2.client.resource.UserRedirectRequiredException;
 import org.springframework.security.oauth2.client.token.AccessTokenProvider;
 import org.springframework.security.oauth2.client.token.AccessTokenRequest;
@@ -19,8 +16,7 @@ public class CustomImplicitAccessTokenProvider implements AccessTokenProvider {
     @Override
     public OAuth2AccessToken obtainAccessToken(
             OAuth2ProtectedResourceDetails details, AccessTokenRequest request)
-            throws UserRedirectRequiredException,
-            UserApprovalRequiredException, AccessDeniedException {
+            throws RuntimeException {
 
         ImplicitResourceDetails resource = (ImplicitResourceDetails) details;
 
@@ -60,9 +56,9 @@ public class CustomImplicitAccessTokenProvider implements AccessTokenProvider {
         queryString.put("client_id", resource.getClientId());
 
         if (resource.isScoped()) {
-            List<String> scope = resource.getScope();
             queryString.put("scope",
-                    scope.stream().reduce((a, b) -> a + " " + b).get());
+                    resource.getScope().stream().reduce((a, b) -> a + " " + b)
+                            .get());
         }
 
         String redirectUri = resource.getRedirectUri(request);
