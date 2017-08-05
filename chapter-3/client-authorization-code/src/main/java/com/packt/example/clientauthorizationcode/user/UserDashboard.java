@@ -1,7 +1,7 @@
 package com.packt.example.clientauthorizationcode.user;
 
-import java.util.Arrays;
-
+import com.packt.example.clientauthorizationcode.oauth.UserProfile;
+import com.packt.example.clientauthorizationcode.security.ClientUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.packt.example.clientauthorizationcode.oauth.UserProfile;
-import com.packt.example.clientauthorizationcode.security.ClientUserDetails;
+import java.util.Arrays;
 
 @Controller
 public class UserDashboard {
@@ -44,7 +43,7 @@ public class UserDashboard {
     }
 
     private void tryToGetUserProfile(ModelAndView mv) {
-        String endpoint = "http://localhost:8081/api/profile";
+        String endpoint = "http://localhost:8080/api/profile";
         try {
             UserProfile userProfile = restTemplate.getForObject(endpoint, UserProfile.class);
             mv.addObject("profile", userProfile);
