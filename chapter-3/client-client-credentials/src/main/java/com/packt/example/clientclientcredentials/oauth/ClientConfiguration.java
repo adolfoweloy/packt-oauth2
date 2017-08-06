@@ -28,17 +28,17 @@ public class ClientConfiguration {
     @Bean
     public OAuth2ProtectedResourceDetails passwordResourceDetails() {
         //@formatter:off
-        ClientCredentialsResourceDetails details = new ClientCredentialsResourceDetails();
+    ClientCredentialsResourceDetails details = new ClientCredentialsResourceDetails();
 
-        details.setId("oauth2server");
-        details.setTokenName("oauth_token");
-        details.setClientId("clientadmin");
-        details.setClientSecret("123");
-        details.setAccessTokenUri("http://localhost:8080/oauth/token");
-        details.setScope(Arrays.asList("admin"));
+    details.setId("oauth2server");
+    details.setTokenName("oauth_token");
+    details.setClientId("clientadmin");
+    details.setClientSecret("123");
+    details.setAccessTokenUri("http://localhost:8080/oauth/token");
+    details.setScope(Arrays.asList("admin"));
 
-        details.setClientAuthenticationScheme(AuthenticationScheme.header);
-        //@formatter:on
+    details.setClientAuthenticationScheme(AuthenticationScheme.header);
+    //@formatter:on
 
         return details;
     }
