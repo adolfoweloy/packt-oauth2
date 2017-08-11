@@ -27,13 +27,18 @@ public class DefaultClientDetails implements ClientDetails {
     private DynamicMetadata dynamicMetadata;
 
     public DynamicMetadata getDynamicMetadata() {
-        // TODO - retrieve dynamicMetaData from additionalInformation
         return dynamicMetadata;
     }
 
     public void setDynamicMetadata(DynamicMetadata dynamicMetadata) {
         this.dynamicMetadata = dynamicMetadata;
-        // TODO - build additionalInformation from dynamicMetaData
+        additionalInformation.put("software_id", dynamicMetadata.getSoftwareId());
+        additionalInformation.put("token_endpoint_auth_method", dynamicMetadata.getTokenEndpointAuthMethod());
+        additionalInformation.put("response_types", dynamicMetadata.getResponseTypes());
+        additionalInformation.put("client_name", dynamicMetadata.getClientName());
+        additionalInformation.put("client_uri", dynamicMetadata.getClientUri());
+        additionalInformation.put("logo_uri", dynamicMetadata.getLogoUri());
+        additionalInformation.put("tos_uri", dynamicMetadata.getTosUri());
     }
 
     public void setClientId(String clientId) {
@@ -56,8 +61,7 @@ public class DefaultClientDetails implements ClientDetails {
 
     @Override
     public boolean isSecretRequired() {
-        return authorizedGrantTypes.containsAll(Arrays.asList(
-                "authorization_code", "password", "client_credentials"));
+        return authorizedGrantTypes.containsAll(Arrays.asList("authorization_code", "password", "client_credentials"));
     }
 
     public void setClientSecret(String clientSecret) {
@@ -121,8 +125,7 @@ public class DefaultClientDetails implements ClientDetails {
         return accessTokenValiditySeconds;
     }
 
-    public void setRefreshTokenValiditySeconds(
-            Integer refreshTokenValiditySeconds) {
+    public void setRefreshTokenValiditySeconds(Integer refreshTokenValiditySeconds) {
         this.refreshTokenValiditySeconds = refreshTokenValiditySeconds;
     }
 

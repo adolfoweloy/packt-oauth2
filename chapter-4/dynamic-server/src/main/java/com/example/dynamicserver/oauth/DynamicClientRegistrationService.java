@@ -8,31 +8,30 @@ import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.security.oauth2.provider.ClientRegistrationService;
 import org.springframework.security.oauth2.provider.NoSuchClientException;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 
-public class DynamicClientRegistrationService implements
-        ClientRegistrationService, ClientDetailsService {
+public class DynamicClientRegistrationService implements ClientRegistrationService, ClientDetailsService {
+
+    private JdbcClientDetailsService jdbcClientDetailsService;
 
     @Override
-    public void addClientDetails(ClientDetails clientDetails)
-            throws ClientAlreadyExistsException {
+    public void addClientDetails(ClientDetails clientDetails) throws ClientAlreadyExistsException {
+        // TODO - do all validations
+        jdbcClientDetailsService.addClientDetails(clientDetails);
+    }
+
+    @Override
+    public void updateClientDetails(ClientDetails clientDetails) throws NoSuchClientException {
 
     }
 
     @Override
-    public void updateClientDetails(ClientDetails clientDetails)
-            throws NoSuchClientException {
+    public void updateClientSecret(String clientId, String secret) throws NoSuchClientException {
 
     }
 
     @Override
-    public void updateClientSecret(String clientId, String secret)
-            throws NoSuchClientException {
-
-    }
-
-    @Override
-    public void removeClientDetails(String clientId)
-            throws NoSuchClientException {
+    public void removeClientDetails(String clientId) throws NoSuchClientException {
 
     }
 
@@ -42,8 +41,7 @@ public class DynamicClientRegistrationService implements
     }
 
     @Override
-    public ClientDetails loadClientByClientId(String clientId)
-            throws ClientRegistrationException {
+    public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
         return null;
     }
 
