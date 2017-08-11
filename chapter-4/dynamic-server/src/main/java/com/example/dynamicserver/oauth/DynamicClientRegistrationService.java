@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.springframework.security.oauth2.provider.ClientAlreadyExistsException;
 import org.springframework.security.oauth2.provider.ClientDetails;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.security.oauth2.provider.ClientRegistrationService;
 import org.springframework.security.oauth2.provider.NoSuchClientException;
 
 public class DynamicClientRegistrationService implements
-        ClientRegistrationService {
+        ClientRegistrationService, ClientDetailsService {
 
     @Override
     public void addClientDetails(ClientDetails clientDetails)
@@ -36,6 +38,12 @@ public class DynamicClientRegistrationService implements
 
     @Override
     public List<ClientDetails> listClientDetails() {
+        return null;
+    }
+
+    @Override
+    public ClientDetails loadClientByClientId(String clientId)
+            throws ClientRegistrationException {
         return null;
     }
 
