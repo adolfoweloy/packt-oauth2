@@ -5,11 +5,11 @@ import java.util.Set;
 
 public class ClientMetadata {
 
-    private Set<String> redirectUris;
+    private Set<String> redirectUris = new HashSet<>();
 
     private String tokenEndpointAuthMethod;
 
-    private Set<String> grantTypes;
+    private Set<String> grantTypes = new HashSet<>();
 
     private Set<String> responseTypes = new HashSet<>();
 

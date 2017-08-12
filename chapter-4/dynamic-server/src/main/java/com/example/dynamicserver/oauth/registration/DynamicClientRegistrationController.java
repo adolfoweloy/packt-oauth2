@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.dynamicserver.oauth.model.DynamicClientDetails;
 import com.example.dynamicserver.oauth.model.GrantTypeAndResponseTypeCorrelationSpecification;
+import com.example.dynamicserver.oauth.model.RedirectFlowSpecification;
 import com.example.dynamicserver.oauth.model.RegistrationError;
 
 @Controller
@@ -27,6 +28,9 @@ public class DynamicClientRegistrationController {
 
     @Autowired
     private GrantTypeAndResponseTypeCorrelationSpecification grantTypeAndResponseTypeCorrelation;
+
+    @Autowired
+    private RedirectFlowSpecification redirectFlowSpecification;
 
     /**
      * RFC7591
@@ -42,6 +46,13 @@ public class DynamicClientRegistrationController {
 
         if (!grantTypeAndResponseTypeCorrelation.isSatisfiedBy(clientDetails)) {
             RegistrationError error = new RegistrationError(RegistrationError.INVALID_CLIENT_METADATA);
+            error.setErrorDescription("Check the correlation between authorized grant types and response code");
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
+
+        if (!redirectFlowSpecification.isSatisfiedBy(clientDetails)) {
+            RegistrationError error = new RegistrationError(RegistrationError.INVALID_REDIRECT_URI);
+            error.setErrorDescription("You must specify redirect_uri when using flows with redirection");
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
 
