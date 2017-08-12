@@ -8,15 +8,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class RedirectFlowSpecification {
 
-    public boolean isSatisfiedBy(DynamicClientDetails clientDetails) {
+    public boolean isSatisfiedBy(ClientMetadata clientMetadata) {
         List<String> flowsWithRedirection = Arrays.asList("authorization_code", "implicit");
 
-        boolean hasFlowWithRedirection = clientDetails.getAuthorizedGrantTypes().stream()
+        boolean hasFlowWithRedirection = clientMetadata.getGrantTypes().stream()
             .filter(grantType -> flowsWithRedirection.contains(grantType))
             .findAny().isPresent();
 
         if (hasFlowWithRedirection) {
-            return clientDetails.getRegisteredRedirectUri().size() > 0;
+            return clientMetadata.getRedirectUris().size() > 0;
         }
 
         return false;

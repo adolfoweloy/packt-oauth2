@@ -1,9 +1,8 @@
-package com.example.dynamicserver.oauth.registration;
+package com.example.dynamicserver.oauth.model;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.example.dynamicserver.oauth.model.DynamicClientDetails;
 import com.example.dynamicserver.util.RandomHelper;
 
 @Component
@@ -19,7 +18,18 @@ public class DynamicClientDetailsFactory {
     public DynamicClientDetails create(ClientMetadata clientMetadata) {
         DynamicClientDetails clientDetails = new DynamicClientDetails();
         clientDetails.setClientId(randomHelper.nextString(10, 32));
-        clientDetails.setClientSecret(randomHelper.nextString(32, 32));
+
+        if (clientMetadata.getTokenEndpointAuthMethod().isEmpty()) {
+            clientDetails.setTokenEndpointAuthMethod("client_secret_basic");
+        }
+
+        boolean publicClient = clientMetadata.getTokenEndpointAuthMethod().equals("none")
+            || clientMetadata.getGrantTypes().contains("implicit");
+
+        if (!publicClient) {
+            clientDetails.setClientSecret(randomHelper.nextString(32, 32));
+        }
+
         clientMetadata.getGrantTypes().forEach(grantType -> clientDetails.addAuthorizedGrantTypes(grantType));
         clientMetadata.getRedirectUris().forEach(uri -> clientDetails.addRegisteredRedirectUri(uri));
 

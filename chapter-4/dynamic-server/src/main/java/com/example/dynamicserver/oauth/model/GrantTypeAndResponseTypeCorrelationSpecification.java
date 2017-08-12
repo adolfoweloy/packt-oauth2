@@ -17,9 +17,9 @@ public class GrantTypeAndResponseTypeCorrelationSpecification {
         correlation.put("implicit", "token");
     }
 
-    public boolean isSatisfiedBy(DynamicClientDetails clientDetails) {
+    public boolean isSatisfiedBy(ClientMetadata clientDetails) {
         Set<String> responseTypes = clientDetails.getResponseTypes();
-        Set<String> grantTypes = clientDetails.getAuthorizedGrantTypes();
+        Set<String> grantTypes = clientDetails.getGrantTypes();
 
         for (String grantType : grantTypes) {
             String responseCode = correlation.get(grantType);

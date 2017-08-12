@@ -3,7 +3,7 @@ package com.example.dynamicserver.oauth.registration;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ClientMetadata {
+public class ClientRegistrationResponse {
 
     private Set<String> redirectUris = new HashSet<>();
 
@@ -17,19 +17,13 @@ public class ClientMetadata {
 
     private String clientUri;
 
-    private String logoUri;
-
     private String scope;
-
-    private Set<String> contacts = new HashSet<>();
-
-    private String tosUri;
-
-    private String policyUri;
 
     private String softwareId;
 
-    private String softwareVersion;
+    private String clientId;
+
+    private String clientSecret;
 
     public Set<String> getRedirectUris() {
         return redirectUris;
@@ -79,44 +73,12 @@ public class ClientMetadata {
         this.clientUri = clientUri;
     }
 
-    public String getLogoUri() {
-        return logoUri;
-    }
-
-    public void setLogoUri(String logoUri) {
-        this.logoUri = logoUri;
-    }
-
     public String getScope() {
         return scope;
     }
 
     public void setScope(String scope) {
         this.scope = scope;
-    }
-
-    public Set<String> getContacts() {
-        return contacts;
-    }
-
-    public void setContacts(Set<String> contacts) {
-        this.contacts = contacts;
-    }
-
-    public String getTosUri() {
-        return tosUri;
-    }
-
-    public void setTosUri(String tosUri) {
-        this.tosUri = tosUri;
-    }
-
-    public String getPolicyUri() {
-        return policyUri;
-    }
-
-    public void setPolicyUri(String policyUri) {
-        this.policyUri = policyUri;
     }
 
     public String getSoftwareId() {
@@ -127,13 +89,21 @@ public class ClientMetadata {
         this.softwareId = softwareId;
     }
 
-    public String getSoftwareVersion() {
-        return softwareVersion;
+    public String getClientId() {
+        return clientId;
     }
 
-    public void setSoftwareVersion(String softwareVersion) {
-        this.softwareVersion = softwareVersion;
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
+    public String getClientSecret() {
+        return clientSecret;
+    }
+
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
+    }
 
 }
+

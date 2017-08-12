@@ -23,6 +23,7 @@ public class DynamicClientDetails implements ClientDetails {
     private Set<GrantedAuthority> authorities = new HashSet<>();
     private Integer accessTokenValiditySeconds;
     private Integer refreshTokenValiditySeconds;
+
     private Map<String, Object> additionalInformation = new HashMap<>();
 
     // additional fields
