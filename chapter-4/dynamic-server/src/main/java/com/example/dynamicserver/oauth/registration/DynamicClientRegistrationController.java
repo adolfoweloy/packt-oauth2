@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.dynamicserver.oauth.model.DefaultClientDetails;
 import com.example.dynamicserver.oauth.model.DynamicMetadata;
+import com.example.dynamicserver.oauth.model.GrantTypeAndResponseTypeCorrelationSpecification;
+import com.example.dynamicserver.oauth.model.RegistrationError;
 import com.example.dynamicserver.util.RandomHelper;
 
 @Controller
@@ -18,10 +20,14 @@ import com.example.dynamicserver.util.RandomHelper;
 public class DynamicClientRegistrationController {
 
     @Autowired
-    private ClientRegistrationService jdbcClientRegistration;
+    private ClientRegistrationService clientRegistration;
 
     @Autowired
     private RandomHelper randomHelper;
+
+    @Autowired
+    private GrantTypeAndResponseTypeCorrelationSpecification grantTypeAndResponseTypeCorrelation;
+
 
     /**
      * RFC7591
@@ -31,9 +37,7 @@ public class DynamicClientRegistrationController {
      * As we are using open registration, these endpoint MAY be rate-limited to prevent a denial-of-service attack.
      */
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody ClientMetadata clientMetadata) {
-        System.out.println(clientMetadata);
-
+    public ResponseEntity<Object> register(@RequestBody ClientMetadata clientMetadata) {
         DefaultClientDetails clientDetails = new DefaultClientDetails();
         clientDetails.setClientId(randomHelper.nextString(10, 32));
         clientDetails.setClientSecret(randomHelper.nextString(32, 32));
@@ -56,8 +60,14 @@ public class DynamicClientRegistrationController {
 
         clientDetails.setDynamicMetadata(metadata);
 
-        jdbcClientRegistration.addClientDetails(clientDetails);
-        ResponseEntity<String> response = new ResponseEntity<>(HttpStatus.CREATED);
+        final ResponseEntity<Object> response;
+        if (grantTypeAndResponseTypeCorrelation.isSatisfiedBy(clientDetails)) {
+            clientRegistration.addClientDetails(clientDetails);
+            response = new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            RegistrationError error = new RegistrationError(RegistrationError.INVALID_CLIENT_METADATA);
+            response = new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
 
         return response;
     }
