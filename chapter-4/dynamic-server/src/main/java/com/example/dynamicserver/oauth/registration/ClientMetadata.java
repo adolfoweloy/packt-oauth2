@@ -1,28 +1,42 @@
-package com.example.dynamicserver.oauth;
+package com.example.dynamicserver.oauth.registration;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class DynamicMetadata {
+public class ClientMetadata {
+
+    private Set<String> redirectUris;
+
+    private String tokenEndpointAuthMethod;
+
+    private Set<String> grantTypes;
+
+    private Set<String> responseTypes = new HashSet<>();
+
+    private String clientName;
+
+    private String clientUri;
+
+    private String logoUri;
+
+    private String scope;
+
+    private Set<String> contacts = new HashSet<>();
+
+    private String tosUri;
+
+    private String policyUri;
 
     private String softwareId;
-    private String tokenEndpointAuthMethod;
-    private String responseTypes;
-    private String clientName;
-    private String logoUri;
-    private String clientUri;
-    private Set<String> contacts = new HashSet<>();
-    private String tosUri;
-    private String policyUri;
-    private String jwksUri;
-    private String jwks;
 
-    public String getSoftwareId() {
-        return softwareId;
+    private String softwareVersion;
+
+    public Set<String> getRedirectUris() {
+        return redirectUris;
     }
 
-    public void setSoftwareId(String softwareId) {
-        this.softwareId = softwareId;
+    public void setRedirectUris(Set<String> redirectUris) {
+        this.redirectUris = redirectUris;
     }
 
     public String getTokenEndpointAuthMethod() {
@@ -33,11 +47,19 @@ public class DynamicMetadata {
         this.tokenEndpointAuthMethod = tokenEndpointAuthMethod;
     }
 
-    public String getResponseTypes() {
+    public Set<String> getGrantTypes() {
+        return grantTypes;
+    }
+
+    public void setGrantTypes(Set<String> grantTypes) {
+        this.grantTypes = grantTypes;
+    }
+
+    public Set<String> getResponseTypes() {
         return responseTypes;
     }
 
-    public void setResponseTypes(String responseTypes) {
+    public void setResponseTypes(Set<String> responseTypes) {
         this.responseTypes = responseTypes;
     }
 
@@ -49,6 +71,14 @@ public class DynamicMetadata {
         this.clientName = clientName;
     }
 
+    public String getClientUri() {
+        return clientUri;
+    }
+
+    public void setClientUri(String clientUri) {
+        this.clientUri = clientUri;
+    }
+
     public String getLogoUri() {
         return logoUri;
     }
@@ -57,12 +87,12 @@ public class DynamicMetadata {
         this.logoUri = logoUri;
     }
 
-    public String getClientUri() {
-        return clientUri;
+    public String getScope() {
+        return scope;
     }
 
-    public void setClientUri(String clientUri) {
-        this.clientUri = clientUri;
+    public void setScope(String scope) {
+        this.scope = scope;
     }
 
     public Set<String> getContacts() {
@@ -89,20 +119,21 @@ public class DynamicMetadata {
         this.policyUri = policyUri;
     }
 
-    public String getJwksUri() {
-        return jwksUri;
+    public String getSoftwareId() {
+        return softwareId;
     }
 
-    public void setJwksUri(String jwksUri) {
-        this.jwksUri = jwksUri;
+    public void setSoftwareId(String softwareId) {
+        this.softwareId = softwareId;
     }
 
-    public String getJwks() {
-        return jwks;
+    public String getSoftwareVersion() {
+        return softwareVersion;
     }
 
-    public void setJwks(String jwks) {
-        this.jwks = jwks;
+    public void setSoftwareVersion(String softwareVersion) {
+        this.softwareVersion = softwareVersion;
     }
+
 
 }

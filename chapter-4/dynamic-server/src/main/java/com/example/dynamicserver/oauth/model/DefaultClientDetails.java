@@ -1,4 +1,4 @@
-package com.example.dynamicserver.oauth;
+package com.example.dynamicserver.oauth.model;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -37,8 +37,6 @@ public class DefaultClientDetails implements ClientDetails {
         additionalInformation.put("response_types", dynamicMetadata.getResponseTypes());
         additionalInformation.put("client_name", dynamicMetadata.getClientName());
         additionalInformation.put("client_uri", dynamicMetadata.getClientUri());
-        additionalInformation.put("logo_uri", dynamicMetadata.getLogoUri());
-        additionalInformation.put("tos_uri", dynamicMetadata.getTosUri());
     }
 
     public void setClientId(String clientId) {

@@ -1,4 +1,4 @@
-package com.example.dynamicserver.oauth;
+package com.example.dynamicserver.oauth.registration;
 
 import java.util.List;
 
