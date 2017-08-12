@@ -11,12 +11,10 @@ public class OAuth2ResourceServer extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        //@formatter:off
         http
             .authorizeRequests()
-                .antMatchers("/oauth/register").permitAll()
+                .antMatchers("/register").permitAll()
                 .anyRequest().authenticated();
-        //@formatter:on
     }
 
 }

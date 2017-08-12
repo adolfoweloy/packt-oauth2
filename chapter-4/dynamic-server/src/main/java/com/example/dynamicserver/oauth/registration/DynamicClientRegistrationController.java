@@ -1,33 +1,32 @@
 package com.example.dynamicserver.oauth.registration;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientRegistrationService;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.dynamicserver.oauth.model.DefaultClientDetails;
-import com.example.dynamicserver.oauth.model.DynamicMetadata;
+import com.example.dynamicserver.oauth.model.DynamicClientDetails;
 import com.example.dynamicserver.oauth.model.GrantTypeAndResponseTypeCorrelationSpecification;
 import com.example.dynamicserver.oauth.model.RegistrationError;
-import com.example.dynamicserver.util.RandomHelper;
 
 @Controller
-@RequestMapping("/oauth")
 public class DynamicClientRegistrationController {
 
     @Autowired
     private ClientRegistrationService clientRegistration;
 
     @Autowired
-    private RandomHelper randomHelper;
+    private DynamicClientDetailsFactory clientDetailsFactory;
 
     @Autowired
     private GrantTypeAndResponseTypeCorrelationSpecification grantTypeAndResponseTypeCorrelation;
-
 
     /**
      * RFC7591
@@ -38,38 +37,21 @@ public class DynamicClientRegistrationController {
      */
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody ClientMetadata clientMetadata) {
-        DefaultClientDetails clientDetails = new DefaultClientDetails();
-        clientDetails.setClientId(randomHelper.nextString(10, 32));
-        clientDetails.setClientSecret(randomHelper.nextString(32, 32));
-        clientMetadata.getGrantTypes().forEach(grantType -> clientDetails.addAuthorizedGrantTypes(grantType));
-        clientMetadata.getRedirectUris().forEach(uri -> clientDetails.addRegisteredRedirectUri(uri));
 
-        if (clientMetadata.getScope() != null) {
-            String[] scopes = clientMetadata.getScope().split("\\s");
-            for (String scope : scopes) {
-                clientDetails.addScope(scope);
-            }
-        }
+        DynamicClientDetails clientDetails = clientDetailsFactory.create(clientMetadata);
 
-        DynamicMetadata metadata = new DynamicMetadata();
-        metadata.setClientName(clientMetadata.getClientName());
-        metadata.setClientUri(clientMetadata.getClientUri());
-        metadata.setSoftwareId(clientMetadata.getSoftwareId());
-        metadata.setResponseTypes(clientMetadata.getResponseTypes());
-        metadata.setTokenEndpointAuthMethod(clientMetadata.getTokenEndpointAuthMethod());
-
-        clientDetails.setDynamicMetadata(metadata);
-
-        final ResponseEntity<Object> response;
-        if (grantTypeAndResponseTypeCorrelation.isSatisfiedBy(clientDetails)) {
-            clientRegistration.addClientDetails(clientDetails);
-            response = new ResponseEntity<>(HttpStatus.CREATED);
-        } else {
+        if (!grantTypeAndResponseTypeCorrelation.isSatisfiedBy(clientDetails)) {
             RegistrationError error = new RegistrationError(RegistrationError.INVALID_CLIENT_METADATA);
-            response = new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
 
-        return response;
+        clientRegistration.addClientDetails(clientDetails);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/clients")
+    public ResponseEntity<List<ClientDetails>> list() {
+        return new ResponseEntity<>(clientRegistration.listClientDetails(), HttpStatus.OK);
     }
 
 }

@@ -11,7 +11,7 @@ import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
 
-public class DefaultClientDetails implements ClientDetails {
+public class DynamicClientDetails implements ClientDetails {
     private static final long serialVersionUID = 1L;
 
     private String clientId;
@@ -24,19 +24,45 @@ public class DefaultClientDetails implements ClientDetails {
     private Integer accessTokenValiditySeconds;
     private Integer refreshTokenValiditySeconds;
     private Map<String, Object> additionalInformation = new HashMap<>();
-    private DynamicMetadata dynamicMetadata;
 
-    public DynamicMetadata getDynamicMetadata() {
-        return dynamicMetadata;
+    // additional fields
+    private String softwareId;
+    private String tokenEndpointAuthMethod;
+    private Set<String> responseTypes = new HashSet<>();
+    private String clientName;
+    private String clientUri;
+
+    public String getSoftwareId() { return softwareId; }
+
+    public void setSoftwareId(String softwareId) {
+        this.softwareId = softwareId;
+        additionalInformation.put("software_id", softwareId);
     }
 
-    public void setDynamicMetadata(DynamicMetadata dynamicMetadata) {
-        this.dynamicMetadata = dynamicMetadata;
-        additionalInformation.put("software_id", dynamicMetadata.getSoftwareId());
-        additionalInformation.put("token_endpoint_auth_method", dynamicMetadata.getTokenEndpointAuthMethod());
-        additionalInformation.put("response_types", dynamicMetadata.getResponseTypes());
-        additionalInformation.put("client_name", dynamicMetadata.getClientName());
-        additionalInformation.put("client_uri", dynamicMetadata.getClientUri());
+    public String getTokenEndpointAuthMethod() { return tokenEndpointAuthMethod; }
+
+    public void setTokenEndpointAuthMethod(String tokenEndpointAuthMethod) {
+        this.tokenEndpointAuthMethod = tokenEndpointAuthMethod;
+        additionalInformation.put("token_endpoint_auth_method", tokenEndpointAuthMethod);
+    }
+    public Set<String> getResponseTypes() { return responseTypes; }
+
+    public void setResponseTypes(Set<String> responseTypes) {
+        this.responseTypes = responseTypes;
+        additionalInformation.put("response_types", getResponseTypes());
+    }
+    public String getClientName() { return clientName; }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+        additionalInformation.put("client_name", clientName);
+    }
+
+    public String getClientUri() { return clientUri; }
+
+    public void setClientUri(String clientUri) {
+        this.clientUri = clientUri;
+        additionalInformation.put("client_uri", clientUri);
     }
 
     public void setClientId(String clientId) {
