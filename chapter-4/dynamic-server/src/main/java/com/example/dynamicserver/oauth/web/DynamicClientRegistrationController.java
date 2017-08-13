@@ -1,4 +1,4 @@
-package com.example.dynamicserver.oauth.registration;
+package com.example.dynamicserver.oauth.web;
 
 import java.util.List;
 
@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.example.dynamicserver.oauth.model.ClientMetadata;
-import com.example.dynamicserver.oauth.model.DynamicClientDetails;
-import com.example.dynamicserver.oauth.model.DynamicClientDetailsFactory;
-import com.example.dynamicserver.oauth.model.GrantTypeAndResponseTypeCorrelationSpecification;
-import com.example.dynamicserver.oauth.model.RedirectFlowSpecification;
-import com.example.dynamicserver.oauth.model.RegistrationError;
-import com.example.dynamicserver.oauth.model.TokenEndpointAuthSpecification;
+import com.example.dynamicserver.oauth.domain.ClientMetadata;
+import com.example.dynamicserver.oauth.domain.DynamicClientDetails;
+import com.example.dynamicserver.oauth.domain.DynamicClientDetailsFactory;
+import com.example.dynamicserver.oauth.domain.GrantTypeAndResponseTypeCorrelationSpecification;
+import com.example.dynamicserver.oauth.domain.RedirectFlowSpecification;
+import com.example.dynamicserver.oauth.domain.RegistrationError;
+import com.example.dynamicserver.oauth.domain.TokenEndpointAuthSpecification;
 
 @Controller
 public class DynamicClientRegistrationController {

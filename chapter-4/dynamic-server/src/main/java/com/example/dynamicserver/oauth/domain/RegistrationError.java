@@ -1,4 +1,4 @@
-package com.example.dynamicserver.oauth.model;
+package com.example.dynamicserver.oauth.domain;
 
 public class RegistrationError {
 

@@ -34,17 +34,11 @@ public class OAuth2AuthorizationServer extends
         return new JdbcApprovalStore(dataSource);
     }
 
-    @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints)
             throws Exception {
-        //@formatter:off
-        endpoints
-            .approvalStore(approvalStore())
-            .tokenStore(tokenStore());
-        //@formatter:on
+        endpoints.approvalStore(approvalStore()).tokenStore(tokenStore());
     }
 
-    @Override
     public void configure(ClientDetailsServiceConfigurer clients)
             throws Exception {
         clients.jdbc(dataSource);

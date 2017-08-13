@@ -1,11 +1,9 @@
-package com.example.dynamicserver.oauth.model;
+package com.example.dynamicserver.oauth.web;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.hibernate.validator.constraints.NotBlank;
-
-public class ClientMetadata {
+public class ClientRegistrationResponse {
 
     private Set<String> redirectUris = new HashSet<>();
 
@@ -15,17 +13,17 @@ public class ClientMetadata {
 
     private Set<String> responseTypes = new HashSet<>();
 
-    @NotBlank
     private String clientName;
 
-    @NotBlank
     private String clientUri;
 
-    @NotBlank
     private String scope;
 
-    @NotBlank
     private String softwareId;
+
+    private String clientId;
+
+    private String clientSecret;
 
     public Set<String> getRedirectUris() {
         return redirectUris;
@@ -75,6 +73,14 @@ public class ClientMetadata {
         this.clientUri = clientUri;
     }
 
+    public String getScope() {
+        return scope;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
+
     public String getSoftwareId() {
         return softwareId;
     }
@@ -83,12 +89,20 @@ public class ClientMetadata {
         this.softwareId = softwareId;
     }
 
-    public String getScope() {
-        return scope;
+    public String getClientId() {
+        return clientId;
     }
 
-    public void setScope(String scope) {
-        this.scope = scope;
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getClientSecret() {
+        return clientSecret;
+    }
+
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.dynamicserver.oauth.model;
+package com.example.dynamicserver.oauth.domain;
 
 import java.util.HashMap;
 import java.util.Map;
