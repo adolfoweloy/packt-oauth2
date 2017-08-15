@@ -12,6 +12,11 @@
 
 		<scala-maven-plugin.version>3.2.2</scala-maven-plugin.version>
 		<scalaVersion>2.11.0</scalaVersion>
+
+		<!-- gatling properties -->
+		<gatling-plugin.version>2.2.4</gatling-plugin.version>
+		<gatlingVersion>2.2.5</gatlingVersion>
+
 	</properties>
 
 	<dependencies>
