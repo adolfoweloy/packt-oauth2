@@ -15,7 +15,7 @@ INSERT INTO oauth_client_details (
   refresh_token_validity, additional_information, autoapprove)
 VALUES (
   'clientxpto', '', '123', 'read_profile,write_profile',
-  'authorization_code', 'http://localhost:9000/callback', null,
+  'authorization_code,password', 'http://localhost:9000/callback', null,
   null, null, null, '');
 
 -- creates user database (resource owner table)

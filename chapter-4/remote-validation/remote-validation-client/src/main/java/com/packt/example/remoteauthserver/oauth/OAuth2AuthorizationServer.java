@@ -3,6 +3,7 @@ package com.packt.example.remoteauthserver.oauth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -21,6 +22,9 @@ public class OAuth2AuthorizationServer extends
     @Autowired
     private DataSource dataSource;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     @Bean
     public TokenStore tokenStore() {
         return new JdbcTokenStore(dataSource);
@@ -28,7 +32,9 @@ public class OAuth2AuthorizationServer extends
 
     public void configure(AuthorizationServerEndpointsConfigurer endpoints)
             throws Exception {
-        endpoints.tokenStore(tokenStore());
+        endpoints
+            .authenticationManager(authenticationManager)
+            .tokenStore(tokenStore());
     }
 
     @Override
