@@ -1,4 +1,4 @@
-package com.packt.example.remoteauthserver.api;
+package com.packt.example.remoteresource.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
