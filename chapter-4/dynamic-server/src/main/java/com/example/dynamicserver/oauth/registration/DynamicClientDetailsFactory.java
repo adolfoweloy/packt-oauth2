@@ -46,7 +46,7 @@ public class DynamicClientDetailsFactory {
 
         clientDetails.setTokenEndpointAuthMethod("client_secret_basic");
 
-        if (clientDetails.getAuthorities().contains("implicit")) {
+        if (clientDetails.getAuthorizedGrantTypes().contains("implicit")) {
             clientDetails.getResponseTypes().add("token");
         }
 
