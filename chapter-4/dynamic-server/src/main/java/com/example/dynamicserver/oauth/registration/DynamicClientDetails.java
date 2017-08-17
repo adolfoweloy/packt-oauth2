@@ -1,4 +1,4 @@
-package com.example.dynamicserver.oauth.domain;
+package com.example.dynamicserver.oauth.registration;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,6 +32,7 @@ public class DynamicClientDetails implements ClientDetails {
     private Set<String> responseTypes = new HashSet<>();
     private String clientName;
     private String clientUri;
+    private long clientSecretExpiresAt;
 
     public String getSoftwareId() { return softwareId; }
 
@@ -64,6 +65,12 @@ public class DynamicClientDetails implements ClientDetails {
     public void setClientUri(String clientUri) {
         this.clientUri = clientUri;
         additionalInformation.put("client_uri", clientUri);
+    }
+
+    public long getClientSecretExpiresAt() { return clientSecretExpiresAt; }
+    public void setClientSecretExpiresAt(long clientSecretExpiresAt) {
+        this.clientSecretExpiresAt = clientSecretExpiresAt;
+        additionalInformation.put("client_secret_expires_at", Long.toString(clientSecretExpiresAt));
     }
 
     public void setClientId(String clientId) {

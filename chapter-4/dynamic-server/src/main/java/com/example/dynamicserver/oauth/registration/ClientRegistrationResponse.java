@@ -1,4 +1,4 @@
-package com.example.dynamicserver.oauth.web;
+package com.example.dynamicserver.oauth.registration;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +24,8 @@ public class ClientRegistrationResponse {
     private String clientId;
 
     private String clientSecret;
+
+    private long clientSecretExpiresAt;
 
     public Set<String> getRedirectUris() {
         return redirectUris;
@@ -104,6 +106,15 @@ public class ClientRegistrationResponse {
     public void setClientSecret(String clientSecret) {
         this.clientSecret = clientSecret;
     }
+
+    public long getClientSecretExpiresAt() {
+        return clientSecretExpiresAt;
+    }
+
+    public void setClientSecretExpiresAt(long clientSecretExpiresAt) {
+        this.clientSecretExpiresAt = clientSecretExpiresAt;
+    }
+
 
 }
 

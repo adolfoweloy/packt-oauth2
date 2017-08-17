@@ -12,13 +12,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.example.dynamicserver.oauth.domain.ClientMetadata;
-import com.example.dynamicserver.oauth.domain.DynamicClientDetails;
-import com.example.dynamicserver.oauth.domain.DynamicClientDetailsFactory;
-import com.example.dynamicserver.oauth.domain.GrantTypeAndResponseTypeCorrelationSpecification;
-import com.example.dynamicserver.oauth.domain.RedirectFlowSpecification;
-import com.example.dynamicserver.oauth.domain.RegistrationError;
-import com.example.dynamicserver.oauth.domain.TokenEndpointAuthSpecification;
+import com.example.dynamicserver.oauth.registration.ClientRegistrationRequest;
+import com.example.dynamicserver.oauth.registration.ClientRegistrationResponse;
+import com.example.dynamicserver.oauth.registration.DynamicClientDetails;
+import com.example.dynamicserver.oauth.registration.DynamicClientDetailsFactory;
+import com.example.dynamicserver.oauth.registration.RedirectFlowSpecification;
+import com.example.dynamicserver.oauth.registration.RegistrationError;
 
 @Controller
 public class DynamicClientRegistrationController {
@@ -30,13 +29,7 @@ public class DynamicClientRegistrationController {
     private DynamicClientDetailsFactory clientDetailsFactory;
 
     @Autowired
-    private GrantTypeAndResponseTypeCorrelationSpecification grantTypeAndResponseTypeCorrelation;
-
-    @Autowired
     private RedirectFlowSpecification redirectFlowSpecification;
-
-    @Autowired
-    private TokenEndpointAuthSpecification tokenEndpointAuthSpecification;
 
     /**
      * RFC7591
@@ -46,13 +39,7 @@ public class DynamicClientRegistrationController {
      * As we are using open registration, these endpoint MAY be rate-limited to prevent a denial-of-service attack.
      */
     @PostMapping("/register")
-    public ResponseEntity<Object> register(@RequestBody ClientMetadata clientMetadata) {
-
-        if (!grantTypeAndResponseTypeCorrelation.isSatisfiedBy(clientMetadata)) {
-            RegistrationError error = new RegistrationError(RegistrationError.INVALID_CLIENT_METADATA);
-            error.setErrorDescription("Check the correlation between authorized grant types and response code");
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<Object> register(@RequestBody ClientRegistrationRequest clientMetadata) {
 
         if (!redirectFlowSpecification.isSatisfiedBy(clientMetadata)) {
             RegistrationError error = new RegistrationError(RegistrationError.INVALID_REDIRECT_URI);
@@ -60,15 +47,9 @@ public class DynamicClientRegistrationController {
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
 
-        if (!tokenEndpointAuthSpecification.isSatisfiedBy(clientMetadata)) {
-            RegistrationError error = new RegistrationError(RegistrationError.INVALID_CLIENT_METADATA);
-            error.setErrorDescription("When must specify token endpoint auth method when registering confidential client");
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-        }
-
         DynamicClientDetails clientDetails = clientDetailsFactory.create(clientMetadata);
-
         clientRegistration.addClientDetails(clientDetails);
+
         return new ResponseEntity<>(createResponse(clientDetails), HttpStatus.CREATED);
     }
 
@@ -84,6 +65,7 @@ public class DynamicClientRegistrationController {
         response.setScope(clientDetails.getScope().stream().reduce((a, b) -> a + " " + b).get());
         response.setSoftwareId(clientDetails.getSoftwareId());
         response.setTokenEndpointAuthMethod(clientDetails.getTokenEndpointAuthMethod());
+        response.setClientSecretExpiresAt(clientDetails.getClientSecretExpiresAt());
         return response;
     }
 

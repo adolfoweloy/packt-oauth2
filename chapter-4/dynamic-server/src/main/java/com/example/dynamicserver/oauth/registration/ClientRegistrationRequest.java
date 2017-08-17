@@ -1,19 +1,11 @@
-package com.example.dynamicserver.oauth.domain;
+package com.example.dynamicserver.oauth.registration;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-public class ClientMetadata {
-
-    private Set<String> redirectUris = new HashSet<>();
-
-    private String tokenEndpointAuthMethod;
-
-    private Set<String> grantTypes = new HashSet<>();
-
-    private Set<String> responseTypes = new HashSet<>();
+public class ClientRegistrationRequest {
 
     @NotBlank
     private String clientName;
@@ -27,36 +19,16 @@ public class ClientMetadata {
     @NotBlank
     private String softwareId;
 
+    private Set<String> redirectUris = new HashSet<>();
+
+    private Set<String> grantTypes = new HashSet<>();
+
     public Set<String> getRedirectUris() {
         return redirectUris;
     }
 
     public void setRedirectUris(Set<String> redirectUris) {
         this.redirectUris = redirectUris;
-    }
-
-    public String getTokenEndpointAuthMethod() {
-        return tokenEndpointAuthMethod;
-    }
-
-    public void setTokenEndpointAuthMethod(String tokenEndpointAuthMethod) {
-        this.tokenEndpointAuthMethod = tokenEndpointAuthMethod;
-    }
-
-    public Set<String> getGrantTypes() {
-        return grantTypes;
-    }
-
-    public void setGrantTypes(Set<String> grantTypes) {
-        this.grantTypes = grantTypes;
-    }
-
-    public Set<String> getResponseTypes() {
-        return responseTypes;
-    }
-
-    public void setResponseTypes(Set<String> responseTypes) {
-        this.responseTypes = responseTypes;
     }
 
     public String getClientName() {
@@ -91,5 +63,12 @@ public class ClientMetadata {
         this.scope = scope;
     }
 
-}
+    public Set<String> getGrantTypes() {
+        return grantTypes;
+    }
 
+    public void setGrantTypes(Set<String> grantTypes) {
+        this.grantTypes = grantTypes;
+    }
+
+}

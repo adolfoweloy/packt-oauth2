@@ -4,11 +4,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.packt.example</groupId>
-  <artifactId>remote-resource</artifactId>
+  <artifactId>remote-authserver</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>remote-resource</name>
+  <name>remote-authserver</name>
   <description>Demo project for Spring Boot</description>
 
   <parent>
@@ -43,6 +43,7 @@
       <artifactId>mysql-connector-java</artifactId>
       <scope>runtime</scope>
     </dependency>
+
     <dependency>
       <groupId>org.springframework.security.oauth</groupId>
       <artifactId>spring-security-oauth2</artifactId>

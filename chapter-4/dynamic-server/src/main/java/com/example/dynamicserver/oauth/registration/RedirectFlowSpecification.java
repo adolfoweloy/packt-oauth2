@@ -1,4 +1,4 @@
-package com.example.dynamicserver.oauth.domain;
+package com.example.dynamicserver.oauth.registration;
 
 import java.util.Arrays;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RedirectFlowSpecification {
 
-    public boolean isSatisfiedBy(ClientMetadata clientMetadata) {
+    public boolean isSatisfiedBy(ClientRegistrationRequest clientMetadata) {
         List<String> flowsWithRedirection = Arrays.asList("authorization_code", "implicit");
 
         boolean hasFlowWithRedirection = clientMetadata.getGrantTypes().stream()
