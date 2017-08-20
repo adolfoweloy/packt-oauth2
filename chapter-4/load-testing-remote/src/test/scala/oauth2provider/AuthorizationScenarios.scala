@@ -15,9 +15,16 @@ object AuthorizationScenarios {
   val accessToken = "Bearer " + jsValue
     .extract[Token].access_token
 
-  var scenario1 = scenario("Validation of the access token (strategy1)")
-      .exec(http("Validate access token scenario 1")
+  var withoutCache = scenario("Without cache")
+      .exec(http("Validate access token without cache")
         .get("/api/profile")
         .header("Authorization", accessToken)
       )
+      
+  var withCache = scenario("Using cache")
+      .exec(http("Validate access token with cache")
+        .get("/api/profile")
+        .header("Authorization", accessToken)
+      )
+      
 }

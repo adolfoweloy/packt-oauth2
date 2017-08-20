@@ -18,7 +18,7 @@ object OAuth {
 
     val auth = java.util.Base64
       .getEncoder()
-      .encodeToString("clientxpto:123".getBytes("UTF-8"));
+      .encodeToString("clientapp:123456".getBytes("UTF-8"));
 
     val post = new HttpPost(url)
     post.addHeader("Content-Type", "application/x-www-form-urlencoded")
