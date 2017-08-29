@@ -1,4 +1,4 @@
-package com.packt.example.jweserver.oauth.authorization;
+package com.packt.example.jweserver.oauth.jwt;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -11,8 +11,6 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 
-import com.packt.example.jweserver.oauth.jwt.JweTokenConverter;
-
 public class JweTokenEnhancer implements TokenEnhancer {
 
     public static final String TOKEN_ID = AccessTokenConverter.JTI;
@@ -21,9 +19,9 @@ public class JweTokenEnhancer implements TokenEnhancer {
 
     private AccessTokenConverter tokenConverter;
 
-    private JweTokenConverter joseConverter;
+    private JweTokenSerializer joseConverter;
 
-    public JweTokenEnhancer(AccessTokenConverter tokenConverter, JweTokenConverter joseConverter) {
+    public JweTokenEnhancer(AccessTokenConverter tokenConverter, JweTokenSerializer joseConverter) {
         this.tokenConverter = tokenConverter;
         this.joseConverter = joseConverter;
     }
