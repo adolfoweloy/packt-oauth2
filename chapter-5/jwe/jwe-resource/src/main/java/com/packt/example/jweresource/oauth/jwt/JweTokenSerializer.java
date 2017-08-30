@@ -7,9 +7,9 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.springframework.security.oauth2.common.util.JsonParser;
-import org.springframework.security.oauth2.common.util.JsonParserFactory;
-
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 import com.nimbusds.jose.EncryptionMethod;
 import com.nimbusds.jose.JWEAlgorithm;
 import com.nimbusds.jose.JWEHeader;
@@ -19,8 +19,6 @@ import com.nimbusds.jose.crypto.DirectDecrypter;
 import com.nimbusds.jose.crypto.DirectEncrypter;
 
 public class JweTokenSerializer {
-
-    private JsonParser objectMapper = JsonParserFactory.create();
 
     public String encode(String payload) {
         try {
@@ -51,7 +49,10 @@ public class JweTokenSerializer {
             jweObject.decrypt(new DirectDecrypter(key));
 
             Payload payload = jweObject.getPayload();
-            return objectMapper.parseMap(payload.toString());
+            ObjectMapper objectMapper = new ObjectMapper();
+            ObjectReader reader = objectMapper.readerFor(Map.class);
+            return reader.with(DeserializationFeature.USE_BIG_INTEGER_FOR_INTS)
+                    .readValue(payload.toString());
 
         } catch (Exception e) {
             throw new RuntimeException(e);
