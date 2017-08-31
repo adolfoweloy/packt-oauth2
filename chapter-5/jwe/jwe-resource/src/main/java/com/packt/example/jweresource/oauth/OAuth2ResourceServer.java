@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
@@ -29,6 +30,9 @@ public class OAuth2ResourceServer extends ResourceServerConfigurerAdapter {
     @Autowired
     private ResourceServerProperties resource;
 
+    @Autowired
+    private DefaultAccessTokenConverter defaultAccessTokenConverter;
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
@@ -36,7 +40,6 @@ public class OAuth2ResourceServer extends ResourceServerConfigurerAdapter {
             .anyRequest().authenticated().and()
             .requestMatchers().antMatchers("/api/**");
     }
-
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
@@ -46,6 +49,7 @@ public class OAuth2ResourceServer extends ResourceServerConfigurerAdapter {
     @Bean
     public JwtAccessTokenConverter jwtTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        converter.setAccessTokenConverter(defaultAccessTokenConverter);
         return converter;
     }
 

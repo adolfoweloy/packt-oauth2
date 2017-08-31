@@ -51,7 +51,7 @@ public class JweTokenSerializer {
             Payload payload = jweObject.getPayload();
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectReader reader = objectMapper.readerFor(Map.class);
-            return reader.with(DeserializationFeature.USE_BIG_INTEGER_FOR_INTS)
+            return reader.with(DeserializationFeature.USE_LONG_FOR_INTS)
                     .readValue(payload.toString());
 
         } catch (Exception e) {
