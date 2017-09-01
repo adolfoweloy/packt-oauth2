@@ -46,7 +46,7 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory().withClient("clientapp").secret("123456").scopes("read_profile")
-                .authorizedGrantTypes("password", "authorization_code", "refresh_token");
+                .authorizedGrantTypes("password", "authorization_code");
     }
 
     @Bean
