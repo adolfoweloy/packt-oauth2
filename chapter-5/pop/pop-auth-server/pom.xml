@@ -41,10 +41,6 @@
       <version>2.2.0.RELEASE</version><!--$NO-MVN-MAN-VER$ -->
     </dependency>
     <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-jwt</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.nimbusds</groupId>
       <artifactId>nimbus-jose-jwt</artifactId>
       <version>4.23</version>
