@@ -1,8 +1,13 @@
 package com.packt.example.popclient;
 
 import java.net.URI;
+import java.text.ParseException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import net.minidev.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -19,6 +24,14 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.JWSHeader;
+import com.nimbusds.jose.JWSObject;
+import com.nimbusds.jose.Payload;
+import com.nimbusds.jose.crypto.RSASSASigner;
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.jwk.RSAKey;
 import com.packt.example.popclient.oauth.AuthorizationCodeTokenService;
 import com.packt.example.popclient.oauth.OAuth2ClientTokenSevices;
 
@@ -42,7 +55,6 @@ public class UserDashboard {
     @GetMapping("/callback")
     public ModelAndView callback(String code, String state) {
         OAuth2AccessToken token = tokenService.getToken(code);
-        System.out.println(token);
         clientTokenServices.saveAccessToken(resourceDetails, SecurityContextHolder.getContext().getAuthentication(), token);
         return new ModelAndView("forward:/dashboard");
     }
@@ -67,9 +79,11 @@ public class UserDashboard {
                 return new ModelAndView("redirect:" + authEndpoint);
             }
 
+            String jwsToken = createJws(accessToken);
+
             RestTemplate restTemplate = new RestTemplate();
             MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-            headers.add("Authorization", "Bearer " + accessToken.getValue());
+            headers.add("Authorization", "Bearer " + jwsToken);
 
             RequestEntity<Object> request = new RequestEntity<>(
                     headers, HttpMethod.GET, URI.create(endpoint));
@@ -84,6 +98,33 @@ public class UserDashboard {
         /// End of OAuth request
 
         return mv;
+    }
+
+    private String createJws(OAuth2AccessToken accessToken) {
+        try {
+
+            // signing the request with RSA in such a way that the resource server
+            // can validates that this client possesses the private key issued by the authorization server.
+            JWK jwk = JWK.parse((String) accessToken.getAdditionalInformation().get("access_token_key"));
+
+            Map<String, String> payloadContent = new HashMap<String, String>();
+            payloadContent.put("at", accessToken.getValue());
+            payloadContent.put("u", "localhost:9000");
+            JSONObject json = new JSONObject(payloadContent);
+
+            RSASSASigner signer = new RSASSASigner((RSAKey) jwk);
+            JWSObject jwsObject = new JWSObject(
+                new JWSHeader.Builder(JWSAlgorithm.RS256).keyID(jwk.getKeyID()).build(),
+                new Payload(json));
+
+            jwsObject.sign(signer);
+            return jwsObject.serialize();
+
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        } catch (JOSEException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

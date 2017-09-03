@@ -81,6 +81,11 @@ public class AuthorizationCodeTokenService {
         token.setExpiration(expiration.getTime());
         token.setScope(new LinkedHashSet<String>(Arrays.asList(String.class.cast(result.get("scope")).split(" "))));
 
+        // save access_token_key or cnf as additional information
+        Map<String, Object> additionalInformation = new HashMap<>();
+        additionalInformation.put("access_token_key", result.get("access_token_key"));
+        token.setAdditionalInformation(additionalInformation);
+
         return token;
     }
 
