@@ -12,6 +12,10 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 
 import com.nimbusds.jose.jwk.JWK;
 
+/**
+ * PoPResourceServerTokenServices was created to override the readAccessToken behavior
+ * so that additional information about PoP Key Pair contains only the public key.
+ */
 public class PoPResourceServerTokenServices implements ResourceServerTokenServices {
 
     private TokenStore tokenStore;
@@ -31,21 +35,23 @@ public class PoPResourceServerTokenServices implements ResourceServerTokenServic
     @Override
     public OAuth2AccessToken readAccessToken(String accessToken) {
         OAuth2AccessToken token = tokenStore.readAccessToken(accessToken);
-
         if (token == null) return null;
+        return copyWithPublicKey(token);
 
-        OAuth2AccessToken copy = new DefaultOAuth2AccessToken(token);
-        String accessTokenKey = (String) token.getAdditionalInformation().get("access_token_key");
+    }
 
-        // this allows for not retrieving private key to resource server
+    /**
+     * this allows for not retrieving private key to resource server
+     */
+    private OAuth2AccessToken copyWithPublicKey(OAuth2AccessToken token) {
         try {
-            JWK jwk = JWK.parse(accessTokenKey);
+            JWK jwk = JWK.parse((String) token.getAdditionalInformation().get("access_token_key"));
+            OAuth2AccessToken copy = new DefaultOAuth2AccessToken(token);
             copy.getAdditionalInformation().put("access_token_key", jwk.toPublicJWK().toJSONString());
 
             return copy;
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-
     }
 }

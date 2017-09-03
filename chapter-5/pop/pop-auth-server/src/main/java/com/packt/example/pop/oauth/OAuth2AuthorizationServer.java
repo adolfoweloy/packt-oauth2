@@ -5,7 +5,6 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -23,34 +22,26 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
 public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
     private PoPTokenEnhancer popTokenEnhancer;
 
-    @Bean
-    public TokenStore tokenStore() {
-        return new InMemoryTokenStore();
-    }
+    private TokenStore tokenStore = new InMemoryTokenStore();
 
     @Bean
     public DefaultTokenServices defaultServerTokenServices() {
         DefaultTokenServices tokenServices = new DefaultTokenServices();
         tokenServices.setTokenEnhancer(popTokenEnhancer);
-        tokenServices.setTokenStore(tokenStore());
-
+        tokenServices.setTokenStore(tokenStore);
         return tokenServices;
     }
 
     @Bean
     public ResourceServerTokenServices resourceServerTokenServices() {
-        return new PoPResourceServerTokenServices(defaultServerTokenServices(), tokenStore());
+        return new PoPResourceServerTokenServices(defaultServerTokenServices(), tokenStore);
     }
 
     @Bean
     public CheckTokenEndpoint checkTokenEndpoint() {
-        CheckTokenEndpoint endpoint = new CheckTokenEndpoint(resourceServerTokenServices());
-        return endpoint;
+        return new CheckTokenEndpoint(resourceServerTokenServices());
     }
 
     @Override
@@ -60,9 +51,8 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
                 Arrays.asList(popTokenEnhancer));
 
         endpoints
-            .authenticationManager(authenticationManager)
             .tokenServices(defaultServerTokenServices())
-            .tokenStore(tokenStore())
+            .tokenStore(tokenStore)
             .tokenEnhancer(tokenEnhancerChain);
     }
 
@@ -77,7 +67,7 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
             .inMemory()
             .withClient("clientapp").secret("123456")
             .scopes("read_profile")
-            .authorizedGrantTypes("password", "authorization_code")
+            .authorizedGrantTypes("authorization_code")
         .and()
             .withClient("resource-server").secret("123")
             .authorities("introspection");
