@@ -1,4 +1,4 @@
-package com.packt.example.popclient;
+package com.packt.example.popclient.dashboard;
 
 public class UserProfile {
 

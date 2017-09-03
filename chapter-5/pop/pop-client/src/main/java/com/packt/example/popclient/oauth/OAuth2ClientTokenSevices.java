@@ -1,6 +1,6 @@
 package com.packt.example.popclient.oauth;
 
-import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,13 +21,11 @@ public class OAuth2ClientTokenSevices implements ClientTokenServices {
     public OAuth2AccessToken getAccessToken(OAuth2ProtectedResourceDetails resource, Authentication authentication) {
         ClientUser clientUser = getClientUser(authentication);
 
-        if (clientUser.getAccessToken() == null) return null;
+        if (clientUser.accessToken == null) return null;
 
-        DefaultOAuth2AccessToken oAuth2AccessToken = new DefaultOAuth2AccessToken(clientUser.getAccessToken());
-        oAuth2AccessToken.setAdditionalInformation(clientUser.getAdditionalInformation());
-        Calendar expirationCalendar = Calendar.getInstance();
-        expirationCalendar.setTimeInMillis(clientUser.getExpirationTime());
-        oAuth2AccessToken.setExpiration(expirationCalendar.getTime());
+        DefaultOAuth2AccessToken oAuth2AccessToken = new DefaultOAuth2AccessToken(clientUser.accessToken);
+        oAuth2AccessToken.setAdditionalInformation(clientUser.additionalInformation);
+        oAuth2AccessToken.setExpiration(new Date(clientUser.expirationTime));
 
         return oAuth2AccessToken;
     }
@@ -35,24 +33,19 @@ public class OAuth2ClientTokenSevices implements ClientTokenServices {
     @Override
     public void saveAccessToken(OAuth2ProtectedResourceDetails resource,
             Authentication authentication, OAuth2AccessToken accessToken) {
-        Calendar expirationDate = Calendar.getInstance();
-        expirationDate.setTime(accessToken.getExpiration());
-
         ClientUser clientUser = getClientUser(authentication);
 
-        clientUser.setAccessToken(accessToken.getValue());
-        clientUser.setExpirationTime(expirationDate.getTimeInMillis());
-        clientUser.setAdditionalInformation(accessToken.getAdditionalInformation());
+        clientUser.accessToken = accessToken.getValue();
+        clientUser.expirationTime = accessToken.getExpiration().getTime();
+        clientUser.additionalInformation = accessToken.getAdditionalInformation();
 
-        users.put(clientUser.getUsername(), clientUser);
+        users.put(clientUser.username, clientUser);
     }
 
     @Override
     public void removeAccessToken(OAuth2ProtectedResourceDetails resource,
             Authentication authentication) {
-        ClientUser clientUser = getClientUser(authentication);
-
-        users.remove(clientUser.getUsername());
+        users.remove(getClientUser(authentication).username);
     }
 
     private ClientUser getClientUser(Authentication authentication) {
@@ -75,27 +68,5 @@ public class OAuth2ClientTokenSevices implements ClientTokenServices {
         public ClientUser(String username) {
             this.username = username;
         }
-        public String getUsername() {
-            return username;
-        }
-        public String getAccessToken() {
-            return accessToken;
-        }
-        public void setAccessToken(String accessToken) {
-            this.accessToken = accessToken;
-        }
-        public Map<String, Object> getAdditionalInformation() {
-            return additionalInformation;
-        }
-        public void setAdditionalInformation(Map<String, Object> additionalInformation) {
-            this.additionalInformation = additionalInformation;
-        }
-        public long getExpirationTime() {
-            return expirationTime;
-        }
-        public void setExpirationTime(long expirationTime) {
-            this.expirationTime = expirationTime;
-        }
-
     }
 }

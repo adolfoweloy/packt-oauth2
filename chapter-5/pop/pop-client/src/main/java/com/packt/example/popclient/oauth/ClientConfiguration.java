@@ -25,8 +25,11 @@ public class ClientConfiguration {
     @Autowired
     private OAuth2ClientContext oauth2ClientContext;
 
+    @Autowired
+    private HttpRequestWithPoPSignatureInterceptor interceptor;
+
     @Bean
-    public OAuth2ProtectedResourceDetails authorizationCode() {
+    public AuthorizationCodeResourceDetails authorizationCode() {
         AuthorizationCodeResourceDetails resourceDetails = new AuthorizationCodeResourceDetails();
 
         resourceDetails.setId("oauth2server");
@@ -45,17 +48,16 @@ public class ClientConfiguration {
 
     @Bean
     public OAuth2RestTemplate oauth2RestTemplate() {
-
         OAuth2ProtectedResourceDetails resourceDetails = authorizationCode();
-
-        OAuth2RestTemplate template = new OAuth2RestTemplate(resourceDetails,
-                oauth2ClientContext);
+        OAuth2RestTemplate template = new OAuth2RestTemplate(
+            resourceDetails, oauth2ClientContext);
 
         AccessTokenProviderChain provider = new AccessTokenProviderChain(
-                Arrays.asList(new AuthorizationCodeAccessTokenProvider()));
+            Arrays.asList(new AuthorizationCodeAccessTokenProvider()));
 
         provider.setClientTokenServices(clientTokenServices);
         template.setAccessTokenProvider(provider);
+        template.setInterceptors(Arrays.asList(interceptor));
 
         return template;
     }
