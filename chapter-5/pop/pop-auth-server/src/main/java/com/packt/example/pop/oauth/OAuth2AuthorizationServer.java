@@ -45,6 +45,7 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
         clients
             .inMemory()
             .withClient("clientapp").secret("123456")
+            .scopes("read_profile")
             .authorizedGrantTypes("password", "authorization_code")
         .and()
             .withClient("resource-server").secret("123")

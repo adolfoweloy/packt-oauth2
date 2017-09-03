@@ -43,7 +43,7 @@ public class PoPTokenEnhancer implements TokenEnhancer {
             // creates the additional claim to hold confirmation data
             // (which the jwk conveys one type of token authenticity confirmation)
             // cnf can be used to carry other types of confirmation members as per RFC7800#3.1
-            additionalData.put("access_token_key", clientJwk);
+            additionalData.put("access_token_key", clientJwk.toJSONString());
 
             defaultAccessToken.setTokenType("PoP");
 
