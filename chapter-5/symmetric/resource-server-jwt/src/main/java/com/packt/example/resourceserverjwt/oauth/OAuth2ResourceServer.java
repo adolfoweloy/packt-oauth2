@@ -1,7 +1,7 @@
 package com.packt.example.resourceserverjwt.oauth;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.JwtAccessTokenConverterConfigurer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -14,9 +14,6 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 public class OAuth2ResourceServer extends ResourceServerConfigurerAdapter
         implements JwtAccessTokenConverterConfigurer {
 
-    @Autowired
-    private DefaultAccessTokenConverter defaultAccessTokenConverter;
-
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
@@ -27,6 +24,12 @@ public class OAuth2ResourceServer extends ResourceServerConfigurerAdapter
 
     @Override
     public void configure(JwtAccessTokenConverter converter) {
-        converter.setAccessTokenConverter(defaultAccessTokenConverter);
+        converter.setAccessTokenConverter(defaultAccessTokenConverter());
+    }
+
+    @Bean
+    public DefaultAccessTokenConverter defaultAccessTokenConverter() {
+        DefaultAccessTokenConverter tokenConverter = new DefaultAccessTokenConverter();
+        return tokenConverter;
     }
 }
