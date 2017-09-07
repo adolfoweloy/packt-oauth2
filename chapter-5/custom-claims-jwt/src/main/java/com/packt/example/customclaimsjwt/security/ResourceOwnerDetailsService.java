@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 public class ResourceOwnerDetailsService implements UserDetailsService {
 
     @Autowired
-    private ResourceOwnerRepository repository;
+    private ResourceOwnerRepository repo;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        ResourceOwner resourceOwner = repository.findByUsername(username)
+    public UserDetails loadUserByUsername(String uname) throws UsernameNotFoundException {
+        ResourceOwner user = repo.findByUsername(uname)
             .orElseThrow(() -> new RuntimeException());
 
-        return new ResourceOwnerUserDetails(resourceOwner);
+        return new ResourceOwnerUserDetails(user);
     }
 
 }

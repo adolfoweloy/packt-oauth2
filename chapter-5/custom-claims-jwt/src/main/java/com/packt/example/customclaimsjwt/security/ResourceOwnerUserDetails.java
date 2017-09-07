@@ -9,14 +9,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class ResourceOwnerUserDetails implements UserDetails {
     private static final long serialVersionUID = 1L;
 
-    private ResourceOwner resourceOwner;
+    private ResourceOwner wrapped;
 
-    public ResourceOwnerUserDetails(ResourceOwner resourceOwner) {
-        this.resourceOwner = resourceOwner;
+    public ResourceOwnerUserDetails(ResourceOwner wrapped) {
+        this.wrapped = wrapped;
     }
 
     public String getEmail() {
-        return resourceOwner.getEmail();
+        return wrapped.getEmail();
     }
 
     @Override
@@ -26,12 +26,12 @@ public class ResourceOwnerUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return resourceOwner.getPassword();
+        return wrapped.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return resourceOwner.getUsername();
+        return wrapped.getUsername();
     }
 
     @Override
