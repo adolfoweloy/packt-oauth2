@@ -19,11 +19,11 @@ public class JweTokenEnhancer implements TokenEnhancer {
 
     private AccessTokenConverter tokenConverter;
 
-    private JweTokenSerializer joseConverter;
+    private JweTokenSerializer tokenSerializer;
 
-    public JweTokenEnhancer(AccessTokenConverter tokenConverter, JweTokenSerializer joseConverter) {
+    public JweTokenEnhancer(AccessTokenConverter tokenConverter, JweTokenSerializer tokenSerializer) {
         this.tokenConverter = tokenConverter;
-        this.joseConverter = joseConverter;
+        this.tokenSerializer = tokenSerializer;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class JweTokenEnhancer implements TokenEnhancer {
         String content;
         try {
             content = objectMapper.formatMap(tokenConverter.convertAccessToken(accessToken, authentication));
-            return joseConverter.encode(content);
+            return tokenSerializer.encode(content);
         } catch (Exception e) {
             throw new IllegalStateException("Cannot convert access token to JSON", e);
         }

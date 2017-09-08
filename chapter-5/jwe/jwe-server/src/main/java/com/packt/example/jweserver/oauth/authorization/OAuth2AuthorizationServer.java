@@ -25,7 +25,8 @@ import com.packt.example.jweserver.oauth.jwt.JwkSignature;
 
 @Configuration
 @EnableAuthorizationServer
-public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdapter {
+public class OAuth2AuthorizationServer
+    extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -33,14 +34,6 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security.tokenKeyAccess("permitAll()");
-    }
-
-    @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.authenticationManager(authenticationManager)
-            .tokenStore(jwtTokenStore())
-            .tokenEnhancer(tokenEnhancer())
-            .accessTokenConverter(accessTokenConverter());
     }
 
     @Override
@@ -53,14 +46,30 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
             .authorizedGrantTypes("password", "authorization_code");
     }
 
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        endpoints.authenticationManager(authenticationManager)
+            .tokenStore(jwtTokenStore())
+            .tokenEnhancer(tokenEnhancer())
+            .accessTokenConverter(accessTokenConverter());
+    }
+
     @Bean
     public TokenEnhancer tokenEnhancer() {
-        return new JweTokenEnhancer(accessTokenConverter(), new JweTokenSerializer(jwkSignature()));
+        return new JweTokenEnhancer(accessTokenConverter(),
+            new JweTokenSerializer(jwkSignature()));
     }
 
     @Bean
     public JwtTokenStore jwtTokenStore() {
         return new JwtTokenStore(accessTokenConverter());
+    }
+
+    @Bean
+    public JwtAccessTokenConverter accessTokenConverter() {
+        JwtAccessTokenConverter tokenConverter = new JwtAccessTokenConverter();
+        tokenConverter.setSigningKey(jwkSignature().getBase64EncodedKey());
+        return tokenConverter;
     }
 
     @Bean
@@ -80,13 +89,6 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
             throw new RuntimeException(e);
         }
 
-    }
-
-    @Bean
-    public JwtAccessTokenConverter accessTokenConverter() {
-        JwtAccessTokenConverter tokenConverter = new JwtAccessTokenConverter();
-        tokenConverter.setSigningKey(jwkSignature().getBase64EncodedKey());
-        return tokenConverter;
     }
 
 }
