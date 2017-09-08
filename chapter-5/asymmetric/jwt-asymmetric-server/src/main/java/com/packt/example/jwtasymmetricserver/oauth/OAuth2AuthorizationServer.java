@@ -62,8 +62,7 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
             .scopes("read_profile")
             .authorizedGrantTypes(
                 "password",
-                "authorization_code",
-                "refresh_token");
+                "authorization_code");
     }
 
     /**
