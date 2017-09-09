@@ -1,9 +1,10 @@
 package com.packt.example.popresourceserver.oauth;
 
-import java.util.Map;
-
+import com.nimbusds.jose.JWSObject;
+import com.nimbusds.jose.Payload;
+import com.packt.example.popresourceserver.validator.AccessTokenValidator;
+import com.packt.example.popresourceserver.validator.PoPTokenValidator;
 import net.minidev.json.JSONObject;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,10 +22,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import com.nimbusds.jose.JWSObject;
-import com.nimbusds.jose.Payload;
-import com.packt.example.popresourceserver.validator.AccessTokenValidator;
-import com.packt.example.popresourceserver.validator.PoPTokenValidator;
+import java.util.Map;
 
 @Service
 public class PoPRemoteTokenServices implements ResourceServerTokenServices {
@@ -46,28 +44,28 @@ public class PoPRemoteTokenServices implements ResourceServerTokenServices {
     public OAuth2Authentication loadAuthentication(String accessToken)
         throws AuthenticationException, InvalidTokenException {
 
-        try {
-            JWSObject jwsObject = JWSObject.parse(accessToken);
-            Payload payload = jwsObject.getPayload();
-            JSONObject jsonObject = payload.toJSONObject();
+    try {
+        JWSObject jwsObject = JWSObject.parse(accessToken);
+        Payload payload = jwsObject.getPayload();
+        JSONObject jsonObject = payload.toJSONObject();
 
-            MultiValueMap<String, String> formData = new LinkedMultiValueMap<String, String>();
-            formData.add("token", (String) jsonObject.get("at"));
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<String, String>();
+        formData.add("token", (String) jsonObject.get("at"));
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-            headers.set("Authorization", resourceServerProperties.getAuthorizationHeader());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.set("Authorization", resourceServerProperties.getAuthorizationHeader());
 
-            Map<String, Object> tokenInfo = postForMap(resourceServerProperties.getCheckTokenUri(), formData, headers);
+        Map<String, Object> tokenInfo = postForMap(resourceServerProperties.getCheckTokenUri(), formData, headers);
 
-            tokenValidator.validateTokenInfo(tokenInfo);
-            popTokenValidator.validateJWSToken(jwsObject, (String) tokenInfo.get("access_token_key"));
+        tokenValidator.validateTokenInfo(tokenInfo);
+        popTokenValidator.validateJWSToken(jwsObject, (String) tokenInfo.get("access_token_key"));
 
-            return tokenConverter.extractAuthentication(tokenInfo);
+        return tokenConverter.extractAuthentication(tokenInfo);
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    } catch (Exception e) {
+        throw new RuntimeException(e);
+    }
 
     }
 
