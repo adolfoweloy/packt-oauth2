@@ -1,14 +1,8 @@
 package com.packt.example.jweserver.oauth.jwt;
 
-import java.util.Base64;
-import java.util.Map;
-
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-
-import org.springframework.security.oauth2.common.util.JsonParser;
-import org.springframework.security.oauth2.common.util.JsonParserFactory;
-
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 import com.nimbusds.jose.EncryptionMethod;
 import com.nimbusds.jose.JWEAlgorithm;
 import com.nimbusds.jose.JWEHeader;
@@ -17,18 +11,22 @@ import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.DirectDecrypter;
 import com.nimbusds.jose.crypto.DirectEncrypter;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.util.Base64;
+import java.util.Map;
+
 public class JweTokenSerializer {
 
-    private JsonParser objectMapper = JsonParserFactory.create();
-    private JwkSignature jwkSignature;
+    private String encodedKeypair;
 
-    public JweTokenSerializer(JwkSignature jwkSignature) {
-        this.jwkSignature = jwkSignature;
+    public JweTokenSerializer(String encodedKeypair) {
+        this.encodedKeypair = encodedKeypair;
     }
 
     public String encode(String payload) {
         try {
-            byte[] decodedKey = Base64.getDecoder().decode(jwkSignature.getBase64EncodedKey());
+            byte[] decodedKey = Base64.getDecoder().decode(encodedKeypair);
             SecretKey key = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
 
             JWEHeader header = new JWEHeader(JWEAlgorithm.DIR, EncryptionMethod.A128GCM);
@@ -54,7 +52,10 @@ public class JweTokenSerializer {
             jweObject.decrypt(new DirectDecrypter(key));
 
             Payload payload = jweObject.getPayload();
-            return objectMapper.parseMap(payload.toString());
+            ObjectMapper objectMapper = new ObjectMapper();
+            ObjectReader reader = objectMapper.readerFor(Map.class);
+            return reader.with(DeserializationFeature.USE_LONG_FOR_INTS)
+                    .readValue(payload.toString());
 
         } catch (Exception e) {
             throw new RuntimeException(e);

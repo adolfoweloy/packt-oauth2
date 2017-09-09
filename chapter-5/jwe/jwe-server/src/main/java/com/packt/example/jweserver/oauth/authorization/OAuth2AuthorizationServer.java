@@ -1,11 +1,7 @@
 package com.packt.example.jweserver.oauth.authorization;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-
+import com.packt.example.jweserver.oauth.jwt.JweTokenEnhancer;
+import com.packt.example.jweserver.oauth.jwt.JweTokenSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,9 +15,10 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
-import com.packt.example.jweserver.oauth.jwt.JweTokenEnhancer;
-import com.packt.example.jweserver.oauth.jwt.JweTokenSerializer;
-import com.packt.example.jweserver.oauth.jwt.JwkSignature;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 @Configuration
 @EnableAuthorizationServer
@@ -46,6 +43,7 @@ public class OAuth2AuthorizationServer
             .authorizedGrantTypes("password", "authorization_code");
     }
 
+
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager)
@@ -57,7 +55,7 @@ public class OAuth2AuthorizationServer
     @Bean
     public TokenEnhancer tokenEnhancer() {
         return new JweTokenEnhancer(accessTokenConverter(),
-            new JweTokenSerializer(jwkSignature()));
+            new JweTokenSerializer(symmetricKey()));
     }
 
     @Bean
@@ -68,27 +66,20 @@ public class OAuth2AuthorizationServer
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
         JwtAccessTokenConverter tokenConverter = new JwtAccessTokenConverter();
-        tokenConverter.setSigningKey(jwkSignature().getBase64EncodedKey());
+        tokenConverter.setSigningKey(symmetricKey());
         return tokenConverter;
     }
 
     @Bean
-    public JwkSignature jwkSignature() {
-
+    public String symmetricKey() {
         try {
             KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
             keyGenerator.init(128);
             SecretKey key = keyGenerator.generateKey();
-            String encodedKey = Base64.getEncoder().encodeToString(key.getEncoded());
-
-            JwkSignature signature = new JwkSignature();
-            signature.setBase64EncodedKey(encodedKey);
-            return signature;
-
+            return Base64.getEncoder().encodeToString(key.getEncoded());
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
-
     }
 
 }

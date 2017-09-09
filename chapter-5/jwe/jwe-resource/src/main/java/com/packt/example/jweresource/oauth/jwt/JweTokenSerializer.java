@@ -1,12 +1,5 @@
 package com.packt.example.jweresource.oauth.jwt;
 
-import java.util.Base64;
-import java.util.Map;
-
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
@@ -18,13 +11,23 @@ import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.DirectDecrypter;
 import com.nimbusds.jose.crypto.DirectEncrypter;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.util.Base64;
+import java.util.Map;
+
 public class JweTokenSerializer {
+
+    private String encodedKeypair;
+
+    public JweTokenSerializer(String encodedKeypair) {
+        this.encodedKeypair = encodedKeypair;
+    }
 
     public String encode(String payload) {
         try {
-            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-            keyGenerator.init(128);
-            SecretKey key = keyGenerator.generateKey();
+            byte[] decodedKey = Base64.getDecoder().decode(encodedKeypair);
+            SecretKey key = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
 
             JWEHeader header = new JWEHeader(JWEAlgorithm.DIR, EncryptionMethod.A128GCM);
             Payload payloadObject = new Payload(payload);

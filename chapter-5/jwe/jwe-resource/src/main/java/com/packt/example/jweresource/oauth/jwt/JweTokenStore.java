@@ -1,46 +1,41 @@
 package com.packt.example.jweresource.oauth.jwt;
 
-import java.util.Collection;
-
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2RefreshToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
+import java.util.Collection;
+
 public class JweTokenStore implements TokenStore {
+    private String encodedSigningKey;
     private final TokenStore delegate;
     private final JwtAccessTokenConverter converter;
-    private JweTokenSerializer tokenSerializer;
-    private String signKey;
+    private final JweTokenSerializer crypto;
 
-    public JweTokenStore(String signKey,
-            TokenStore delegate, JwtAccessTokenConverter converter,
-            JweTokenSerializer tokenSerializer) {
-        this.signKey = signKey;
+    public JweTokenStore(String encodedSigningKey, TokenStore delegate,
+                         JwtAccessTokenConverter converter, JweTokenSerializer crypto) {
+        this.encodedSigningKey = encodedSigningKey;
         this.delegate = delegate;
         this.converter = converter;
-        this.tokenSerializer = tokenSerializer;
+        this.crypto = crypto;
     }
 
     @Override
     public OAuth2AccessToken readAccessToken(String tokenValue) {
-        OAuth2AccessToken accessToken = convertAccessToken(tokenValue);
-        return accessToken;
-    }
-
-    private OAuth2AccessToken convertAccessToken(String tokenValue) {
-        return converter.extractAccessToken(tokenValue, tokenSerializer.decode(signKey, tokenValue));
-    }
-
-    @Override
-    public OAuth2Authentication readAuthentication(String token) {
-        return converter.extractAuthentication(tokenSerializer.decode(signKey, token));
+        return converter.extractAccessToken(
+            tokenValue, crypto.decode(encodedSigningKey, tokenValue));
     }
 
     @Override
     public OAuth2Authentication readAuthentication(OAuth2AccessToken token) {
         return readAuthentication(token.getValue());
+    }
+
+    @Override
+    public OAuth2Authentication readAuthentication(String token) {
+        return converter.extractAuthentication(crypto.decode(encodedSigningKey, token));
     }
 
     // delegating remaining methods
@@ -94,5 +89,4 @@ public class JweTokenStore implements TokenStore {
     public Collection<OAuth2AccessToken> findTokensByClientId(String clientId) {
         return delegate.findTokensByClientId(clientId);
     }
-
 }
