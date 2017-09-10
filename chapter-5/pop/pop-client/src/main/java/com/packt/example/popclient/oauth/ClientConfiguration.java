@@ -1,7 +1,5 @@
 package com.packt.example.popclient.oauth;
 
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +13,8 @@ import org.springframework.security.oauth2.client.token.grant.code.Authorization
 import org.springframework.security.oauth2.common.AuthenticationScheme;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 
+import java.util.Arrays;
+
 @Configuration
 @EnableOAuth2Client
 public class ClientConfiguration {
@@ -27,6 +27,9 @@ public class ClientConfiguration {
 
     @Autowired
     private HttpRequestWithPoPSignatureInterceptor interceptor;
+
+    @Autowired
+    private PoPTokenRequestEnhancer requestEnhancer;
 
     @Bean
     public AuthorizationCodeResourceDetails authorizationCode() {
@@ -52,8 +55,11 @@ public class ClientConfiguration {
         OAuth2RestTemplate template = new OAuth2RestTemplate(
             resourceDetails, oauth2ClientContext);
 
+        AuthorizationCodeAccessTokenProvider authorizationCode = new AuthorizationCodeAccessTokenProvider();
+        authorizationCode.setTokenRequestEnhancer(requestEnhancer);
+
         AccessTokenProviderChain provider = new AccessTokenProviderChain(
-            Arrays.asList(new AuthorizationCodeAccessTokenProvider()));
+            Arrays.asList(authorizationCode));
 
         provider.setClientTokenServices(clientTokenServices);
         template.setAccessTokenProvider(provider);

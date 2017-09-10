@@ -1,14 +1,14 @@
 package com.packt.example.popclient.dashboard;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 public class UserDashboard {
@@ -40,7 +40,7 @@ public class UserDashboard {
     }
 
     private void tryToGetUserProfile(ModelAndView mv) {
-        String endpoint = "http://localhost:8081/api/profile";
+        String endpoint = "http://localhost:8080/api/profile";
         try {
             UserProfile userProfile = restTemplate.getForObject(endpoint, UserProfile.class);
             mv.addObject("profile", userProfile);
