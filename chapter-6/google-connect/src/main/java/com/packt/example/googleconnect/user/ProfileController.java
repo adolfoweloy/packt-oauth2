@@ -28,7 +28,7 @@ public class ProfileController {
             return mv;
         }
 
-        return new ModelAndView("redirect:/profile/add");
+        return new ModelAndView("redirect:/profile/form");
     }
 
     @GetMapping("/form")
