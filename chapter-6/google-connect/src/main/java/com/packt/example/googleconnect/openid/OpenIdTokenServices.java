@@ -1,4 +1,4 @@
-package com.packt.example.googleconnect.oauth;
+package com.packt.example.googleconnect.openid;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;

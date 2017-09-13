@@ -1,4 +1,4 @@
-package com.packt.example.googleconnect.oauth;
+package com.packt.example.googleconnect.openid;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
