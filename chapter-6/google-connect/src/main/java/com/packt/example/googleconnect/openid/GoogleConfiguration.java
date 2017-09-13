@@ -1,25 +1,29 @@
 package com.packt.example.googleconnect.openid;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
-import org.springframework.security.oauth2.client.token.AccessTokenProvider;
 import org.springframework.security.oauth2.client.token.AccessTokenProviderChain;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeAccessTokenProvider;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 
 import java.util.Arrays;
 
-//@Configuration
-//@EnableOAuth2Client
+@Configuration
+@EnableOAuth2Client
 public class GoogleConfiguration {
 
-    private OpenIdTokenServices clientTokenServices;
+    @Autowired
+    private OpenIdTokenServices tokenServices;
 
     public OAuth2ProtectedResourceDetails resourceDetails() {
         AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
-        details.setClientId("client_id");
-        details.setClientSecret("secret");
+        details.setClientId("500120288874-3rblj0mueku43pqadohijog7o9v4dtj2.apps.googleusercontent.com");
+        details.setClientSecret("QPe-uIBwVVgqTHEscj9FNbVQ");
 
         // URLs retrieved from https://accounts.google.com/.well-known/openid-configuration
         details.setAccessTokenUri("https://www.googleapis.com/oauth2/v4/token");
@@ -29,18 +33,18 @@ public class GoogleConfiguration {
         return details;
     }
 
-    public OAuth2RestTemplate oAuth2RestTemplate(OAuth2ClientContext context) {
-        OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(resourceDetails(), context);
-        restTemplate.setAccessTokenProvider(getAccessTokenProvider());
-        return restTemplate;
-    }
+    @Bean
+    public OAuth2RestTemplate restTemplate(OAuth2ClientContext context) {
+        OAuth2RestTemplate rest = new OAuth2RestTemplate(resourceDetails(), context);
 
-    private AccessTokenProvider getAccessTokenProvider() {
         AccessTokenProviderChain providerChain = new AccessTokenProviderChain(
                 Arrays.asList(new AuthorizationCodeAccessTokenProvider()));
-        providerChain.setClientTokenServices(clientTokenServices);
-        return providerChain;
+        providerChain.setClientTokenServices(tokenServices);
+
+        rest.setAccessTokenProvider(providerChain);
+        return rest;
     }
+
 
 
 }
