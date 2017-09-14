@@ -2,6 +2,7 @@ package com.packt.example.googleconnect.openid;
 
 import com.packt.example.googleconnect.user.User;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,11 +12,13 @@ import javax.persistence.OneToOne;
 @Entity
 public class OpenIDAuthentication {
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private User user;
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String subject;
 
     private String provider;
 
@@ -37,6 +40,14 @@ public class OpenIDAuthentication {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public String getProvider() {

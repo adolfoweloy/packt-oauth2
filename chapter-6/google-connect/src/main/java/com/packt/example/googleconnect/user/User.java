@@ -20,6 +20,12 @@ public class User implements UserDetails {
 
     private String password;
 
+    @Deprecated User() {}
+
+    public User(String login) {
+        this.login = login;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return new ArrayList<>();

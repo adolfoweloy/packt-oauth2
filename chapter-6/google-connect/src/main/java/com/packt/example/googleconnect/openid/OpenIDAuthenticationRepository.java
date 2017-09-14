@@ -9,4 +9,6 @@ public interface OpenIDAuthenticationRepository extends JpaRepository<OpenIDAuth
 
     Optional<OpenIDAuthentication> findByUser(User user);
 
+    Optional<OpenIDAuthentication> findBySubject(String subject);
+
 }

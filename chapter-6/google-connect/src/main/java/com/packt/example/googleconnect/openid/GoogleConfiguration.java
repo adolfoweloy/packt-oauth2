@@ -20,12 +20,14 @@ public class GoogleConfiguration {
     @Autowired
     private OpenIdTokenServices tokenServices;
 
+    @Bean
     public OAuth2ProtectedResourceDetails resourceDetails() {
         AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
         details.setClientId("500120288874-3rblj0mueku43pqadohijog7o9v4dtj2.apps.googleusercontent.com");
         details.setClientSecret("QPe-uIBwVVgqTHEscj9FNbVQ");
 
         // URLs retrieved from https://accounts.google.com/.well-known/openid-configuration
+        details.setUserAuthorizationUri("https://accounts.google.com/o/oauth2/v2/auth");
         details.setAccessTokenUri("https://www.googleapis.com/oauth2/v4/token");
         details.setPreEstablishedRedirectUri("http://localhost:8080/callback");
         details.setScope(Arrays.asList("openid", "email", "profile"));
@@ -44,7 +46,5 @@ public class GoogleConfiguration {
         rest.setAccessTokenProvider(providerChain);
         return rest;
     }
-
-
 
 }
