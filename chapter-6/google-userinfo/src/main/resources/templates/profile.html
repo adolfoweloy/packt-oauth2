@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>client app</title>
+</head>
+<body>
+
+<p sec:authorize="isAuthenticated()">
+    You are logged in as
+    <span sec:authentication="principal.username">John Doe</span>
+    <a href="#" th:href="@{/logout}">Logout</a>
+</p>
+
+<h1>that's your profile</h1>
+<table>
+    <tr>
+        <td><b>hobbies</b></td>
+        <td th:text="${profile.hobbies}">hobbies</td>
+    </tr>
+    <tr>
+        <td><b>profession</b></td>
+        <td th:text="${profile.profession}">profession</td>
+    </tr>
+    <tr>
+        <td><b>country</b></td>
+        <td th:text="${profile.country}">country</td>
+    </tr>
+    <tr>
+        <td><b>city</b></td>
+        <td th:text="${profile.city}">city</td>
+    </tr>
+</table>
+<h2>that' your OpenID info</h2>
+<p style="color: red">
+    <label><b>name:</b></label><span th:text="${openID.name}">name</span>
+</p>
+<p>
+    <label><b>subject:</b></label><span th:text="${openID.subject}">sub</span>
+</p>
+<p>
+    <label><b>provider:</b>:</label><span th:text="${openID.provider}">provider</span>
+</p>
+<p>
+    <label><b>expiration time(ms):</b></label><span th:text="${openID.expirationTime}">expirationTime</span>
+</p>
+<p>
+    <label><b>access token:</b></label><span th:text="${openID.token}">token</span>
+</p>
+<hr/>
+<button type="button" onclick="javascript: window.location.href='/profile/form'">Add/Edit</button>
+</body>
+</html>
