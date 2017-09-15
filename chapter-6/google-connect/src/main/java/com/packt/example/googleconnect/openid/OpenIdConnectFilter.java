@@ -65,42 +65,37 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
         throws AuthenticationException, IOException, ServletException {
 
-        OAuth2AccessToken accessToken;
-
         try {
-            accessToken = restTemplate.getAccessToken();
+            OAuth2AccessToken accessToken = restTemplate.getAccessToken();
+            Map<String, Object> tokenIdClaims = extractClaims(accessToken);
+            Optional<OpenIDAuthentication> found = repository.findBySubject((String) tokenIdClaims.get("sub"));
 
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            clientTokenServices.saveAccessToken(oAuth2ProtectedResourceDetails, authentication, accessToken);
+            if (found.isPresent()) {
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                        found.get().getUser(), null, found.get().getUser().getAuthorities());
 
+                publish(new AuthenticationSuccessEvent(authentication));
+                return authentication;
+            } else {
+                throw new UsernameNotFoundException("user not found");
+            }
         } catch (OAuth2Exception e) {
             BadCredentialsException error = new BadCredentialsException(
                     "Cannot retrieve the access token", e);
             publish(new OAuth2AuthenticationFailureEvent(error));
             throw error;
         }
-
-        Map<String, Object> tokenIdClaims = extractClaims(accessToken);
-
-        Optional<OpenIDAuthentication> found = repository.findBySubject((String) tokenIdClaims.get("sub"));
-
-        if (found.isPresent()) {
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    found.get().getUser(), null, found.get().getUser().getAuthorities());
-
-            publish(new AuthenticationSuccessEvent(authentication));
-            return authentication;
-        } else {
-            throw new UsernameNotFoundException("user not found");
-        }
     }
 
     private Map<String, Object> extractClaims(OAuth2AccessToken accessToken) {
-        String idToken = accessToken.getAdditionalInformation().get("id_token").toString();
-        Jwt decodedToken = JwtHelper.decode(idToken);
-
         try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            clientTokenServices.saveAccessToken(oAuth2ProtectedResourceDetails, authentication, accessToken);
+
+            String idToken = accessToken.getAdditionalInformation().get("id_token").toString();
+            Jwt decodedToken = JwtHelper.decode(idToken);
             return jsonMapper.readValue(decodedToken.getClaims(), Map.class);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

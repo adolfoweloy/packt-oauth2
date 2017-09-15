@@ -20,11 +20,14 @@ public class GoogleConfiguration {
     @Autowired
     private OpenIdTokenServices tokenServices;
 
+    @Autowired
+    private GoogleProperties properties;
+
     @Bean
     public OAuth2ProtectedResourceDetails resourceDetails() {
         AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
-        details.setClientId("500120288874-3rblj0mueku43pqadohijog7o9v4dtj2.apps.googleusercontent.com");
-        details.setClientSecret("QPe-uIBwVVgqTHEscj9FNbVQ");
+        details.setClientId(properties.getClientId());
+        details.setClientSecret(properties.getClientSecret());
 
         // URLs retrieved from https://accounts.google.com/.well-known/openid-configuration
         details.setUserAuthorizationUri("https://accounts.google.com/o/oauth2/v2/auth");

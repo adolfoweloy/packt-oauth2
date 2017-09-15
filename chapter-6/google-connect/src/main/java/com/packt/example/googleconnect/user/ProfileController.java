@@ -1,5 +1,7 @@
 package com.packt.example.googleconnect.user;
 
+import com.packt.example.googleconnect.openid.OpenIDAuthentication;
+import com.packt.example.googleconnect.openid.OpenIDAuthenticationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,9 @@ public class ProfileController {
     @Autowired
     private ProfileRepository profileRepository;
 
+    @Autowired
+    private OpenIDAuthenticationRepository openIDRepository;
+
     @GetMapping
     public ModelAndView profile() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -25,6 +30,10 @@ public class ProfileController {
         if (profile.isPresent()) {
             ModelAndView mv = new ModelAndView("profile");
             mv.addObject("profile", profile.get());
+            Optional<OpenIDAuthentication> openID = openIDRepository.findByUser(user);
+            if (openID.isPresent()) {
+                mv.addObject("openID", openID.get());
+            }
             return mv;
         }
 
