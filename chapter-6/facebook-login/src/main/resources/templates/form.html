@@ -9,7 +9,7 @@
 
 <p sec:authorize="isAuthenticated()">
     You are logged in as
-    <span sec:authentication="principal.username">John Doe</span>
+    <span sec:authentication="name">John Doe</span>
     <h2>Add your profile info</h2>
 
     <form action="#" th:action="@{/profile}" th:object="${profile}" method="post">

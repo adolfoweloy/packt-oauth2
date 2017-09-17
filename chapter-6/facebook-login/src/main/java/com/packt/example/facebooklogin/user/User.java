@@ -20,7 +20,8 @@ public class User implements UserDetails {
 
     private String password;
 
-    @Deprecated User() {}
+    // empty user when using social login
+    public User() {}
 
     public User(String login) {
         this.login = login;

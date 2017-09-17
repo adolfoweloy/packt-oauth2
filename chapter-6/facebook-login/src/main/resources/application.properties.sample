@@ -7,4 +7,6 @@ spring.jpa.properties.hibernate.hbm2ddl.auto=create
 
 spring.thymeleaf.cache=false
 
-
+security.oauth2.client.facebook.client-id=<client-id>
+security.oauth2.client.facebook.client-secret=<client-secret>
+security.oauth2.client.facebook.scopes=public_profile,email
