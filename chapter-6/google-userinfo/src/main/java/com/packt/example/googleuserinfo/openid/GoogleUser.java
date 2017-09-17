@@ -1,29 +1,42 @@
-package com.packt.example.googleuserinfo.user;
+package com.packt.example.googleuserinfo.openid;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
-public class User implements UserDetails {
+public class GoogleUser implements UserDetails {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String login;
+    private String email;
 
-    private String password;
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private OpenIDAuthentication openIDAuthentication;
 
-    @Deprecated User() {}
+    @Deprecated
+    GoogleUser() {}
 
-    public User(String login) {
-        this.login = login;
+    public GoogleUser(String email, OpenIDAuthentication openIDAuthentication) {
+        this.email = email;
+        this.openIDAuthentication = openIDAuthentication;
+    }
+
+    public OpenIDAuthentication getOpenIDAuthentication() {
+        return openIDAuthentication;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @Override
@@ -33,12 +46,12 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return null;
     }
 
     @Override
     public String getUsername() {
-        return login;
+        return openIDAuthentication.getName();
     }
 
     @Override
@@ -53,7 +66,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return !openIDAuthentication.hasExpired();
     }
 
     @Override

@@ -1,7 +1,6 @@
-package com.packt.example.googleuserinfo.user;
+package com.packt.example.googleuserinfo.profile;
 
-import com.packt.example.googleuserinfo.openid.OpenIDAuthentication;
-import com.packt.example.googleuserinfo.openid.OpenIDAuthenticationRepository;
+import com.packt.example.googleuserinfo.openid.GoogleUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -19,21 +18,15 @@ public class ProfileController {
     @Autowired
     private ProfileRepository profileRepository;
 
-    @Autowired
-    private OpenIDAuthenticationRepository openIDRepository;
-
     @GetMapping
     public ModelAndView profile() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        GoogleUser user = (GoogleUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Profile> profile = profileRepository.findByUser(user);
 
         if (profile.isPresent()) {
             ModelAndView mv = new ModelAndView("profile");
             mv.addObject("profile", profile.get());
-            Optional<OpenIDAuthentication> openID = openIDRepository.findByUser(user);
-            if (openID.isPresent()) {
-                mv.addObject("openID", openID.get());
-            }
+            mv.addObject("openID", user.getOpenIDAuthentication());
             return mv;
         }
 
@@ -42,7 +35,7 @@ public class ProfileController {
 
     @GetMapping("/form")
     public ModelAndView form() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        GoogleUser user = (GoogleUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Profile> profile = profileRepository.findByUser(user);
 
         ModelAndView mv = new ModelAndView("form");
@@ -57,7 +50,7 @@ public class ProfileController {
 
     @PostMapping
     public ModelAndView save(Profile profile) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        GoogleUser user = (GoogleUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         profile.setUser(user);
 
         Profile newProfile = profileRepository.save(profile);

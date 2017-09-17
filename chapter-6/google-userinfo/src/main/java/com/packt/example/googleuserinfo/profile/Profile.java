@@ -1,4 +1,6 @@
-package com.packt.example.googleuserinfo.user;
+package com.packt.example.googleuserinfo.profile;
+
+import com.packt.example.googleuserinfo.openid.GoogleUser;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +23,7 @@ public class Profile {
     private String country;
 
     @OneToOne
-    private User user;
+    private GoogleUser user;
 
     public Long getId() {
         return id;
@@ -63,11 +65,11 @@ public class Profile {
         this.country = country;
     }
 
-    public User getUser() {
+    public GoogleUser getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(GoogleUser user) {
         this.user = user;
     }
 }
