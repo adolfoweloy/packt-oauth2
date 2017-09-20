@@ -1,4 +1,6 @@
-package com.packt.example.googleconnect.user;
+package com.packt.example.googleconnect.profile;
+
+import com.packt.example.googleconnect.openid.GoogleUser;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,12 +18,8 @@ public class Profile {
 
     private String profession;
 
-    private String city;
-
-    private String country;
-
     @OneToOne
-    private User user;
+    private GoogleUser user;
 
     public Long getId() {
         return id;
@@ -47,27 +45,11 @@ public class Profile {
         this.profession = profession;
     }
 
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public User getUser() {
+    public GoogleUser getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(GoogleUser user) {
         this.user = user;
     }
 }

@@ -1,19 +1,15 @@
 package com.packt.example.googleconnect.openid;
 
-import com.packt.example.googleconnect.user.User;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 
 @Entity
 public class OpenIDAuthentication {
-
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private User user;
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,12 +22,13 @@ public class OpenIDAuthentication {
 
     private String token;
 
-    public User getUser() {
-        return user;
-    }
+    public boolean hasExpired() {
+        OffsetDateTime expirationDateTime = OffsetDateTime.ofInstant(
+                Instant.ofEpochSecond(expirationTime), ZoneId.systemDefault());
 
-    public void setUser(User user) {
-        this.user = user;
+        OffsetDateTime now = OffsetDateTime.now(ZoneId.systemDefault());
+
+        return now.isAfter(expirationDateTime);
     }
 
     public Long getId() {
@@ -66,15 +63,12 @@ public class OpenIDAuthentication {
         this.expirationTime = expirationTime;
     }
 
-    public boolean hasExpired() {
-        return false;
+    public String getToken() {
+        return token;
     }
 
     public void setToken(String token) {
         this.token = token;
     }
 
-    public String getToken() {
-        return token;
-    }
 }

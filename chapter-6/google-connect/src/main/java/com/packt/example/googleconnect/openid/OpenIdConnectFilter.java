@@ -10,14 +10,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.jwt.Jwt;
-import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.filter.OAuth2AuthenticationFailureEvent;
-import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
-import org.springframework.security.oauth2.client.token.ClientTokenServices;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -27,8 +21,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
-import java.util.Optional;
 
 @Component
 public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter {
@@ -37,21 +29,18 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
     private OAuth2RestTemplate restTemplate;
 
     @Autowired
+    private UserIdentity userIdentity;
+
+    @Autowired
+    private UserRepository repository;
+
+    @Autowired
     private ObjectMapper jsonMapper;
-
-    @Autowired
-    private ClientTokenServices clientTokenServices;
-
-    @Autowired
-    private OAuth2ProtectedResourceDetails oAuth2ProtectedResourceDetails;
-
-    @Autowired
-    private OpenIDAuthenticationRepository repository;
 
     private ApplicationEventPublisher eventPublisher;
 
     public OpenIdConnectFilter() {
-        super("/callback");
+        super("/google/callback");
         setAuthenticationManager(new NoopAuthenticationManager());
     }
 
@@ -62,42 +51,26 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+    public Authentication attemptAuthentication(
+        HttpServletRequest request, HttpServletResponse response)
         throws AuthenticationException, IOException, ServletException {
 
         try {
             OAuth2AccessToken accessToken = restTemplate.getAccessToken();
-            Map<String, Object> tokenIdClaims = extractClaims(accessToken);
-            Optional<OpenIDAuthentication> found = repository.findBySubject((String) tokenIdClaims.get("sub"));
 
-            if (found.isPresent()) {
-                Authentication authentication = new UsernamePasswordAuthenticationToken(
-                        found.get().getUser(), null, found.get().getUser().getAuthorities());
+            Claims claims = Claims.createFrom(jsonMapper, accessToken);
+            GoogleUser googleUser = userIdentity.findOrCreateFrom(claims);
+            repository.save(googleUser);
 
-                publish(new AuthenticationSuccessEvent(authentication));
-                return authentication;
-            } else {
-                throw new UsernameNotFoundException("user not found");
-            }
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                googleUser, null, googleUser.getAuthorities());
+            publish(new AuthenticationSuccessEvent(authentication));
+            return authentication;
         } catch (OAuth2Exception e) {
             BadCredentialsException error = new BadCredentialsException(
                     "Cannot retrieve the access token", e);
             publish(new OAuth2AuthenticationFailureEvent(error));
             throw error;
-        }
-    }
-
-    private Map<String, Object> extractClaims(OAuth2AccessToken accessToken) {
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            clientTokenServices.saveAccessToken(oAuth2ProtectedResourceDetails, authentication, accessToken);
-
-            String idToken = accessToken.getAdditionalInformation().get("id_token").toString();
-            Jwt decodedToken = JwtHelper.decode(idToken);
-            return jsonMapper.readValue(decodedToken.getClaims(), Map.class);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -112,7 +85,8 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
         @Override
         public Authentication authenticate(Authentication authentication)
                 throws AuthenticationException {
-            throw new UnsupportedOperationException("No authentication should be done with this AuthenticationManager");
+            throw new UnsupportedOperationException(
+                "No authentication should be done with this AuthenticationManager");
         }
 
     }

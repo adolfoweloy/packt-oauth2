@@ -1,4 +1,4 @@
-package com.packt.example.googleconnect.user;
+package com.packt.example.googleconnect.profile;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

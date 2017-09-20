@@ -1,1 +1,0 @@
-insert into User (login, password) values ('adolfo', '123');
