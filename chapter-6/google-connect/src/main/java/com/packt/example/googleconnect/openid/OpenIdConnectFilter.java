@@ -2,6 +2,7 @@ package com.packt.example.googleconnect.openid;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,9 +16,14 @@ import org.springframework.security.oauth2.client.filter.OAuth2AuthenticationFai
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -39,9 +45,28 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
 
     private ApplicationEventPublisher eventPublisher;
 
-    public OpenIdConnectFilter() {
-        super("/google/callback");
+    private final AntPathRequestMatcher localMatcher;
+
+    public OpenIdConnectFilter(
+        @Value("${openid.callback-uri}") String callbackUri,
+        @Value("${openid.api-base-uri}") String apiBaseUri) {
+        super(new OrRequestMatcher(
+            new AntPathRequestMatcher(callbackUri),
+            new AntPathRequestMatcher(apiBaseUri)));
+        this.localMatcher = new AntPathRequestMatcher("/profile/**");
         setAuthenticationManager(new NoopAuthenticationManager());
+    }
+
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse res,
+        FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) req;
+        if (localMatcher.matches(request)) {
+            restTemplate.getAccessToken();
+            chain.doFilter(req, res);
+        } else {
+            super.doFilter(req, res, chain);
+        }
     }
 
     @Override

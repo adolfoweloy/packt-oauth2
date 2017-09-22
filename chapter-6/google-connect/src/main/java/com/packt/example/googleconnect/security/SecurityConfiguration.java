@@ -2,6 +2,7 @@ package com.packt.example.googleconnect.security;
 
 import com.packt.example.googleconnect.openid.OpenIdConnectFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,6 +15,12 @@ import org.springframework.security.web.authentication.preauth.AbstractPreAuthen
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    @Value("${openid.callback-uri}")
+    private String callbackUri;
+
+    @Value("${openid.api-base-uri}")
+    private String apiBaseUri;
+
     @Autowired
     private OpenIdConnectFilter openIdConnectFilter;
 
@@ -25,10 +32,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers("/").permitAll().and()
             .authorizeRequests()
-            .antMatchers("/profile/*").authenticated().and()
+            .antMatchers(apiBaseUri).authenticated().and()
             .authorizeRequests().anyRequest().authenticated().and()
             .httpBasic().authenticationEntryPoint(
-                new LoginUrlAuthenticationEntryPoint("/google/callback")).and()
+                new LoginUrlAuthenticationEntryPoint(callbackUri)).and()
                 .logout()
                 .logoutSuccessUrl("/")
                 .permitAll().and()
