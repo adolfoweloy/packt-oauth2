@@ -53,7 +53,7 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
         super(new OrRequestMatcher(
             new AntPathRequestMatcher(callbackUri),
             new AntPathRequestMatcher(apiBaseUri)));
-        this.localMatcher = new AntPathRequestMatcher("/profile/**");
+        this.localMatcher = new AntPathRequestMatcher(apiBaseUri);
         setAuthenticationManager(new NoopAuthenticationManager());
     }
 
