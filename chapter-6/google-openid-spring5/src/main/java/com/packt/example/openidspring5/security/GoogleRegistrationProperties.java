@@ -11,16 +11,17 @@ public class GoogleRegistrationProperties {
     private String clientId;
     private String clientSecret;
     private String scopes;
-
-    private String redirectUri = "http://localhost:8080/oauth2/authorize/code/google";
-    private String authorizationUri = "https://accounts.google.com/o/oauth2/v2/auth";
-    private String tokenUri = "https://www.googleapis.com/oauth2/v4/token";
+    private String redirectUri;
+    private String authorizationUri;
+    private String tokenUri;
     private String clientName = "Google";
     private String clientAlias = "google";
-    private AuthorizationGrantType authorizedGrantType = AuthorizationGrantType.AUTHORIZATION_CODE;
-    private String userInfoUri = "https://www.googleapis.com/oauth2/v3/userinfo";
+    private String userInfoUri;
     private String userInfoNameAttributeKey = "name";
-    private String jwkSetUri = "https://www.googleapis.com/oauth2/v3/certs";
+    private String jwkSetUri;
+
+    private AuthorizationGrantType authorizedGrantType
+            = AuthorizationGrantType.AUTHORIZATION_CODE;
 
     public String getClientId() {
         return clientId;

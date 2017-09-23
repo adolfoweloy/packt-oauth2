@@ -13,7 +13,8 @@ public class DashboardController {
 
     @GetMapping
     public ModelAndView profile() {
-        DefaultOidcUser user = (DefaultOidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        DefaultOidcUser user = (DefaultOidcUser) SecurityContextHolder
+            .getContext().getAuthentication().getPrincipal();
 
         ModelAndView mv = new ModelAndView("dashboard");
         mv.addObject("profile", user.getUserInfo().getClaims());
