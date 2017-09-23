@@ -1,29 +1,21 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-<head>
-    <style>
-        label { font-weight: bold; }
-    </style>
-</head>
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
 <p sec:authorize="isAuthenticated()">
-You are logged in as <span sec:authentication="principal.username">.</span>
+Logged as <span sec:authentication="principal.username"></span>
 </p>
-<h1>that's your profile</h1>
-<p><label>hobbies:</label><span th:text="${profile.hobbies}">hobbies</span></p>
-<p><label>profession:</label><span th:text="${profile.profession}">profession</span></p>
+<h1>That's your profile</h1>
+<p>hobbie:<span th:text="${profile.hobbies}">hobbies</span></p>
+<p>profession:<span th:text="${profile.profession}">profession</span></p>
 
-<h2>that' your OpenID info</h2>
-<label>subject:</label>
-<p><span th:text="${openID.subject}">sub</span></p>
-<p><label>provider:</label><span th:text="${openID.provider}">provider</span></p>
-<p><label>exp time(ms):</label><span th:text="${openID.expirationTime}">exp time</span></p>
-<p><label>access token:</label><span th:text="${openID.token}">token</span></p>
+<h2>That's your OpenID info</h2>
+<p>subject:<span th:text="${openID.subject}"></span></p>
+<p>provider:<span th:text="${openID.provider}"></span></p>
+<p>exp time(ms):<span th:text="${openID.expirationTime}"></span></p>
+<p>access token:<span th:text="${openID.token}"></span></p>
 
 <a href="#" th:href="@{/profile/form}">Add/Edit</a>
-<hr/>
-
 <p><a href="#" th:href="@{/logout}">Logout</a></p>
 </body>
 </html>
