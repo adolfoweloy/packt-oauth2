@@ -22,6 +22,7 @@ public class OpenIDAuthentication {
 
     private String token;
 
+    // new attribute (retrieved from user info endpoint)
     private String name;
 
     public boolean hasExpired() {
@@ -65,12 +66,12 @@ public class OpenIDAuthentication {
         this.expirationTime = expirationTime;
     }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
-
     public String getToken() {
         return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getName() {

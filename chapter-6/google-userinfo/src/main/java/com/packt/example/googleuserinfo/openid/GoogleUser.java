@@ -31,12 +31,9 @@ public class GoogleUser implements UserDetails {
         this.openIDAuthentication = openIDAuthentication;
     }
 
-    public OpenIDAuthentication getOpenIDAuthentication() {
-        return openIDAuthentication;
-    }
-
-    public Long getId() {
-        return id;
+    @Override
+    public String getUsername() {
+        return email;
     }
 
     @Override
@@ -45,13 +42,40 @@ public class GoogleUser implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return null;
+    public boolean isCredentialsNonExpired() {
+        return !openIDAuthentication.hasExpired();
     }
 
+    // standard getters and setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public OpenIDAuthentication getOpenIDAuthentication() {
+        return openIDAuthentication;
+    }
+
+    public void setOpenIDAuthentication(OpenIDAuthentication openIDAuthentication) {
+        this.openIDAuthentication = openIDAuthentication;
+    }
+
+
     @Override
-    public String getUsername() {
-        return openIDAuthentication.getName();
+    public String getPassword() {
+        return null;
     }
 
     @Override
@@ -62,11 +86,6 @@ public class GoogleUser implements UserDetails {
     @Override
     public boolean isAccountNonLocked() {
         return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return !openIDAuthentication.hasExpired();
     }
 
     @Override

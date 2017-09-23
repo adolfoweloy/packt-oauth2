@@ -1,5 +1,7 @@
 package com.packt.example.googleuserinfo.openid;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
@@ -15,11 +17,14 @@ import java.util.Map;
 @Service
 public class UserInfoService {
 
+    @Autowired
+    private ObjectMapper jsonMapper;
+
     public Map<String, String> getUserInfoFor(OAuth2AccessToken accessToken) {
         RestTemplate restTemplate = new RestTemplate();
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = new RequestEntity<>(
-                getHeader(accessToken.getValue()),
+                getHeader(accessToken),
                 HttpMethod.GET,
                 URI.create("https://www.googleapis.com/oauth2/v3/userinfo")
         );
@@ -34,9 +39,9 @@ public class UserInfoService {
         throw new RuntimeException("It wasn't possible to retrieve userInfo");
     }
 
-    private MultiValueMap getHeader(String accessToken) {
+    private MultiValueMap getHeader(OAuth2AccessToken accessToken) {
         MultiValueMap httpHeaders = new HttpHeaders();
-        httpHeaders.add("Authorization", "Bearer " + accessToken);
+        httpHeaders.add("Authorization", "Bearer " + accessToken.getValue());
         return httpHeaders;
     }
 

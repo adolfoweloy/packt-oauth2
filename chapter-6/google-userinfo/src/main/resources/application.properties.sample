@@ -7,5 +7,10 @@ spring.jpa.properties.hibernate.hbm2ddl.auto=create
 
 spring.thymeleaf.cache=false
 
+## Google open-id configuration
 google.config.clientId=client-id
 google.config.clientSecret=client-secret
+
+## open-id aware URIs
+openid.callback-uri=/google/callback
+openid.api-base-uri=/profile/*

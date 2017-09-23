@@ -1,5 +1,6 @@
 package com.packt.example.googleuserinfo.profile;
 
+
 import com.packt.example.googleuserinfo.openid.GoogleUser;
 
 import javax.persistence.Entity;
@@ -17,10 +18,6 @@ public class Profile {
     private String hobbies;
 
     private String profession;
-
-    private String city;
-
-    private String country;
 
     @OneToOne
     private GoogleUser user;
@@ -47,22 +44,6 @@ public class Profile {
 
     public void setProfession(String profession) {
         this.profession = profession;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
     }
 
     public GoogleUser getUser() {

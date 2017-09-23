@@ -18,9 +18,6 @@ import java.util.Arrays;
 public class GoogleConfiguration {
 
     @Autowired
-    private OpenIdTokenServices tokenServices;
-
-    @Autowired
     private GoogleProperties properties;
 
     @Bean
@@ -32,22 +29,21 @@ public class GoogleConfiguration {
         // URLs retrieved from https://accounts.google.com/.well-known/openid-configuration
         details.setUserAuthorizationUri("https://accounts.google.com/o/oauth2/v2/auth");
         details.setAccessTokenUri("https://www.googleapis.com/oauth2/v4/token");
-        details.setPreEstablishedRedirectUri("http://localhost:8080/callback");
+        details.setPreEstablishedRedirectUri("http://localhost:8080/google/callback");
         details.setScope(Arrays.asList("openid", "email", "profile"));
         details.setUseCurrentUri(false);
+
         return details;
     }
 
     @Bean
     public OAuth2RestTemplate restTemplate(OAuth2ClientContext context) {
         OAuth2RestTemplate rest = new OAuth2RestTemplate(resourceDetails(), context);
-
         AccessTokenProviderChain providerChain = new AccessTokenProviderChain(
                 Arrays.asList(new AuthorizationCodeAccessTokenProvider()));
-        providerChain.setClientTokenServices(tokenServices);
-
         rest.setAccessTokenProvider(providerChain);
         return rest;
     }
 
 }
+

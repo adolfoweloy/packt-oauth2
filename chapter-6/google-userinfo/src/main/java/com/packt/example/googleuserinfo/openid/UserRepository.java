@@ -7,6 +7,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<GoogleUser, Long> {
-    @Query("select u from GoogleUser u inner join u.openIDAuthentication o where o.subject = :subject")
-    Optional<GoogleUser> findByOpenIDSubject(@Param("subject") String subject);
+    @Query("select u from GoogleUser u " +
+            "inner join u.openIDAuthentication o " +
+            "where o.subject = :subject")
+    Optional<GoogleUser> findByOpenIDSubject(
+            @Param("subject") String subject);
 }

@@ -1,21 +1,21 @@
 package com.packt.example.googleuserinfo.openid;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-@Component
-public class OpenIDTokenExtractor {
+public class Claims {
 
-    @Autowired
-    private ObjectMapper jsonMapper;
+    private String iss;
+    private String sub;
+    private String at_hash;
+    private String email;
+    private Long exp;
 
-    public Claims extractFrom(OAuth2AccessToken accessToken) {
+    public static Claims createFrom(ObjectMapper jsonMapper, OAuth2AccessToken accessToken) {
         try {
             String idToken = accessToken.getAdditionalInformation().get("id_token").toString();
             Jwt decodedToken = JwtHelper.decode(idToken);
@@ -26,11 +26,23 @@ public class OpenIDTokenExtractor {
         }
     }
 
-    static class Claims {
-        public String iss;
-        public String sub;
-        public String at_hash;
-        public String email;
-        public Long exp;
+    public String getIss() {
+        return iss;
+    }
+
+    public String getSub() {
+        return sub;
+    }
+
+    public String getAt_hash() {
+        return at_hash;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Long getExp() {
+        return exp;
     }
 }
