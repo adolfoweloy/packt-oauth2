@@ -18,9 +18,6 @@ import java.util.Arrays;
 public class FacebookConfiguration {
 
     @Autowired
-    private FacebookTokenServices tokenServices;
-
-    @Autowired
     private FacebookProperties properties;
 
     @Bean
@@ -28,26 +25,21 @@ public class FacebookConfiguration {
         AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
         details.setClientId(properties.getClientId());
         details.setClientSecret(properties.getClientSecret());
-
-        details.setUserAuthorizationUri("https://www.facebook.com/v2.10/dialog/oauth");
-        details.setAccessTokenUri("https://graph.facebook.com/v2.10/oauth/access_token");
-        details.setPreEstablishedRedirectUri("http://localhost:8080/callback");
+        details.setUserAuthorizationUri(properties.getAppAuthorizationUri());
+        details.setAccessTokenUri(properties.getAppTokenUri());
+        details.setPreEstablishedRedirectUri(properties.getRedirectUri());
         details.setScope(Arrays.asList("email", "public_profile"));
         details.setClientAuthenticationScheme(AuthenticationScheme.query);
         details.setUseCurrentUri(false);
-        details.isClientOnly();
         return details;
     }
 
     @Bean
     public OAuth2RestTemplate restTemplate(OAuth2ClientContext context) {
         OAuth2RestTemplate rest = new OAuth2RestTemplate(resourceDetails(), context);
-
-        AccessTokenProviderChain providerChain = new AccessTokenProviderChain(
-                Arrays.asList(new FacebookAccessTokenProvider()));
-        providerChain.setClientTokenServices(tokenServices);
-
-        rest.setAccessTokenProvider(providerChain);
+        rest.setAccessTokenProvider(
+            new AccessTokenProviderChain(
+                Arrays.asList(new FacebookAccessTokenProvider())));
         return rest;
     }
 

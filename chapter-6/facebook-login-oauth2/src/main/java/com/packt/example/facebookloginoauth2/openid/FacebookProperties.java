@@ -11,6 +11,8 @@ public class FacebookProperties {
     private String clientSecret;
     private String userInfoUri;
     private String appTokenUri;
+    private String appAuthorizationUri;
+    private String redirectUri;
 
     public String getClientId() {
         return clientId;
@@ -42,5 +44,21 @@ public class FacebookProperties {
 
     public void setAppTokenUri(String appTokenUri) {
         this.appTokenUri = appTokenUri;
+    }
+
+    public String getAppAuthorizationUri() {
+        return appAuthorizationUri;
+    }
+
+    public void setAppAuthorizationUri(String appAuthorizationUri) {
+        this.appAuthorizationUri = appAuthorizationUri;
+    }
+
+    public String getRedirectUri() {
+        return redirectUri;
+    }
+
+    public void setRedirectUri(String redirectUri) {
+        this.redirectUri = redirectUri;
     }
 }

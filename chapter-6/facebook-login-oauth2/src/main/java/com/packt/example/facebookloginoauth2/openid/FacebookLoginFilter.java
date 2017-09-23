@@ -1,6 +1,7 @@
 package com.packt.example.facebookloginoauth2.openid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,20 +13,21 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.filter.OAuth2AuthenticationFailureEvent;
-import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
-import org.springframework.security.oauth2.client.token.ClientTokenServices;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.Optional;
 
 @Component
 public class FacebookLoginFilter extends AbstractAuthenticationProcessingFilter {
@@ -34,22 +36,36 @@ public class FacebookLoginFilter extends AbstractAuthenticationProcessingFilter 
     private OAuth2RestTemplate restTemplate;
 
     @Autowired
-    private ClientTokenServices clientTokenServices;
-
-    @Autowired
-    private OAuth2ProtectedResourceDetails resourceDetails;
+    private FacebookUserIdentity userIdentity;
 
     @Autowired
     private UserRepository repository;
 
-    @Autowired
-    private UserInfoService userInfoService;
-
     private ApplicationEventPublisher eventPublisher;
 
-    public FacebookLoginFilter() {
-        super("/callback");
+    private final AntPathRequestMatcher localMatcher;
+
+    public FacebookLoginFilter(
+        @Value("${facebook.filter.callback-uri}") String callbackUri,
+        @Value("${facebook.filter.api-base-uri}")String apiBaseUri) {
+        super(new OrRequestMatcher(
+            new AntPathRequestMatcher(callbackUri),
+            new AntPathRequestMatcher(apiBaseUri)
+        ));
+        this.localMatcher = new AntPathRequestMatcher(apiBaseUri);
         setAuthenticationManager(new NoopAuthenticationManager());
+    }
+
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse res,
+                         FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) req;
+        if (localMatcher.matches(request)) {
+            restTemplate.getAccessToken();
+            chain.doFilter(req, res);
+        } else {
+            super.doFilter(req, res, chain);
+        }
     }
 
     @Override
@@ -64,15 +80,12 @@ public class FacebookLoginFilter extends AbstractAuthenticationProcessingFilter 
 
         try {
             OAuth2AccessToken accessToken = restTemplate.getAccessToken();
+            FacebookUser facebookUser = userIdentity.findOrCreateFrom(accessToken);
 
-            clientTokenServices.saveAccessToken(resourceDetails, null, accessToken);
-
-            Map<String, String> userInfo = userInfoService.getUserInfoFor(accessToken);
-            Optional<FacebookUser> facebookUser = repository.findByFacebookId(userInfo.get("id"));
+            repository.save(facebookUser);
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    facebookUser.get(), null, Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
-
+                    facebookUser, null, Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
             publish(new AuthenticationSuccessEvent(authentication));
             return authentication;
         } catch (OAuth2Exception e) {

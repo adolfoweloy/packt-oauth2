@@ -18,10 +18,6 @@ public class Profile {
 
     private String profession;
 
-    private String city;
-
-    private String country;
-
     @OneToOne
     private FacebookUser user;
 
@@ -47,22 +43,6 @@ public class Profile {
 
     public void setProfession(String profession) {
         this.profession = profession;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
     }
 
     public FacebookUser getUser() {

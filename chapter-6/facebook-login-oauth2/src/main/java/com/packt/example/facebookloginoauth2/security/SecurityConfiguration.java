@@ -29,9 +29,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .authorizeRequests().anyRequest().authenticated().and()
             .httpBasic().authenticationEntryPoint(
                 new LoginUrlAuthenticationEntryPoint("/callback")).and()
-                .logout()
-                .logoutSuccessUrl("/")
-                .permitAll().and()
+                .logout().logoutSuccessUrl("/").permitAll().and()
+                .headers().frameOptions().disable().and()
                 .csrf().disable();
     }
 
