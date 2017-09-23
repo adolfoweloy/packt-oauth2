@@ -28,18 +28,24 @@ public class FacebookUser implements UserDetails {
         this.facebookLoginData = facebookLoginData;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return new ArrayList<>();
+    }
+
     public FacebookLoginData getFacebookLoginData() {
         return facebookLoginData;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return !facebookLoginData.hasExpired();
     }
 
     public Long getId() {
         return id;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
-    }
 
     @Override
     public String getPassword() {
@@ -59,11 +65,6 @@ public class FacebookUser implements UserDetails {
     @Override
     public boolean isAccountNonLocked() {
         return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return !facebookLoginData.hasExpired();
     }
 
     @Override

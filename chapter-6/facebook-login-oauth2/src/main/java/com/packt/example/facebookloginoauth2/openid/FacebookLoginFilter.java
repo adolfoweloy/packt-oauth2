@@ -56,25 +56,13 @@ public class FacebookLoginFilter extends AbstractAuthenticationProcessingFilter 
         setAuthenticationManager(new NoopAuthenticationManager());
     }
 
-    @Override
-    public void doFilter(ServletRequest req, ServletResponse res,
-                         FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) req;
-        if (localMatcher.matches(request)) {
-            restTemplate.getAccessToken();
-            chain.doFilter(req, res);
-        } else {
-            super.doFilter(req, res, chain);
+    private static class NoopAuthenticationManager implements AuthenticationManager {
+        public Authentication authenticate(Authentication authentication)
+                throws AuthenticationException {
+            throw new UnsupportedOperationException("No authentication should be done with this AuthenticationManager");
         }
     }
 
-    @Override
-    public void setApplicationEventPublisher(ApplicationEventPublisher eventPublisher) {
-        this.eventPublisher = eventPublisher;
-        super.setApplicationEventPublisher(eventPublisher);
-    }
-
-    @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
         throws AuthenticationException, IOException, ServletException {
 
@@ -96,20 +84,26 @@ public class FacebookLoginFilter extends AbstractAuthenticationProcessingFilter 
         }
     }
 
+    public void doFilter(ServletRequest req, ServletResponse res,
+                         FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) req;
+        if (localMatcher.matches(request)) {
+            restTemplate.getAccessToken();
+            chain.doFilter(req, res);
+        } else {
+            super.doFilter(req, res, chain);
+        }
+    }
+
+    public void setApplicationEventPublisher(ApplicationEventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
+        super.setApplicationEventPublisher(eventPublisher);
+    }
+
     private void publish(ApplicationEvent event) {
         if (eventPublisher!=null) {
             eventPublisher.publishEvent(event);
         }
-    }
-
-    private static class NoopAuthenticationManager implements AuthenticationManager {
-
-        @Override
-        public Authentication authenticate(Authentication authentication)
-                throws AuthenticationException {
-            throw new UnsupportedOperationException("No authentication should be done with this AuthenticationManager");
-        }
-
     }
 
 }
