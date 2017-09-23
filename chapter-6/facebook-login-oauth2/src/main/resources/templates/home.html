@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <title>Profile</title>
@@ -8,17 +7,15 @@
 <body>
 
 <h2>Your online profile manager</h2>
-
 <p sec:authorize="isAuthenticated()">
     You are logged in as
-    <p sec:authentication="principal.username">John Doe</p>
-    <button type="button" onclick="javascript: window.location.href='/profile'">Go to profile</button>
-    <a href="#" th:href="@{/logout}">Logout</a>
+<p sec:authentication="principal.username">John Doe</p>
+<a href="#" th:href="@{/profile}">Go to profile</a>
+<a href="#" th:href="@{/logout}">Logout</a>
 </p>
 
 <div sec:authorize="not isAuthenticated()">
-    <button type="button" onclick="javascript: window.location.href='/profile'">Login with Facebook</button>
+    <a href="#" th:href="@{/profile}">Login with Facebook</a>
 </div>
-
 </body>
 </html>
