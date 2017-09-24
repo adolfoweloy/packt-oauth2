@@ -1,27 +1,13 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>client app</title>
-</head>
 <body>
-
-<h1>You are logged in</h1>
-<table>
-    <tr>
-        <td><b>Name</b></td>
-        <td th:text="${profile.name}"></td>
-    </tr>
-    <tr>
-        <td><b>Email</b></td>
-        <td th:text="${profile.email}"></td>
-    </tr>
-    <tr>
-        <td><b>Subject</b></td>
-        <td th:text="${profile.sub}">Subject</td>
-    </tr>
+<div style="border: 3px solid black; width: 30%; padding: 15px">
+    <h1>You are logged in</h1>
+    <p><b>Name:</b><span th:text="${profile.name}"></span></p>
+    <p><b>Email:</b><span th:text="${profile.email}"></span></p>
+    <p><b>Profile:</b><span th:text="${profile.sub}"></span></p>
     <a href="/">Home</a>
-</table>
-<hr/>
+</div>
 </body>
 </html>

@@ -2,18 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-<head>
-    <title>Profile</title>
-</head>
 <body>
-
-<h2>Multiple OpenID providers</h2>
-
+<h2>Use multiple identity providers</h2>
 <p sec:authorize="isAuthenticated()">
-    <div>You are logged in</div>
+<div>You are logged in</div>
 </p>
-
-<button type="button" onclick="javascript: window.location.href='/dashboard'">Go to dashboard</button>
-
+<a th:href="@{/dashboard}">Go to dashboard</a>
 </body>
 </html>

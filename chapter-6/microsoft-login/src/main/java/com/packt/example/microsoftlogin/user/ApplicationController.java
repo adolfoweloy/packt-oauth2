@@ -8,11 +8,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/dashboard")
-public class DashboardController {
+@RequestMapping("/")
+public class ApplicationController {
 
     @GetMapping
-    public ModelAndView profile() {
+    public String home() {
+        return "home";
+    }
+
+    @GetMapping("/dashboard")
+    public ModelAndView dashboard() {
         DefaultOidcUser user = (DefaultOidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         ModelAndView mv = new ModelAndView("dashboard");

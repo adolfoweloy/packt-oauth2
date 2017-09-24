@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 
 import java.util.Arrays;
 
@@ -29,9 +30,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .anyRequest().authenticated().and()
             .oauth2Login();
-
-        http.oauth2Login().tokenEndpoint()
-            .authorizationCodeTokenExchanger(new CustomAuthorizationCodeExchanger());
     }
 
     @Bean
@@ -69,7 +67,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .jwkSetUri(microsoft.getJwkSetUri())
             .authorizationGrantType(microsoft.getAuthorizedGrantType())
             .userInfoUri(microsoft.getUserInfoUri())
+            .clientAuthenticationMethod(ClientAuthenticationMethod.POST)
             .build();
+
+
         return registration;
     }
 
