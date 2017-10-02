@@ -12,6 +12,8 @@ public class WebClient {
 
     private final Retrofit retrofit;
 
+    public static final String BASE_URL = "http://192.168.11.190:8080";
+
     public WebClient() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -21,7 +23,7 @@ public class WebClient {
         client.addInterceptor(new ErrorInterceptor());
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.167:8080")
+                .baseUrl(BASE_URL)
                 .addConverterFactory(JacksonConverterFactory.create())
                 .client(client.build())
                 .build();

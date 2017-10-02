@@ -19,5 +19,4 @@ public class URIUtils {
         }
         return parameters;
     }
-
 }

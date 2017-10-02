@@ -16,6 +16,9 @@ import retrofit2.Response;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    private TextView usernameText;
+    private TextView emailText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +37,7 @@ public class ProfileActivity extends AppCompatActivity {
         String state = parameters.get("state");
 
         // validates state parameter
-        OAuth2Manager oauth2Manager = new OAuth2Manager(getApplicationContext());
+        OAuth2Manager oauth2Manager = new OAuth2Manager(this);
         String savedState = oauth2Manager.getState();
 
         if (!savedState.equals(state)) {
@@ -42,8 +45,8 @@ public class ProfileActivity extends AppCompatActivity {
             return;
         }
 
-        final TextView usernameText = (TextView) findViewById(R.id.profile_username);
-        final TextView emailText = (TextView) findViewById(R.id.profile_email);
+        usernameText = (TextView) findViewById(R.id.profile_username);
+        emailText = (TextView) findViewById(R.id.profile_email);
 
         WebClient client = new WebClient();
         Call<UserProfile> profileCallback = client.userProfile().token("Bearer " + token);
@@ -63,6 +66,4 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }
