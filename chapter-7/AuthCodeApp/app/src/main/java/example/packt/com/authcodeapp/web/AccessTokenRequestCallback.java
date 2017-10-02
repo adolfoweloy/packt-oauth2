@@ -9,20 +9,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AuthorizationCallback
+public class AccessTokenRequestCallback
         extends Observable
         implements Callback<AccessToken> {
 
     @Override
     public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
         AccessToken accessToken = response.body();
+
         setChanged();
         notifyObservers(accessToken);
     }
 
     @Override
     public void onFailure(Call<AccessToken> call, Throwable t) {
-        Log.e("ProfileActivity", "Error trying to retrieve access token", t);
+        Log.e("ProfileActivity", "Error trying to retrieve access requestToken", t);
     }
 
 }

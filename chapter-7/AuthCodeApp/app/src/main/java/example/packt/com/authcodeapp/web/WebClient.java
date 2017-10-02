@@ -14,7 +14,10 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
  */
 public class WebClient {
 
+    public static final String BASE_URL = "10.0.2.2:8080";
+
     private final Retrofit retrofit;
+
     private final OAuth2Service oAuth2Service;
 
     public static WebClient create() {
@@ -38,7 +41,7 @@ public class WebClient {
         }
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.167:8080")
+                .baseUrl("http://" + BASE_URL)
                 .addConverterFactory(JacksonConverterFactory.create())
                 .client(client.build())
                 .build();

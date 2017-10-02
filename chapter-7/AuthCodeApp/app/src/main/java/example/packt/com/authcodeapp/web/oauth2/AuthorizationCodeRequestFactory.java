@@ -1,7 +1,7 @@
 package example.packt.com.authcodeapp.web.oauth2;
 
 public class AuthorizationCodeRequestFactory {
-    public static AuthorizationCodeRequest create(String code) {
+    public static AuthorizationCodeRequest createTokenRequestFrom(String code) {
 
         AuthorizationCodeRequest tokenRequest = new AuthorizationCodeRequest();
         tokenRequest.setCode(code);

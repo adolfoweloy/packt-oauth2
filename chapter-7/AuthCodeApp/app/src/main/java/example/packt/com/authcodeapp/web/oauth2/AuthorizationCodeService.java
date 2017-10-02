@@ -11,6 +11,6 @@ public interface AuthorizationCodeService {
 
     @FormUrlEncoded
     @POST("oauth/token")
-    Call<AccessToken> token(@FieldMap Map<String, String> tokenRequest);
+    Call<AccessToken> requestToken(@FieldMap Map<String, String> tokenRequest);
 
 }

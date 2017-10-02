@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import example.packt.com.authcodeapp.BuildConfig;
 import example.packt.com.authcodeapp.R;
+import example.packt.com.authcodeapp.web.WebClient;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Uri authorizationUri = new Uri.Builder()
                     .scheme("http")
-                    .encodedAuthority("192.168.0.167:8080")
+                    .encodedAuthority(WebClient.BASE_URL)
                     .path("/oauth/authorize")
                         .appendQueryParameter("client_id", BuildConfig.CLIENT_ID)
                         .appendQueryParameter("response_type", "code")

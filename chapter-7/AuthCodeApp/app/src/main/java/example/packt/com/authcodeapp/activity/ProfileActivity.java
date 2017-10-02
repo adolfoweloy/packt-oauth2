@@ -5,22 +5,31 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import example.packt.com.authcodeapp.R;
-import example.packt.com.authcodeapp.web.AuthorizationCallback;
+import example.packt.com.authcodeapp.web.AccessTokenRequestCallback;
 import example.packt.com.authcodeapp.web.oauth2.AuthorizationCodeRequestFactory;
 import example.packt.com.authcodeapp.web.oauth2.AccessToken;
 import example.packt.com.authcodeapp.web.WebClient;
+import example.packt.com.authcodeapp.web.profile.UserProfile;
 import example.packt.com.authcodeapp.web.profile.UserProfileReady;
 import retrofit2.Call;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    private TextView textName;
+    private TextView textEmail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        textName = (TextView) findViewById(R.id.profile_name);
+        textEmail = (TextView) findViewById(R.id.profile_email);
 
         // extract data from redirection URI which is a uri scheme
 
@@ -39,22 +48,37 @@ public class ProfileActivity extends AppCompatActivity {
             return;
         }
 
-        // to retrieve access token our client app needs to authenticate using basic auth
+        // to retrieve access requestToken our client app needs to authenticate using basic auth
 
         WebClient provider = WebClient.createBasicProtectedResource();
 
-        // prepares the token request
+        // prepares the requestToken request
 
         Call<AccessToken> tokenCallback = provider
                 .oauth2()
                 .authorizationCodeService()
-                .token(AuthorizationCodeRequestFactory.create(code).getMap());
+                .requestToken(AuthorizationCodeRequestFactory
+                            .createTokenRequestFrom(code)
+                            .getMap());
 
-        AuthorizationCallback authorizationCallback
-            = new AuthorizationCallback();
-        authorizationCallback.addObserver(new UserProfileReady(ProfileActivity.this));
+        AccessTokenRequestCallback accessTokenRequestCallback = new AccessTokenRequestCallback();
+        accessTokenRequestCallback.addObserver(
+            new UserProfileReady(new UserProfileReady.OnProfileResultCallback() {
+                @Override
+                public void onSuccess(UserProfile userProfile) {
 
-        tokenCallback.enqueue(authorizationCallback);
+                    textName.setText(userProfile.getName());
+                    textEmail.setText(userProfile.getEmail());
+
+                }
+
+                @Override
+                public void onError(String message, Throwable t) {
+                    Log.e("ProfileActivity", message, t);
+                }
+        }));
+
+        tokenCallback.enqueue(accessTokenRequestCallback);
 
     }
 
