@@ -1,6 +1,7 @@
 package example.packt.com.resourceownerpassword.web;
 
-import example.packt.com.resourceownerpassword.web.oauth2.BasicAuthenticationInterceptor;
+import example.packt.com.resourceownerpassword.web.interceptor.BasicAuthenticationInterceptor;
+import example.packt.com.resourceownerpassword.web.interceptor.ErrorInterceptor;
 import example.packt.com.resourceownerpassword.web.oauth2.OAuth2Service;
 import example.packt.com.resourceownerpassword.web.profile.UserProfileService;
 import okhttp3.OkHttpClient;
@@ -27,6 +28,7 @@ public class WebClient {
 
         OkHttpClient.Builder client = new OkHttpClient.Builder();
         client.addInterceptor(logging);
+        client.addInterceptor(new ErrorInterceptor());
 
         if (basicAuthentication != null) {
             client.addInterceptor(basicAuthentication);

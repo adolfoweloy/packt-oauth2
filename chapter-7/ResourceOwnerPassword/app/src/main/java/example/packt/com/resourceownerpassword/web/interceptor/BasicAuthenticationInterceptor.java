@@ -1,4 +1,4 @@
-package example.packt.com.resourceownerpassword.web.oauth2;
+package example.packt.com.resourceownerpassword.web.interceptor;
 
 import android.util.Base64;
 
