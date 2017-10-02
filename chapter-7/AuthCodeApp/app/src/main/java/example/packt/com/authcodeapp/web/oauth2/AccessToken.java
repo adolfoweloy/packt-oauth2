@@ -1,4 +1,4 @@
-package example.packt.com.authcodeapp.oauth2.dto;
+package example.packt.com.authcodeapp.web.oauth2;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

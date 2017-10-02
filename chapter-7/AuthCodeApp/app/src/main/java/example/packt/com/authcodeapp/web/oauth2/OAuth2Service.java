@@ -1,4 +1,4 @@
-package example.packt.com.authcodeapp.oauth2.service;
+package example.packt.com.authcodeapp.web.oauth2;
 
 import retrofit2.Retrofit;
 

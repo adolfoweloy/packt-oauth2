@@ -1,6 +1,9 @@
-package example.packt.com.authcodeapp.oauth2.service;
+package example.packt.com.authcodeapp.web;
 
-import example.packt.com.authcodeapp.oauth2.interceptor.BasicAuthenticationInterceptor;
+import example.packt.com.authcodeapp.web.interceptor.ErrorInterceptor;
+import example.packt.com.authcodeapp.web.oauth2.OAuth2Service;
+import example.packt.com.authcodeapp.web.profile.UserProfileService;
+import example.packt.com.authcodeapp.web.interceptor.BasicAuthenticationInterceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -28,6 +31,7 @@ public class WebClient {
 
         OkHttpClient.Builder client = new OkHttpClient.Builder();
         client.addInterceptor(logging);
+        client.addInterceptor(new ErrorInterceptor());
 
         if (basicAuthentication != null) {
             client.addInterceptor(basicAuthentication);

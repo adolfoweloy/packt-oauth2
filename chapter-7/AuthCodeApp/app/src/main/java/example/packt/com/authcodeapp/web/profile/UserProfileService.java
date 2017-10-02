@@ -1,7 +1,7 @@
-package example.packt.com.authcodeapp.oauth2.service;
+package example.packt.com.authcodeapp.web.profile;
 
 
-import example.packt.com.authcodeapp.profile.UserProfile;
+import example.packt.com.authcodeapp.web.profile.UserProfile;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;

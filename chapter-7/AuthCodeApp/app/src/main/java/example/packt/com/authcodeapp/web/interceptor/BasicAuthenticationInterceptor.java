@@ -1,4 +1,4 @@
-package example.packt.com.authcodeapp.oauth2.interceptor;
+package example.packt.com.authcodeapp.web.interceptor;
 
 import android.util.Base64;
 

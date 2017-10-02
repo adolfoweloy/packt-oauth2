@@ -1,21 +1,16 @@
-package example.packt.com.authcodeapp.oauth2.dto;
+package example.packt.com.authcodeapp.web.oauth2;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class AccessTokenRequest {
+public class AuthorizationCodeRequest {
 
     private String code;
     private String scope;
-    private String grantType;
     private String redirectUri;
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public void setGrantType(String grantType) {
-        this.grantType = grantType;
     }
 
     public void setRedirectUri(String redirectUri) {
@@ -30,7 +25,7 @@ public class AccessTokenRequest {
         Map<String, String> map = new HashMap<>();
         map.put("code", code);
         map.put("scope", scope);
-        map.put("grant_type", grantType);
+        map.put("grant_type", "authorization_code");
         map.put("redirect_uri", redirectUri);
         return map;
     }

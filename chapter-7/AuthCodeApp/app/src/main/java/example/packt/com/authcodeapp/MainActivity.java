@@ -1,4 +1,4 @@
-package example.packt.com.authcodeapp.activity;
+package example.packt.com.authcodeapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

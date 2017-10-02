@@ -1,4 +1,4 @@
-package example.packt.com.authcodeapp.profile;
+package example.packt.com.authcodeapp.web.profile;
 
 
 import android.app.Activity;
@@ -9,8 +9,8 @@ import java.util.Observable;
 import java.util.Observer;
 
 import example.packt.com.authcodeapp.R;
-import example.packt.com.authcodeapp.oauth2.service.WebClient;
-import example.packt.com.authcodeapp.oauth2.dto.AccessToken;
+import example.packt.com.authcodeapp.web.WebClient;
+import example.packt.com.authcodeapp.web.oauth2.AccessToken;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

@@ -8,11 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import example.packt.com.authcodeapp.R;
-import example.packt.com.authcodeapp.oauth2.AuthorizationCallback;
-import example.packt.com.authcodeapp.oauth2.TokenRequestFactory;
-import example.packt.com.authcodeapp.oauth2.dto.AccessToken;
-import example.packt.com.authcodeapp.oauth2.service.WebClient;
-import example.packt.com.authcodeapp.profile.UserProfileReady;
+import example.packt.com.authcodeapp.web.AuthorizationCallback;
+import example.packt.com.authcodeapp.web.oauth2.AuthorizationCodeRequestFactory;
+import example.packt.com.authcodeapp.web.oauth2.AccessToken;
+import example.packt.com.authcodeapp.web.WebClient;
+import example.packt.com.authcodeapp.web.profile.UserProfileReady;
 import retrofit2.Call;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -48,7 +48,7 @@ public class ProfileActivity extends AppCompatActivity {
         Call<AccessToken> tokenCallback = provider
                 .oauth2()
                 .authorizationCodeService()
-                .token(TokenRequestFactory.create(code).getMap());
+                .token(AuthorizationCodeRequestFactory.create(code).getMap());
 
         AuthorizationCallback authorizationCallback
             = new AuthorizationCallback();

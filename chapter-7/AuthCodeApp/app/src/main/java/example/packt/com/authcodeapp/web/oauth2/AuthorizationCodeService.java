@@ -1,8 +1,7 @@
-package example.packt.com.authcodeapp.oauth2.service;
+package example.packt.com.authcodeapp.web.oauth2;
 
 import java.util.Map;
 
-import example.packt.com.authcodeapp.oauth2.dto.AccessToken;
 import retrofit2.Call;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
