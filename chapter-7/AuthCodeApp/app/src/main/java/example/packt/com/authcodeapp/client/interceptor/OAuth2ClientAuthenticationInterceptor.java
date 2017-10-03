@@ -1,4 +1,4 @@
-package example.packt.com.authcodeapp.web.interceptor;
+package example.packt.com.authcodeapp.client.interceptor;
 
 import android.util.Base64;
 
@@ -9,7 +9,7 @@ import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class BasicAuthenticationInterceptor implements Interceptor {
+public class OAuth2ClientAuthenticationInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();

@@ -1,4 +1,4 @@
-package example.packt.com.authcodeapp.web.profile;
+package example.packt.com.authcodeapp.client.profile;
 
 public class UserProfile {
 

@@ -1,4 +1,4 @@
-package example.packt.com.authcodeapp.web.oauth2;
+package example.packt.com.authcodeapp.client.oauth2;
 
 import java.util.Map;
 
@@ -7,7 +7,7 @@ import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
-public interface AuthorizationCodeService {
+public interface OAuth2Service {
 
     @FormUrlEncoded
     @POST("oauth/token")

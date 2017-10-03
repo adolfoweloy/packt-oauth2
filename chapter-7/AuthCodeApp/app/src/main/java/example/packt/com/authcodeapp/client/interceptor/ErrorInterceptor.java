@@ -1,4 +1,4 @@
-package example.packt.com.authcodeapp.web.interceptor;
+package example.packt.com.authcodeapp.client.interceptor;
 
 import java.io.IOException;
 

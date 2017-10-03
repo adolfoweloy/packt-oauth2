@@ -1,30 +1,20 @@
-package example.packt.com.authcodeapp.web.profile;
+package example.packt.com.authcodeapp.client.profile;
 
-
-import android.util.Log;
 
 import java.util.Observable;
 import java.util.Observer;
 
-import example.packt.com.authcodeapp.web.WebClient;
-import example.packt.com.authcodeapp.web.oauth2.AccessToken;
+import example.packt.com.authcodeapp.client.ClientAPI;
+import example.packt.com.authcodeapp.client.oauth2.AccessToken;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UserProfileReady implements Observer {
-
-    /**
-     * Give a chance for the view to be updated
-     */
-    public interface OnProfileResultCallback{
-        void onSuccess(UserProfile userProfile);
-        void onError(String message, Throwable t);
-    }
+public class ProfileAuthorizationListener implements Observer {
 
     private final OnProfileResultCallback resultCallback;
 
-    public UserProfileReady(OnProfileResultCallback resultCallback) {
+    public ProfileAuthorizationListener(OnProfileResultCallback resultCallback) {
         this.resultCallback = resultCallback;
     }
 
@@ -34,12 +24,10 @@ public class UserProfileReady implements Observer {
         if (o instanceof AccessToken) {
             AccessToken accessToken = (AccessToken) o;
 
-            WebClient provider = WebClient.create();
+            Call<UserProfile> call = ClientAPI
+                    .userProfile().token(accessToken.getValue());
 
-            Call<UserProfile> userProfileCall = provider.userProfile()
-                    .token("Bearer " + accessToken.getValue());
-
-            userProfileCall.enqueue(new Callback<UserProfile>() {
+            call.enqueue(new Callback<UserProfile>() {
                 @Override
                 public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
                     UserProfile userProfile = response.body();
@@ -53,10 +41,13 @@ public class UserProfileReady implements Observer {
             });
 
         } else {
-            throw new RuntimeException("invalid access requestToken being observed");
+            throw new RuntimeException("Invalid access requestToken being observed");
         }
 
     }
 
-
+    public interface OnProfileResultCallback{
+        void onSuccess(UserProfile userProfile);
+        void onError(String message, Throwable t);
+    }
 }

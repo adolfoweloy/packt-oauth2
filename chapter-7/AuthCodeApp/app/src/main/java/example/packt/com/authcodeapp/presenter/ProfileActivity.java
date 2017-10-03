@@ -1,21 +1,20 @@
-package example.packt.com.authcodeapp.activity;
+package example.packt.com.authcodeapp.presenter;
 
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import example.packt.com.authcodeapp.R;
-import example.packt.com.authcodeapp.web.AccessTokenRequestCallback;
-import example.packt.com.authcodeapp.web.oauth2.AuthorizationCodeRequestFactory;
-import example.packt.com.authcodeapp.web.oauth2.AccessToken;
-import example.packt.com.authcodeapp.web.WebClient;
-import example.packt.com.authcodeapp.web.profile.UserProfile;
-import example.packt.com.authcodeapp.web.profile.UserProfileReady;
+import example.packt.com.authcodeapp.client.ClientAPI;
+import example.packt.com.authcodeapp.client.oauth2.AccessTokenRequestCallback;
+import example.packt.com.authcodeapp.client.oauth2.AccessTokenRequestData;
+import example.packt.com.authcodeapp.client.oauth2.OAuth2StateManager;
+import example.packt.com.authcodeapp.client.oauth2.AccessToken;
+import example.packt.com.authcodeapp.client.profile.UserProfile;
+import example.packt.com.authcodeapp.client.profile.ProfileAuthorizationListener;
 import retrofit2.Call;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -38,32 +37,20 @@ public class ProfileActivity extends AppCompatActivity {
         String state = callbackUri.getQueryParameter("state");
 
         // validates state parameter
+        OAuth2StateManager manager = new OAuth2StateManager(this);
 
-        SharedPreferences preferences = PreferenceManager
-            .getDefaultSharedPreferences(getApplicationContext());
-        String savedState = preferences.getString("state", "");
-
-        if (!savedState.equals(state)) {
+        if (!manager.isValidState(state)) {
             Toast.makeText(this, "CSRF Attack detected", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // to retrieve access requestToken our client app needs to authenticate using basic auth
-
-        WebClient provider = WebClient.createBasicProtectedResource();
-
-        // prepares the requestToken request
-
-        Call<AccessToken> tokenCallback = provider
-                .oauth2()
-                .authorizationCodeService()
-                .requestToken(AuthorizationCodeRequestFactory
-                            .createTokenRequestFrom(code)
-                            .getMap());
+        Call<AccessToken> tokenCallback = ClientAPI
+                .oauth2().requestToken(AccessTokenRequestData.fromCode(code));
 
         AccessTokenRequestCallback accessTokenRequestCallback = new AccessTokenRequestCallback();
         accessTokenRequestCallback.addObserver(
-            new UserProfileReady(new UserProfileReady.OnProfileResultCallback() {
+            new ProfileAuthorizationListener(new ProfileAuthorizationListener.OnProfileResultCallback() {
                 @Override
                 public void onSuccess(UserProfile userProfile) {
 
