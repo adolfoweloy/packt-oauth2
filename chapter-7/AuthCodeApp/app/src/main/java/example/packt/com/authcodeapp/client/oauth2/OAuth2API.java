@@ -7,7 +7,7 @@ import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
-public interface OAuth2Service {
+public interface OAuth2API {
 
     @FormUrlEncoded
     @POST("oauth/token")

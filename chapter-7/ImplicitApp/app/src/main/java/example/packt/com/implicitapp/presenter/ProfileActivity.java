@@ -50,9 +50,7 @@ public class ProfileActivity extends AppCompatActivity {
             return;
         }
 
-        ClientAPI provider = new ClientAPI();
-
-        Call<UserProfile> getUserProfile = provider.userProfile().token(response.getAccessToken().getValue());
+        Call<UserProfile> getUserProfile = ClientAPI.userProfile().token(response.getAccessToken().getValue());
         getUserProfile.enqueue(new Callback<UserProfile>() {
             @Override
             public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {

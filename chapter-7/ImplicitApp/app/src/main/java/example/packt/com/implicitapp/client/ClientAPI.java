@@ -2,7 +2,7 @@ package example.packt.com.implicitapp.client;
 
 import example.packt.com.implicitapp.client.interceptor.BearerTokenHeaderInterceptor;
 import example.packt.com.implicitapp.client.interceptor.ErrorInterceptor;
-import example.packt.com.implicitapp.client.profile.UserProfileService;
+import example.packt.com.implicitapp.client.profile.UserProfileAPI;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -14,7 +14,7 @@ public class ClientAPI {
 
     private final Retrofit retrofit;
 
-    public ClientAPI() {
+    private ClientAPI() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -31,8 +31,9 @@ public class ClientAPI {
 
     }
 
-    public UserProfileService userProfile() {
-        return retrofit.create(UserProfileService.class);
+    public static UserProfileAPI userProfile() {
+        ClientAPI api = new ClientAPI();
+        return api.retrofit.create(UserProfileAPI.class);
     }
 
 }

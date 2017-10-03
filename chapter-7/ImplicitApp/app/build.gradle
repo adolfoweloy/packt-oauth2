@@ -15,13 +15,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            buildConfigField("String", "CLIENT_ID", "\"clientapp\"")
-            buildConfigField("String", "CLIENT_SECRET", "\"123456\"")
-        }
-        debug {
-            buildConfigField("String", "CLIENT_ID", "\"clientapp\"")
-            buildConfigField("String", "CLIENT_SECRET", "\"123456\"")
         }
     }
     packagingOptions {

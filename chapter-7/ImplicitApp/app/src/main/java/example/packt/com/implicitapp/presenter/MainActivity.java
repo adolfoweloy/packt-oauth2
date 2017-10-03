@@ -9,7 +9,6 @@ import android.widget.Button;
 
 import java.util.UUID;
 
-import example.packt.com.implicitapp.BuildConfig;
 import example.packt.com.implicitapp.R;
 import example.packt.com.implicitapp.client.ClientAPI;
 import example.packt.com.implicitapp.client.oauth2.OAuth2StateManager;
@@ -33,22 +32,26 @@ public class MainActivity extends AppCompatActivity {
                 String state = generateState();
                 oAuth2StateManager.saveState(state);
 
-                Uri authorizationUri = new Uri.Builder()
-                        .scheme("http")
-                        .encodedAuthority(ClientAPI.BASE_URL)
-                        .path("/oauth/authorize")
-                        .appendQueryParameter("client_id", BuildConfig.CLIENT_ID)
-                        .appendQueryParameter("response_type", "token")
-                        .appendQueryParameter("redirect_uri", "oauth2://profile/callback")
-                        .appendQueryParameter("scope", "read_profile")
-                        .appendQueryParameter("state", state)
-                        .build();
+                Uri authorizationUri = createAuthorizationURI(state);
 
                 Intent authorizationIntent = new Intent(Intent.ACTION_VIEW);
                 authorizationIntent.setData(authorizationUri);
                 startActivity(authorizationIntent);
             }
         });
+    }
+
+    private Uri createAuthorizationURI(String state) {
+        return new Uri.Builder()
+            .scheme("http")
+            .encodedAuthority(ClientAPI.BASE_URL)
+            .path("/oauth/authorize")
+            .appendQueryParameter("client_id", "clientapp")
+            .appendQueryParameter("response_type", "token")
+            .appendQueryParameter("redirect_uri", "oauth2://profile/callback")
+            .appendQueryParameter("scope", "read_profile")
+            .appendQueryParameter("state", state)
+            .build();
     }
 
     private String generateState() {

@@ -2,8 +2,8 @@ package example.packt.com.authcodeapp.client;
 
 import example.packt.com.authcodeapp.client.interceptor.BearerTokenHeaderInterceptor;
 import example.packt.com.authcodeapp.client.interceptor.ErrorInterceptor;
-import example.packt.com.authcodeapp.client.profile.UserProfileService;
-import example.packt.com.authcodeapp.client.oauth2.OAuth2Service;
+import example.packt.com.authcodeapp.client.profile.UserProfileAPI;
+import example.packt.com.authcodeapp.client.oauth2.OAuth2API;
 import example.packt.com.authcodeapp.client.interceptor.OAuth2ClientAuthenticationInterceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -16,14 +16,14 @@ public class ClientAPI {
 
     private final Retrofit retrofit;
 
-    public static UserProfileService userProfile() {
+    public static UserProfileAPI userProfile() {
         ClientAPI api = new ClientAPI(null);
-        return api.retrofit.create(UserProfileService.class);
+        return api.retrofit.create(UserProfileAPI.class);
     }
 
-    public static OAuth2Service oauth2() {
+    public static OAuth2API oauth2() {
         ClientAPI api = new ClientAPI(new OAuth2ClientAuthenticationInterceptor());
-        return api.retrofit.create(OAuth2Service.class);
+        return api.retrofit.create(OAuth2API.class);
     }
 
     private ClientAPI(OAuth2ClientAuthenticationInterceptor clientAuthentication) {
