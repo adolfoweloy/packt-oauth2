@@ -1,4 +1,4 @@
-package example.packt.com.embeddedapp;
+package example.packt.com.embeddedapp.client.interceptor;
 
 import java.io.IOException;
 
@@ -14,12 +14,15 @@ public class ErrorInterceptor implements Interceptor {
 
         boolean httpError = (response.code() >= 400);
         if (httpError) {
-            throw new HttpException();
+            throw new HttpException(response.code() + ":" + response.message());
         }
 
         return response;
     }
 
     public static class HttpException extends RuntimeException {
+        public HttpException(String message) {
+            super(message);
+        }
     }
 }

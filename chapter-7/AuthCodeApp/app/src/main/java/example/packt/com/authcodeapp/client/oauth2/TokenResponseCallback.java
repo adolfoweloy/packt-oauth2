@@ -8,7 +8,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TokenRequestCallback
+public class TokenResponseCallback
         extends Observable
         implements Callback<AccessToken> {
 
@@ -22,7 +22,7 @@ public class TokenRequestCallback
 
     @Override
     public void onFailure(Call<AccessToken> call, Throwable t) {
-        Log.e("TokenRequestCallback", "Error trying to retrieve access requestToken", t);
+        Log.e("TokenResponseCallback", "Error trying to retrieve access requestToken", t);
     }
 
 }

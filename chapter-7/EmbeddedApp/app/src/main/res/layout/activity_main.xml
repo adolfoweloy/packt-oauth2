@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="example.packt.com.embeddedapp.MainActivity">
+    tools:context="example.packt.com.embeddedapp.presenter.MainActivity">
 
     <Button
         android:id="@+id/main_button"

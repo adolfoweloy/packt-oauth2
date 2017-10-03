@@ -1,4 +1,4 @@
-package example.packt.com.embeddedapp;
+package example.packt.com.embeddedapp.client.profile;
 
 public class UserProfile {
 

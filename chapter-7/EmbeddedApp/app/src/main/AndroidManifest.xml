@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".presenter.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,10 +19,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".AuthorizationActivity">
+        <activity android:name=".presenter.AuthorizationActivity">
         </activity>
 
-        <activity android:name=".ProfileActivity">
+        <activity android:name=".presenter.ProfileActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>

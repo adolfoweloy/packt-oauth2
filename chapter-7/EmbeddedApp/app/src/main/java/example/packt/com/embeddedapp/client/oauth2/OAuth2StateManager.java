@@ -1,14 +1,14 @@
-package example.packt.com.embeddedapp;
+package example.packt.com.embeddedapp.client.oauth2;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public class OAuth2Manager {
+public class OAuth2StateManager {
 
     private final SharedPreferences prefs;
 
-    public OAuth2Manager(Context context) {
+    public OAuth2StateManager(Context context) {
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
@@ -18,8 +18,12 @@ public class OAuth2Manager {
         editor.commit();
     }
 
+    public boolean isValidState(String state) {
+        return this.getState().equals(state);
+    }
+
     public String getState() {
-        return prefs.getString("state", null);
+        return prefs.getString("state", "");
     }
 
 }

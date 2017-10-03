@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="example.packt.com.embeddedapp.AuthorizationActivity">
+    tools:context="example.packt.com.embeddedapp.presenter.AuthorizationActivity">
 
     <WebView
         android:id="@+id/authorization_webview"

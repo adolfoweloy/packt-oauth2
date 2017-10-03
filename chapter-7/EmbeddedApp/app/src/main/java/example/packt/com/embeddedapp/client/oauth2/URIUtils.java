@@ -1,4 +1,4 @@
-package example.packt.com.embeddedapp;
+package example.packt.com.embeddedapp.client.oauth2;
 
 import android.support.annotation.NonNull;
 

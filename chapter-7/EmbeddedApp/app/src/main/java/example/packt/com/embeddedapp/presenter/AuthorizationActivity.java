@@ -1,4 +1,4 @@
-package example.packt.com.embeddedapp;
+package example.packt.com.embeddedapp.presenter;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -10,9 +10,13 @@ import android.webkit.WebViewClient;
 
 import java.util.UUID;
 
+import example.packt.com.embeddedapp.client.oauth2.OAuth2StateManager;
+import example.packt.com.embeddedapp.R;
+import example.packt.com.embeddedapp.client.ClientAPI;
+
 public class AuthorizationActivity extends AppCompatActivity {
 
-    private OAuth2Manager oauth2Manager;
+    private OAuth2StateManager oauth2StateManager;
 
     private WebView webView;
 
@@ -23,21 +27,10 @@ public class AuthorizationActivity extends AppCompatActivity {
 
         webView = (WebView) findViewById(R.id.authorization_webview);
 
-        oauth2Manager = new OAuth2Manager(this);
+        oauth2StateManager = new OAuth2StateManager(this);
+        oauth2StateManager.saveState(generateState());
 
-        String state = generateState();
-        oauth2Manager.saveState(state);
-
-        Uri authorizationUri = new Uri.Builder()
-                .scheme("http")
-                .encodedAuthority(WebClient.BASE_URL)
-                .path("/oauth/authorize")
-                .appendQueryParameter("client_id", "clientapp")
-                .appendQueryParameter("response_type", "token")
-                .appendQueryParameter("redirect_uri", "oauth2://profile/callback")
-                .appendQueryParameter("scope", "read_profile")
-                .appendQueryParameter("state", state)
-                .build();
+        Uri authorizationUri = createAuthorizationURI();
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -46,13 +39,10 @@ public class AuthorizationActivity extends AppCompatActivity {
                     Intent intent = new Intent(AuthorizationActivity.this, ProfileActivity.class);
                     intent.setData(Uri.parse(url));
                     startActivity(intent);
-
                     finish();
                 }
-
                 return false;
             }
-
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 return false;
@@ -60,6 +50,19 @@ public class AuthorizationActivity extends AppCompatActivity {
         });
 
         webView.loadUrl(authorizationUri.toString());
+    }
+
+    private Uri createAuthorizationURI() {
+        return new Uri.Builder()
+            .scheme("http")
+            .encodedAuthority(ClientAPI.BASE_URL)
+            .path("/oauth/authorize")
+            .appendQueryParameter("client_id", "clientapp")
+            .appendQueryParameter("response_type", "token")
+            .appendQueryParameter("redirect_uri", "oauth2://profile/callback")
+            .appendQueryParameter("scope", "read_profile")
+            .appendQueryParameter("state", oauth2StateManager.getState())
+            .build();
     }
 
     private String generateState() {
