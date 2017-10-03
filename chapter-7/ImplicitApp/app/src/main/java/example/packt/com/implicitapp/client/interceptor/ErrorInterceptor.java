@@ -1,4 +1,4 @@
-package example.packt.com.authcodeapp.client.interceptor;
+package example.packt.com.implicitapp.client.interceptor;
 
 import java.io.IOException;
 
@@ -14,15 +14,12 @@ public class ErrorInterceptor implements Interceptor {
 
         boolean httpError = (response.code() >= 400);
         if (httpError) {
-            throw new HttpException(response.code() + ":" + response.message());
+            throw new HttpException();
         }
 
         return response;
     }
 
     public static class HttpException extends RuntimeException {
-        public HttpException(String message) {
-            super(message);
-        }
     }
 }

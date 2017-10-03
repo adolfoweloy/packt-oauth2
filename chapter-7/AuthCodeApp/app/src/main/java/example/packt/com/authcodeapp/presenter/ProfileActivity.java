@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import example.packt.com.authcodeapp.R;
 import example.packt.com.authcodeapp.client.ClientAPI;
-import example.packt.com.authcodeapp.client.oauth2.AccessTokenRequestCallback;
+import example.packt.com.authcodeapp.client.oauth2.TokenRequestCallback;
 import example.packt.com.authcodeapp.client.oauth2.AccessTokenRequestData;
 import example.packt.com.authcodeapp.client.oauth2.OAuth2StateManager;
 import example.packt.com.authcodeapp.client.oauth2.AccessToken;
@@ -48,8 +48,8 @@ public class ProfileActivity extends AppCompatActivity {
         Call<AccessToken> tokenCallback = ClientAPI
                 .oauth2().requestToken(AccessTokenRequestData.fromCode(code));
 
-        AccessTokenRequestCallback accessTokenRequestCallback = new AccessTokenRequestCallback();
-        accessTokenRequestCallback.addObserver(
+        TokenRequestCallback requestCallback = new TokenRequestCallback();
+        requestCallback.addObserver(
             new ProfileAuthorizationListener(new ProfileAuthorizationListener.OnProfileResultCallback() {
                 @Override
                 public void onSuccess(UserProfile userProfile) {
@@ -65,7 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
         }));
 
-        tokenCallback.enqueue(accessTokenRequestCallback);
+        tokenCallback.enqueue(requestCallback);
 
     }
 
