@@ -9,6 +9,14 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class OAuth2ClientAuthenticationInterceptor implements Interceptor {
+    private String username;
+    private String password;
+
+    public OAuth2ClientAuthenticationInterceptor(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
@@ -23,10 +31,7 @@ public class OAuth2ClientAuthenticationInterceptor implements Interceptor {
     }
 
     private String getEncodedAuthorization() {
-        String clientId = "clientapp";
-        String clientSecret = "123456";
-
-        String credentials = clientId + ":" + clientSecret;
+        String credentials = username + ":" + password;
         return "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
     }
 }

@@ -7,6 +7,9 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import example.packt.com.dynamicregisterapp.client.oauth2.registration.ClientCredentials;
+import example.packt.com.dynamicregisterapp.client.oauth2.registration.ClientCredentialsRepository;
+import example.packt.com.dynamicregisterapp.client.oauth2.registration.OnClientRegistrationResult;
 import retrofit2.Call;
 
 import example.packt.com.dynamicregisterapp.R;
@@ -17,6 +20,8 @@ import example.packt.com.dynamicregisterapp.client.oauth2.OAuth2StateManager;
 import example.packt.com.dynamicregisterapp.client.oauth2.TokenResponseCallback;
 import example.packt.com.dynamicregisterapp.client.profile.ProfileAuthorizationListener;
 import example.packt.com.dynamicregisterapp.client.profile.UserProfile;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -28,46 +33,27 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        String accessToken = (String) getIntent().getExtras().get("access_token");
+
         textName = (TextView) findViewById(R.id.profile_name);
         textEmail = (TextView) findViewById(R.id.profile_email);
 
-        // extract data from redirection URI which is a uri scheme
+        Call<UserProfile> call = ClientAPI.userProfile().token(accessToken);
+        call.enqueue(new Callback<UserProfile>() {
+            @Override
+            public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
+                UserProfile profile = response.body();
+                textName.setText(profile.getName());
+                textEmail.setText(profile.getEmail());
+            }
 
-        Uri callbackUri = Uri.parse(getIntent().getDataString());
-        String code = callbackUri.getQueryParameter("code");
-        String state = callbackUri.getQueryParameter("state");
-
-        // validates state parameter
-        OAuth2StateManager manager = new OAuth2StateManager(this);
-
-        if (!manager.isValidState(state)) {
-            Toast.makeText(this, "CSRF Attack detected", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // to retrieve access requestToken our client app needs to authenticate using basic auth
-        Call<AccessToken> tokenCallback = ClientAPI
-                .oauth2().requestToken(AccessTokenRequestData.fromCode(code));
-
-        TokenResponseCallback responseCallback = new TokenResponseCallback();
-        responseCallback.addObserver(
-            new ProfileAuthorizationListener(new ProfileAuthorizationListener.OnProfileResultCallback() {
-                @Override
-                public void onSuccess(UserProfile userProfile) {
-
-                    textName.setText(userProfile.getName());
-                    textEmail.setText(userProfile.getEmail());
-
-                }
-
-                @Override
-                public void onError(String message, Throwable t) {
-                    Log.e("ProfileActivity", message, t);
-                }
-        }));
-
-        tokenCallback.enqueue(responseCallback);
+            @Override
+            public void onFailure(Call<UserProfile> call, Throwable t) {
+                Log.e("ProfileActivity", "error retrieving user profile", t);
+            }
+        });
 
     }
+
 
 }
