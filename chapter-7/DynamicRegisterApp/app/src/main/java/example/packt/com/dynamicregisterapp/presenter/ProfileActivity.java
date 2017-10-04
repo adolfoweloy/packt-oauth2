@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import example.packt.com.dynamicregisterapp.client.oauth2.TokenStore;
 import example.packt.com.dynamicregisterapp.client.oauth2.registration.ClientCredentials;
 import example.packt.com.dynamicregisterapp.client.oauth2.registration.ClientCredentialsRepository;
 import example.packt.com.dynamicregisterapp.client.oauth2.registration.OnClientRegistrationResult;
@@ -28,17 +29,20 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView textName;
     private TextView textEmail;
 
+    private TokenStore tokenStore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        String accessToken = (String) getIntent().getExtras().get("access_token");
+        tokenStore = new TokenStore(this);
+        final AccessToken token = tokenStore.getToken();
 
         textName = (TextView) findViewById(R.id.profile_name);
         textEmail = (TextView) findViewById(R.id.profile_email);
 
-        Call<UserProfile> call = ClientAPI.userProfile().token(accessToken);
+        Call<UserProfile> call = ClientAPI.userProfile().token(token.getValue());
         call.enqueue(new Callback<UserProfile>() {
             @Override
             public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {

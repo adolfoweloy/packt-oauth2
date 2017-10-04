@@ -13,6 +13,7 @@ import example.packt.com.dynamicregisterapp.client.ClientAPI;
 import example.packt.com.dynamicregisterapp.client.oauth2.AccessToken;
 import example.packt.com.dynamicregisterapp.client.oauth2.AccessTokenRequestData;
 import example.packt.com.dynamicregisterapp.client.oauth2.OAuth2StateManager;
+import example.packt.com.dynamicregisterapp.client.oauth2.TokenStore;
 import example.packt.com.dynamicregisterapp.client.oauth2.registration.ClientCredentials;
 import example.packt.com.dynamicregisterapp.client.oauth2.registration.ClientCredentialsRepository;
 import example.packt.com.dynamicregisterapp.client.oauth2.registration.OnClientRegistrationResult;
@@ -24,6 +25,7 @@ public class AuthorizationCodeActivity  extends AppCompatActivity implements OnC
 
     private String code;
     private String state;
+    private TokenStore tokenStore;
     private OAuth2StateManager manager;
     private ClientCredentialsRepository clientCredentialsRepo;
 
@@ -32,6 +34,7 @@ public class AuthorizationCodeActivity  extends AppCompatActivity implements OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        tokenStore = new TokenStore(this);
         manager = new OAuth2StateManager(this);
         clientCredentialsRepo = new ClientCredentialsRepository(this);
 
@@ -60,15 +63,14 @@ public class AuthorizationCodeActivity  extends AppCompatActivity implements OnC
             @Override
             public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
                 AccessToken token = response.body();
+                tokenStore.save(token);
 
                 // go to the other activity with an access token in hands!!!!!!!
 
                 Intent intent = new Intent(AuthorizationCodeActivity.this, ProfileActivity.class);
-                intent.putExtra("access_token", token.getValue());
                 startActivity(intent);
 
                 finish();
-
             }
 
             @Override

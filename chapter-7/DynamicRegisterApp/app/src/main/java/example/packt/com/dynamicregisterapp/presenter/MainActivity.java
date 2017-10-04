@@ -12,15 +12,20 @@ import java.util.UUID;
 
 import example.packt.com.dynamicregisterapp.R;
 import example.packt.com.dynamicregisterapp.client.ClientAPI;
+import example.packt.com.dynamicregisterapp.client.oauth2.AccessToken;
 import example.packt.com.dynamicregisterapp.client.oauth2.OAuth2StateManager;
+import example.packt.com.dynamicregisterapp.client.oauth2.TokenStore;
 import example.packt.com.dynamicregisterapp.client.oauth2.registration.ClientCredentials;
 import example.packt.com.dynamicregisterapp.client.oauth2.registration.ClientCredentialsRepository;
 import example.packt.com.dynamicregisterapp.client.oauth2.registration.OnClientRegistrationResult;
+import example.packt.com.dynamicregisterapp.client.profile.ProfileAuthorizationListener;
 
 public class MainActivity extends AppCompatActivity
         implements View.OnClickListener, OnClientRegistrationResult {
 
     private Button profileButton;
+
+    private TokenStore tokenStore;
 
     private OAuth2StateManager oauth2StateManager;
 
@@ -29,6 +34,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        tokenStore = new TokenStore(this);
         oauth2StateManager = new OAuth2StateManager(MainActivity.this);
         profileButton = (Button) findViewById(R.id.profile_button);
         profileButton.setOnClickListener(this);
@@ -43,7 +49,19 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSuccessfulClientRegistration(ClientCredentials credentials) {
+
+        AccessToken token = tokenStore.getToken();
+        if (token != null && !token.isExpired()) {
+            Intent intentProfile = new Intent(this, ProfileActivity.class);
+            startActivity(intentProfile);
+            return;
+        }
+
+        // if there isn't any valid access token start
+        // oauth2 authorization code flow to retrieve an access token
+
         final String state = UUID.randomUUID().toString();
+
         oauth2StateManager.saveState(state);
 
         Uri authorizationUri = new Uri.Builder()
