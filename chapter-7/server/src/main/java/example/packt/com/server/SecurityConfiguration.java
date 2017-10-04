@@ -23,18 +23,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/webjars/**", "/images/**", "/oauth/uncache_approvals", "/oauth/cache_approvals");
+        web.ignoring().antMatchers("/h2-console*/**", "/webjars/**", "/images/**", "/oauth/uncache_approvals", "/oauth/cache_approvals");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-                .authorizeRequests().antMatchers("/oauth/**").authenticated().and()
-                .csrf().requireCsrfProtectionMatcher(new AntPathRequestMatcher("/oauth/authorize")).disable()
-                .formLogin().permitAll().and()
-                .logout().permitAll().and()
-                ;
+            .authorizeRequests()
+            .antMatchers("/oauth/**")
+            .authenticated()
+        .and()
+            .csrf().requireCsrfProtectionMatcher(new AntPathRequestMatcher("/oauth/authorize")).disable()
+            .formLogin().permitAll().and()
+            .logout().permitAll().and()
+            ;
 
 
     }
