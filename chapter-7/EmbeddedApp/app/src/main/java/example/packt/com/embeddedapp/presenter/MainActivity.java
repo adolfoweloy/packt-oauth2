@@ -7,22 +7,40 @@ import android.view.View;
 import android.widget.Button;
 
 import example.packt.com.embeddedapp.R;
+import example.packt.com.embeddedapp.client.oauth2.AccessToken;
+import example.packt.com.embeddedapp.client.oauth2.TokenStore;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private TokenStore tokenStore;
+
+    private Button mainButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button mainButton = (Button) findViewById(R.id.main_button);
+        tokenStore = new TokenStore(this);
+        mainButton = (Button) findViewById(R.id.main_button);
 
-        mainButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AuthorizationActivity.class);
-                startActivity(intent);
+        mainButton.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == mainButton) {
+
+            Intent intent;
+
+            AccessToken accessToken = tokenStore.getToken();
+            if (accessToken != null && !accessToken.isExpired()) {
+                intent = new Intent(this, ProfileActivity.class);
+            } else {
+                intent = new Intent(this, AuthorizationActivity.class);
             }
-        });
+
+            startActivity(intent);
+        }
     }
 }

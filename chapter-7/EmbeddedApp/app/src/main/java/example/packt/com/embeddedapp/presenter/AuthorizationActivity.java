@@ -36,7 +36,7 @@ public class AuthorizationActivity extends AppCompatActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.contains("oauth2://profile/callback")) {
-                    Intent intent = new Intent(AuthorizationActivity.this, ProfileActivity.class);
+                    Intent intent = new Intent(AuthorizationActivity.this, RedirectUriActivity.class);
                     intent.setData(Uri.parse(url));
                     startActivity(intent);
                     finish();

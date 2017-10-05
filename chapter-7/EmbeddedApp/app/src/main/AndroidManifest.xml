@@ -22,7 +22,7 @@
         <activity android:name=".presenter.AuthorizationActivity">
         </activity>
 
-        <activity android:name=".presenter.ProfileActivity">
+        <activity android:name=".presenter.RedirectUriActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -31,6 +31,9 @@
                     android:host="profile"
                     android:path="/callback"/>
             </intent-filter>
+        </activity>
+
+        <activity android:name=".presenter.ProfileActivity">
         </activity>
     </application>
 
