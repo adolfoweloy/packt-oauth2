@@ -11,10 +11,13 @@ import java.util.UUID;
 
 import example.packt.com.implicitapp.R;
 import example.packt.com.implicitapp.client.ClientAPI;
+import example.packt.com.implicitapp.client.oauth2.AccessToken;
 import example.packt.com.implicitapp.client.oauth2.OAuth2StateManager;
+import example.packt.com.implicitapp.client.oauth2.TokenStore;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private TokenStore tokenStore;
     private OAuth2StateManager oAuth2StateManager;
 
     @Override
@@ -22,36 +25,45 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        tokenStore = new TokenStore(this);
         oAuth2StateManager = new OAuth2StateManager(this);
 
         Button profileButton = (Button) findViewById(R.id.profile_button);
-        profileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        profileButton.setOnClickListener(this);
+    }
 
-                String state = generateState();
-                oAuth2StateManager.saveState(state);
+    @Override
+    public void onClick(View view) {
 
-                Uri authorizationUri = createAuthorizationURI(state);
+        AccessToken accessToken = tokenStore.getToken();
 
-                Intent authorizationIntent = new Intent(Intent.ACTION_VIEW);
-                authorizationIntent.setData(authorizationUri);
-                startActivity(authorizationIntent);
-            }
-        });
+        Intent intent;
+        if (accessToken != null && !accessToken.isExpired()) {
+            intent = new Intent(this, ProfileActivity.class);
+        } else {
+            String state = generateState();
+            oAuth2StateManager.saveState(state);
+
+            Uri authorizationUri = createAuthorizationURI(state);
+            intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(authorizationUri);
+        }
+
+        startActivity(intent);
+
     }
 
     private Uri createAuthorizationURI(String state) {
         return new Uri.Builder()
-            .scheme("http")
-            .encodedAuthority(ClientAPI.BASE_URL)
-            .path("/oauth/authorize")
-            .appendQueryParameter("client_id", "clientapp")
-            .appendQueryParameter("response_type", "token")
-            .appendQueryParameter("redirect_uri", "oauth2://profile/callback")
-            .appendQueryParameter("scope", "read_profile")
-            .appendQueryParameter("state", state)
-            .build();
+                .scheme("http")
+                .encodedAuthority(ClientAPI.BASE_URL)
+                .path("/oauth/authorize")
+                .appendQueryParameter("client_id", "clientapp")
+                .appendQueryParameter("response_type", "token")
+                .appendQueryParameter("redirect_uri", "oauth2://profile/callback")
+                .appendQueryParameter("scope", "read_profile")
+                .appendQueryParameter("state", state)
+                .build();
     }
 
     private String generateState() {
