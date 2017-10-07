@@ -1,5 +1,6 @@
 package example.packt.com.implicitapp.client.oauth2;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
@@ -17,9 +18,14 @@ public class AccessToken {
 
     private String scope;
 
+    @JsonIgnore
+    private Long issuedAt = new Date().getTime(); // issued at in milliseconds
+
     public boolean isExpired() {
-        Date now = new Date();
-        return expiresIn > now.getTime();
+        Long expirationTimeInSeconds = (issuedAt / 1000) + expiresIn;
+        Long nowInSeconds = (new Date().getTime()) / 1000;
+
+        return expirationTimeInSeconds < nowInSeconds;
     }
 
     public String getValue() {
@@ -52,5 +58,13 @@ public class AccessToken {
 
     public void setScope(String scope) {
         this.scope = scope;
+    }
+
+    public Long getIssuedAt() {
+        return issuedAt;
+    }
+
+    public void setIssuedAt(Long issuedAt) {
+        this.issuedAt = issuedAt;
     }
 }

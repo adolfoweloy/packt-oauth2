@@ -18,6 +18,7 @@ public class TokenStore {
         editor.putString("scope", accessToken.getScope());
         editor.putString("token_type", accessToken.getTokenType());
         editor.putLong("expires_in", accessToken.getExpiresIn());
+        editor.putLong("issued_at", accessToken.getIssuedAt());
         editor.commit();
     }
 
@@ -29,7 +30,8 @@ public class TokenStore {
             token = new AccessToken();
             token.setValue(prefs.getString("access_token", null));
             token.setTokenType(prefs.getString("token_type", "bearer"));
-            token.setExpiresIn(prefs.getLong("expires_in", 0));
+            token.setExpiresIn(prefs.getLong("expires_in", -1)); // prevents / 0
+            token.setIssuedAt(prefs.getLong("issued_at", -1)); // prevents / 0
         }
         return token;
     }

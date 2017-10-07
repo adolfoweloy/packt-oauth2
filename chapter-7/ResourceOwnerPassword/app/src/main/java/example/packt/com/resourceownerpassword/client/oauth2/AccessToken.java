@@ -1,5 +1,6 @@
 package example.packt.com.resourceownerpassword.client.oauth2;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Calendar;
@@ -16,16 +17,16 @@ public class AccessToken {
     @JsonProperty("expires_in")
     private Long expiresIn;
 
+    @JsonIgnore
+    private Long issuedAt = new Date().getTime(); // issued at in milliseconds
+
     private String scope;
 
     public boolean hasExpired() {
-        Calendar expiresInCalendar = Calendar.getInstance();
-        expiresInCalendar.setTimeInMillis(expiresIn * 1000);
+        Long expirationTimeInSeconds = (issuedAt / 1000) + expiresIn;
+        Long nowInSeconds = (new Date().getTime()) / 1000;
 
-        Calendar today = Calendar.getInstance();
-        today.setTime(new Date());
-
-        return expiresInCalendar.after(today);
+        return expirationTimeInSeconds < nowInSeconds;
     }
 
     public String getValue() {
@@ -58,5 +59,13 @@ public class AccessToken {
 
     public void setScope(String scope) {
         this.scope = scope;
+    }
+
+    public Long getIssuedAt() {
+        return issuedAt;
+    }
+
+    public void setIssuedAt(Long issuedAt) {
+        this.issuedAt = issuedAt;
     }
 }
