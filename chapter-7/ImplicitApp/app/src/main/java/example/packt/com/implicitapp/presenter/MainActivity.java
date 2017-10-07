@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             Uri authorizationUri = createAuthorizationURI(state);
             intent = new Intent(Intent.ACTION_VIEW);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             intent.setData(authorizationUri);
         }
 

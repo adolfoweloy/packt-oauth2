@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity     implements View.OnClickL
                 .build();
 
         Intent authorizationIntent = new Intent(Intent.ACTION_VIEW);
+        authorizationIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         authorizationIntent.setData(authorizationUri);
         startActivity(authorizationIntent);
     }
