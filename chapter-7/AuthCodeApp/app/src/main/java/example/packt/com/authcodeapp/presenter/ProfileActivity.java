@@ -17,7 +17,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     private TextView textName;
     private TextView textEmail;
-
     private TokenStore tokenStore;
 
     @Override

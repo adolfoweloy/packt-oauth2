@@ -9,10 +9,9 @@ import android.widget.Button;
 
 import java.util.UUID;
 
-import example.packt.com.authcodeapp.BuildConfig;
 import example.packt.com.authcodeapp.R;
-import example.packt.com.authcodeapp.client.ClientAPI;
 import example.packt.com.authcodeapp.client.oauth2.AccessToken;
+import example.packt.com.authcodeapp.client.oauth2.AuthorizationRequest;
 import example.packt.com.authcodeapp.client.oauth2.OAuth2StateManager;
 import example.packt.com.authcodeapp.client.oauth2.TokenStore;
 
@@ -37,10 +36,6 @@ public class MainActivity extends AppCompatActivity
         profileButton.setOnClickListener(this);
     }
 
-    private String generateState() {
-        return UUID.randomUUID().toString();
-    }
-
     @Override
     public void onClick(View view) {
 
@@ -51,20 +46,13 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
-        // starts oauth flow if there is no valid access token
-        oauth2StateManager.saveState(generateState());
+        // create a state parameter to start the authorization flow
+        String state = UUID.randomUUID().toString();
+        oauth2StateManager.saveState(state);
 
         // creates the authorization URI to redirect user
-        Uri authorizationUri = new Uri.Builder()
-                .scheme("http")
-                .encodedAuthority(ClientAPI.BASE_URL)
-                .path("/oauth/authorize")
-                .appendQueryParameter("client_id", BuildConfig.CLIENT_ID)
-                .appendQueryParameter("response_type", "code")
-                .appendQueryParameter("redirect_uri", "oauth2://profile/callback")
-                .appendQueryParameter("scope", "read_profile")
-                .appendQueryParameter("state", oauth2StateManager.getState())
-                .build();
+        Uri authorizationUri = AuthorizationRequest
+            .createAuthorizationUri(state);
 
         Intent authorizationIntent = new Intent(Intent.ACTION_VIEW);
         authorizationIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);

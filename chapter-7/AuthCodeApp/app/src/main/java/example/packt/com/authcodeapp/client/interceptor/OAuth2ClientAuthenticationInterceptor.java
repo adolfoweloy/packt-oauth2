@@ -4,7 +4,6 @@ import android.util.Base64;
 
 import java.io.IOException;
 
-import example.packt.com.authcodeapp.BuildConfig;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -24,10 +23,7 @@ public class OAuth2ClientAuthenticationInterceptor implements Interceptor {
     }
 
     private String getEncodedAuthorization() {
-        String clientId = BuildConfig.CLIENT_ID;
-        String clientSecret = BuildConfig.CLIENT_SECRET;
-
-        String credentials = clientId + ":" + clientSecret;
+        String credentials = "clientapp:123456";
         return "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
     }
 }

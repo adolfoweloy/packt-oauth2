@@ -10,7 +10,7 @@ import android.widget.Toast;
 import example.packt.com.authcodeapp.R;
 import example.packt.com.authcodeapp.client.ClientAPI;
 import example.packt.com.authcodeapp.client.oauth2.AccessToken;
-import example.packt.com.authcodeapp.client.oauth2.AccessTokenRequestData;
+import example.packt.com.authcodeapp.client.oauth2.AccessTokenRequest;
 import example.packt.com.authcodeapp.client.oauth2.OAuth2StateManager;
 import example.packt.com.authcodeapp.client.oauth2.TokenStore;
 import retrofit2.Call;
@@ -45,7 +45,7 @@ public class AuthorizationCodeActivity extends AppCompatActivity {
 
         Call<AccessToken> accessTokenCall = ClientAPI
                 .oauth2()
-                .requestToken(AccessTokenRequestData.fromCode(code));
+                .requestToken(AccessTokenRequest.fromCode(code));
 
         accessTokenCall.enqueue(new Callback<AccessToken>() {
             @Override

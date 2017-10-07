@@ -1,5 +1,6 @@
 package example.packt.com.authcodeapp.client.oauth2;
 
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
