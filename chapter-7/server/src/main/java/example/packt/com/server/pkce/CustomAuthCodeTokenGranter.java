@@ -76,7 +76,7 @@ public class CustomAuthCodeTokenGranter extends AbstractTokenGranter {
                 hashed = DigestUtils.sha256Hex(codeVerifier);
             }
 
-            if (!hashed.equals(codeChallenge)) {
+            if (!hashed.equalsIgnoreCase(codeChallenge)) {
                 throw new InvalidRequestException(
                         "Invalid authorization code for current token request.");
             }
