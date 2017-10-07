@@ -38,5 +38,5 @@ insert into oauth_client_details
  authorized_grant_types, web_server_redirect_uri)
 values
 ('clientapp', '123456', 'read_profile,read_contacts',
-'authorization_code,implicit,password', 'oauth2://profile/callback'
+'authorization_code,implicit,password', 'oauth2://profile/callback,http://localhost:9000/callback'
 );
