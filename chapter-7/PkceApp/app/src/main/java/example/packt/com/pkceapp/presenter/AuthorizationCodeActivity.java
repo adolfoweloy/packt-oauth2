@@ -10,7 +10,7 @@ import android.widget.Toast;
 import example.packt.com.pkceapp.R;
 import example.packt.com.pkceapp.client.ClientAPI;
 import example.packt.com.pkceapp.client.oauth2.AccessToken;
-import example.packt.com.pkceapp.client.oauth2.AccessTokenRequestData;
+import example.packt.com.pkceapp.client.oauth2.AccessTokenRequest;
 import example.packt.com.pkceapp.client.oauth2.OAuth2StateManager;
 import example.packt.com.pkceapp.client.oauth2.PkceManager;
 import example.packt.com.pkceapp.client.oauth2.TokenStore;
@@ -24,7 +24,7 @@ public class AuthorizationCodeActivity extends AppCompatActivity {
     private String state;
     private TokenStore tokenStore;
     private OAuth2StateManager manager;
-    private PkceManager pixyManager;
+    private AccessTokenRequest accessTokenRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class AuthorizationCodeActivity extends AppCompatActivity {
 
         tokenStore = new TokenStore(this);
         manager = new OAuth2StateManager(this);
-        pixyManager = new PkceManager(this);
+        accessTokenRequest = new AccessTokenRequest(new PkceManager(this));
 
         Uri callbackUri = Uri.parse(getIntent().getDataString());
 
@@ -48,7 +48,7 @@ public class AuthorizationCodeActivity extends AppCompatActivity {
 
         Call<AccessToken> accessTokenCall = ClientAPI
                 .oauth2()
-                .requestToken(AccessTokenRequestData.from(code, pixyManager.getCodeVerifier()));
+                .requestToken(accessTokenRequest.from(code));
 
         accessTokenCall.enqueue(new Callback<AccessToken>() {
             @Override
