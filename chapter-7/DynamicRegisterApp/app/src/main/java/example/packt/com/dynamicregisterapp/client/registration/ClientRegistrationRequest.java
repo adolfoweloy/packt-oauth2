@@ -1,4 +1,4 @@
-package example.packt.com.dynamicregisterapp.client.oauth2.registration;
+package example.packt.com.dynamicregisterapp.client.registration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

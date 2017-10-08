@@ -4,10 +4,11 @@ import example.packt.com.dynamicregisterapp.client.interceptor.BearerTokenHeader
 import example.packt.com.dynamicregisterapp.client.interceptor.ErrorInterceptor;
 import example.packt.com.dynamicregisterapp.client.interceptor.OAuth2ClientAuthenticationInterceptor;
 import example.packt.com.dynamicregisterapp.client.oauth2.OAuth2API;
-import example.packt.com.dynamicregisterapp.client.oauth2.registration.ClientCredentials;
-import example.packt.com.dynamicregisterapp.client.oauth2.registration.ClientRegistrationAPI;
+import example.packt.com.dynamicregisterapp.client.registration.ClientCredentials;
+import example.packt.com.dynamicregisterapp.client.registration.ClientRegistrationAPI;
 import example.packt.com.dynamicregisterapp.client.profile.UserProfileAPI;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
@@ -21,30 +22,28 @@ public class ClientAPI {
         OkHttpClient.Builder client = new OkHttpClient.Builder();
         client.addInterceptor(new ErrorInterceptor());
         client.addInterceptor(new BearerTokenHeaderInterceptor());
-
         ClientAPI api = new ClientAPI(client);
-
         return api.retrofit.create(UserProfileAPI.class);
     }
 
     public static OAuth2API oauth2(ClientCredentials clientCredentials) {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+
         OkHttpClient.Builder client = new OkHttpClient.Builder();
+        client.addInterceptor(logging);
         client.addInterceptor(new ErrorInterceptor());
         client.addInterceptor(new OAuth2ClientAuthenticationInterceptor(
                 clientCredentials.getClientId(),
                 clientCredentials.getClientSecret()));
-
         ClientAPI api = new ClientAPI(client);
-
         return api.retrofit.create(OAuth2API.class);
     }
 
     public static ClientRegistrationAPI registration() {
         OkHttpClient.Builder client = new OkHttpClient.Builder();
         client.addInterceptor(new ErrorInterceptor());
-
         ClientAPI api = new ClientAPI(client);
-
         return api.retrofit.create(ClientRegistrationAPI.class);
     }
 

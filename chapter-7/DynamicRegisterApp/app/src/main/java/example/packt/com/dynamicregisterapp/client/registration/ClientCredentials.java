@@ -1,10 +1,10 @@
-package example.packt.com.dynamicregisterapp.client.oauth2.registration;
+package example.packt.com.dynamicregisterapp.client.registration;
 
 public class ClientCredentials {
 
     private String clientId;
     private String clientSecret;
-    private String redirectUri;
+//    private String redirectUri;
 
     public String getClientId() {
         return clientId;
@@ -22,11 +22,11 @@ public class ClientCredentials {
         this.clientSecret = clientSecret;
     }
 
-    public String getRedirectUri() {
-        return redirectUri;
-    }
-
-    public void setRedirectUri(String redirectUri) {
-        this.redirectUri = redirectUri;
-    }
+//    public String getRedirectUri() {
+//        return redirectUri;
+//    }
+//
+//    public void setRedirectUri(String redirectUri) {
+//        this.redirectUri = redirectUri;
+//    }
 }

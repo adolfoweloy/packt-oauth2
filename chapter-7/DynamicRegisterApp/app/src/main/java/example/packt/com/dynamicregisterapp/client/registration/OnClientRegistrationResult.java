@@ -1,4 +1,4 @@
-package example.packt.com.dynamicregisterapp.client.oauth2.registration;
+package example.packt.com.dynamicregisterapp.client.registration;
 
 public interface OnClientRegistrationResult {
     void onSuccessfulClientRegistration(ClientCredentials credentials);

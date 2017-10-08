@@ -8,6 +8,9 @@ import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/**
+ * This version of OAuth2ClientAuthenticationInterceptor can' have hard coded client credentials
+ */
 public class OAuth2ClientAuthenticationInterceptor implements Interceptor {
     private String username;
     private String password;

@@ -1,25 +1,16 @@
 package example.packt.com.dynamicregisterapp.presenter;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import example.packt.com.dynamicregisterapp.client.oauth2.TokenStore;
-import example.packt.com.dynamicregisterapp.client.oauth2.registration.ClientCredentials;
-import example.packt.com.dynamicregisterapp.client.oauth2.registration.ClientCredentialsRepository;
-import example.packt.com.dynamicregisterapp.client.oauth2.registration.OnClientRegistrationResult;
 import retrofit2.Call;
 
 import example.packt.com.dynamicregisterapp.R;
 import example.packt.com.dynamicregisterapp.client.ClientAPI;
 import example.packt.com.dynamicregisterapp.client.oauth2.AccessToken;
-import example.packt.com.dynamicregisterapp.client.oauth2.AccessTokenRequestData;
-import example.packt.com.dynamicregisterapp.client.oauth2.OAuth2StateManager;
-import example.packt.com.dynamicregisterapp.client.oauth2.TokenResponseCallback;
-import example.packt.com.dynamicregisterapp.client.profile.ProfileAuthorizationListener;
 import example.packt.com.dynamicregisterapp.client.profile.UserProfile;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,7 +19,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     private TextView textName;
     private TextView textEmail;
-
     private TokenStore tokenStore;
 
     @Override
