@@ -46,10 +46,10 @@ public class AuthorizationCodeActivity  extends AppCompatActivity {
         }
 
         ClientCredentials credentials = ClientCredentialsStore.getInstance().get();
-        Call<AccessToken> call = ClientAPI.oauth2(credentials)
+        Call<AccessToken> accessTokenCall = ClientAPI.oauth2(credentials)
             .requestToken(AccessTokenRequest.fromCode(code));
 
-        call.enqueue(new Callback<AccessToken>() {
+        accessTokenCall.enqueue(new Callback<AccessToken>() {
             @Override
             public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
                 AccessToken token = response.body();

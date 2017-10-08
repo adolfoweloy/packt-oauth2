@@ -17,15 +17,15 @@ import example.packt.com.dynamicregisterapp.client.oauth2.OAuth2StateManager;
 import example.packt.com.dynamicregisterapp.client.oauth2.TokenStore;
 import example.packt.com.dynamicregisterapp.client.registration.ClientCredentials;
 import example.packt.com.dynamicregisterapp.client.registration.ClientCredentialsStore;
-import example.packt.com.dynamicregisterapp.client.registration.ClientRegistrationService;
-import example.packt.com.dynamicregisterapp.client.registration.OnClientRegistrationResult;
+import example.packt.com.dynamicregisterapp.client.ClientRegistrationService;
+import example.packt.com.dynamicregisterapp.client.OnClientRegistrationResult;
 
 public class MainActivity extends AppCompatActivity
         implements View.OnClickListener, OnClientRegistrationResult {
 
     private Button profileButton;
     private TokenStore tokenStore;
-    private OAuth2StateManager stateManager;
+    private OAuth2StateManager oauth2StateManager;
     private ClientRegistrationService clientRegistrationService;
 
     @Override
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         tokenStore = new TokenStore(this);
-        stateManager = new OAuth2StateManager(MainActivity.this);
+        oauth2StateManager = new OAuth2StateManager(MainActivity.this);
         clientRegistrationService = new ClientRegistrationService();
 
         profileButton = (Button) findViewById(R.id.profile_button);
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity
 
     private void proceed(ClientCredentials clientCredentials) {
         String state = UUID.randomUUID().toString();
-        stateManager.saveState(state);
+        oauth2StateManager.saveState(state);
 
         Uri authorizationUri = AuthorizationRequest.createAuthorizationUri(state, clientCredentials);
         AccessToken token = tokenStore.getToken();

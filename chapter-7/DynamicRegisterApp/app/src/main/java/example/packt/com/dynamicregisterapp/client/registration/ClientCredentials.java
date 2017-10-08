@@ -4,7 +4,6 @@ public class ClientCredentials {
 
     private String clientId;
     private String clientSecret;
-//    private String redirectUri;
 
     public String getClientId() {
         return clientId;
@@ -22,11 +21,4 @@ public class ClientCredentials {
         this.clientSecret = clientSecret;
     }
 
-//    public String getRedirectUri() {
-//        return redirectUri;
-//    }
-//
-//    public void setRedirectUri(String redirectUri) {
-//        this.redirectUri = redirectUri;
-//    }
 }

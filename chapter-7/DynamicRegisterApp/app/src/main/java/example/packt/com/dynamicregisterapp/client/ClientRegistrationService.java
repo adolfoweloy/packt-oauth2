@@ -1,9 +1,11 @@
-package example.packt.com.dynamicregisterapp.client.registration;
+package example.packt.com.dynamicregisterapp.client;
 
 import android.support.annotation.NonNull;
 
-import example.packt.com.dynamicregisterapp.client.ClientAPI;
 import example.packt.com.dynamicregisterapp.client.oauth2.AuthorizationRequest;
+import example.packt.com.dynamicregisterapp.client.registration.ClientCredentials;
+import example.packt.com.dynamicregisterapp.client.registration.ClientRegistrationRequest;
+import example.packt.com.dynamicregisterapp.client.registration.ClientRegistrationResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,7 +45,6 @@ public class ClientRegistrationService {
         ClientCredentials credentials = new ClientCredentials();
         credentials.setClientId(credentialsResponse.getClientId());
         credentials.setClientSecret(credentialsResponse.getClientSecret());
-//        credentials.setRedirectUri(AuthorizationRequest.REDIRECT_URI);
         return credentials;
     }
 }

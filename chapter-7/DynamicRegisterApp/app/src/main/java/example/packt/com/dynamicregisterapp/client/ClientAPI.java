@@ -27,11 +27,7 @@ public class ClientAPI {
     }
 
     public static OAuth2API oauth2(ClientCredentials clientCredentials) {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.HEADERS);
-
         OkHttpClient.Builder client = new OkHttpClient.Builder();
-        client.addInterceptor(logging);
         client.addInterceptor(new ErrorInterceptor());
         client.addInterceptor(new OAuth2ClientAuthenticationInterceptor(
                 clientCredentials.getClientId(),

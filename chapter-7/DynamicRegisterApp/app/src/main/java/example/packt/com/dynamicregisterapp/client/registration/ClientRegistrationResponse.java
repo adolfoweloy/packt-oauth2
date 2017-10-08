@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashSet;
 import java.util.Set;
 
-class ClientRegistrationResponse {
+public class ClientRegistrationResponse {
 
     @JsonProperty("redirect_uris")
     private Set<String> redirectUris = new HashSet<>();
