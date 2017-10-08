@@ -22,8 +22,6 @@ public class RedirectUriActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-
         tokenStore = new TokenStore(this);
         stateManager = new OAuth2StateManager(this);
 
