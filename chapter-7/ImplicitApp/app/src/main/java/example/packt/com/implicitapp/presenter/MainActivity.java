@@ -10,8 +10,8 @@ import android.widget.Button;
 import java.util.UUID;
 
 import example.packt.com.implicitapp.R;
-import example.packt.com.implicitapp.client.ClientAPI;
 import example.packt.com.implicitapp.client.oauth2.AccessToken;
+import example.packt.com.implicitapp.client.oauth2.AuthorizationRequest;
 import example.packt.com.implicitapp.client.oauth2.OAuth2StateManager;
 import example.packt.com.implicitapp.client.oauth2.TokenStore;
 
@@ -41,10 +41,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (accessToken != null && !accessToken.isExpired()) {
             intent = new Intent(this, ProfileActivity.class);
         } else {
-            String state = generateState();
+            String state = UUID.randomUUID().toString();
             oAuth2StateManager.saveState(state);
 
-            Uri authorizationUri = createAuthorizationURI(state);
+            Uri authorizationUri = AuthorizationRequest.createAuthorizationURI(state);
             intent = new Intent(Intent.ACTION_VIEW);
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             intent.setData(authorizationUri);
@@ -52,23 +52,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         startActivity(intent);
 
-    }
-
-    private Uri createAuthorizationURI(String state) {
-        return new Uri.Builder()
-                .scheme("http")
-                .encodedAuthority(ClientAPI.BASE_URL)
-                .path("/oauth/authorize")
-                .appendQueryParameter("client_id", "clientapp")
-                .appendQueryParameter("response_type", "token")
-                .appendQueryParameter("redirect_uri", "oauth2://profile/callback")
-                .appendQueryParameter("scope", "read_profile")
-                .appendQueryParameter("state", state)
-                .build();
-    }
-
-    private String generateState() {
-        return UUID.randomUUID().toString();
     }
 
 }

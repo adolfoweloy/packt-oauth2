@@ -5,13 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import example.packt.com.implicitapp.R;
 import example.packt.com.implicitapp.client.ClientAPI;
 import example.packt.com.implicitapp.client.oauth2.AccessToken;
-import example.packt.com.implicitapp.client.oauth2.AccessTokenResponse;
-import example.packt.com.implicitapp.client.oauth2.OAuth2StateManager;
 import example.packt.com.implicitapp.client.oauth2.TokenStore;
 import example.packt.com.implicitapp.client.profile.UserProfile;
 import retrofit2.Call;
