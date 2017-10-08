@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         loginService.loadUser(username, password, new LoginService.Callback() {
             @Override
             public void onSuccess(User user) {
-                authenticationManager.authenticate(user);
+                authenticationManager.authenticate();
                 AccessToken accessToken = tokenStore.getToken();
 
                 Intent intent;
@@ -59,8 +59,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     intent = new Intent(MainActivity.this, DashboardActivity.class);
                 } else {
                     intent = new Intent(MainActivity.this, AuthorizationActivity.class);
+                    intent.putExtra("username", user.getUsername());
+                    intent.putExtra("password", user.getPassword());
                 }
-
                 startActivity(intent);
             }
 

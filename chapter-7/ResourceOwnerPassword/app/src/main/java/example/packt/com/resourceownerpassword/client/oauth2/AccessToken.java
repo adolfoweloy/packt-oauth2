@@ -3,7 +3,6 @@ package example.packt.com.resourceownerpassword.client.oauth2;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class AccessToken {

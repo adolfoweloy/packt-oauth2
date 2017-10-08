@@ -10,7 +10,6 @@ import example.packt.com.resourceownerpassword.client.oauth2.AccessToken;
 import example.packt.com.resourceownerpassword.client.oauth2.PasswordAccessTokenRequest;
 import example.packt.com.resourceownerpassword.client.oauth2.TokenStore;
 import example.packt.com.resourceownerpassword.login.AuthenticationManager;
-import example.packt.com.resourceownerpassword.login.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,24 +26,23 @@ public class AuthorizationActivity extends AppCompatActivity {
         tokenStore = new TokenStore(this);
         authenticationManager = new AuthenticationManager(this);
 
-        if (authenticationManager.isAuthenticated()) {
-            User user = authenticationManager.getLoggedUser();
+        String username = getIntent().getStringExtra("username");
+        String password = getIntent().getStringExtra("password");
 
+        if (authenticationManager.isAuthenticated()) {
             Call<AccessToken> call = ClientAPI.oauth2().token(
-                    PasswordAccessTokenRequest.from(
-                            user.getUsername(), user.getPassword()));
+                PasswordAccessTokenRequest.from(username, password));
 
             call.enqueue(new Callback<AccessToken>() {
                 @Override
                 public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
                     AccessToken accessToken = response.body();
                     tokenStore.save(accessToken);
-
-                    Intent intent = new Intent(AuthorizationActivity.this, DashboardActivity.class);
+                    Intent intent = new Intent(
+                        AuthorizationActivity.this, DashboardActivity.class);
                     startActivity(intent);
                     finish();
                 }
-
                 @Override
                 public void onFailure(Call<AccessToken> call, Throwable t) {
                     Log.e("AuthorizationActivity", "could not retrieve access token", t);

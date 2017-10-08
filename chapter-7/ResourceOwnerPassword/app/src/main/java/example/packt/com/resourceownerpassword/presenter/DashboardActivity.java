@@ -16,17 +16,14 @@ import example.packt.com.resourceownerpassword.client.oauth2.AccessToken;
 import example.packt.com.resourceownerpassword.client.oauth2.TokenStore;
 import example.packt.com.resourceownerpassword.client.profile.UserProfile;
 import example.packt.com.resourceownerpassword.login.AuthenticationManager;
-import example.packt.com.resourceownerpassword.login.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DashboardActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView usernameText;
-    private TextView emailText;
     private TokenStore tokenStore;
-    private AuthenticationManager authenticationManager;
+    private TextView usernameText, emailText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +34,13 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         emailText = findViewById(R.id.profile_email);
 
         tokenStore = new TokenStore(this);
-        authenticationManager = new AuthenticationManager(this);
 
-        if (authenticationManager.isAuthenticated()) {
-            final User user = authenticationManager.getLoggedUser();
-
+        if (new AuthenticationManager(this).isAuthenticated()) {
             // add some fake user entries
             ListView listView = findViewById(R.id.dashboard_entries);
             listView.setAdapter(new ArrayAdapter<>(
                 this, android.R.layout.simple_list_item_1,
-                user.getEntries().toArray(new String[]{})));
+                new String[] {"Entry 1"}));
 
             // button to retrieve user profile
             Button profileButton = findViewById(R.id.profile_button);
@@ -62,26 +56,26 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View view) {
 
-        AccessToken accessToken = tokenStore.getToken();
+AccessToken accessToken = tokenStore.getToken();
 
-        if (accessToken != null && !accessToken.hasExpired()) {
-            Call<UserProfile> call = ClientAPI.userProfile()
-                .token(accessToken.getValue());
+if (accessToken != null && !accessToken.hasExpired()) {
+    Call<UserProfile> call = ClientAPI.userProfile()
+        .token(accessToken.getValue());
 
-            call.enqueue(new Callback<UserProfile>() {
-                @Override
-                public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
-                    UserProfile profile = response.body();
-                    usernameText.setText(profile.getName());
-                    emailText.setText(profile.getEmail());
-                }
-
-                @Override
-                public void onFailure(Call<UserProfile> call, Throwable t) {
-                    Log.e("DashboardActivity", "Error reading user profile data", t);
-                }
-            });
+    call.enqueue(new Callback<UserProfile>() {
+        @Override
+        public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
+            UserProfile profile = response.body();
+            usernameText.setText(profile.getName());
+            emailText.setText(profile.getEmail());
         }
+
+        @Override
+        public void onFailure(Call<UserProfile> call, Throwable t) {
+            Log.e("DashboardActivity", "Error reading user profile data", t);
+        }
+    });
+}
 
     }
 

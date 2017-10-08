@@ -33,8 +33,8 @@ public class TokenStore {
             token.setValue(prefs.getString("access_token", null));
             token.setScope(prefs.getString("scope", ""));
             token.setTokenType(prefs.getString("token_type", "bearer"));
-            token.setExpiresIn(prefs.getLong("expires_in", -1)); // prevents / 0
-            token.setIssuedAt(prefs.getLong("issued_at", -1)); // prevents / 0
+            token.setExpiresIn(prefs.getLong("expires_in", -1));
+            token.setIssuedAt(prefs.getLong("issued_at", -1));
         }
         return token;
     }

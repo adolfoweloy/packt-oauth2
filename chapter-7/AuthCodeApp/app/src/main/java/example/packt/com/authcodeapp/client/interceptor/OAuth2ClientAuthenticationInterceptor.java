@@ -23,7 +23,7 @@ public class OAuth2ClientAuthenticationInterceptor implements Interceptor {
     }
 
     private String getEncodedAuthorization() {
-        String credentials = "clientapp:123456";
-        return "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+        return "Basic " + Base64.encodeToString(
+            "clientapp:123456".getBytes(), Base64.NO_WRAP);
     }
 }
